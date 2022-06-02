@@ -4413,7 +4413,7 @@ let SectionData = {
     btnText: 'Go Back',
     path: '/',
     title: 'Create collectible',
-    content: 'Choose <strong>“Single”</strong> if you want your collectible to be one of a kind or <strong>“Multiple”</strong> if you want to sell one collectible multiple times',
+    content: 'Choose <strong>“Single”</strong> if you want your collectible to be one of a kind.',
     cards: [
       {
         id: 1,
@@ -4421,12 +4421,12 @@ let SectionData = {
         img: require('@/images/thumb/single-mobile.png'),
         path: 'create-single'
       },
-      {
-        id: 1,
-        title: 'Mutiple',
-        img: require('@/images/thumb/multiple-mobile.png'),
-        path: 'create-multiple'
-      }
+      // {
+      //   id: 1,
+      //   title: 'Mutiple',
+      //   img: require('@/images/thumb/multiple-mobile.png'),
+      //   path: 'create-multiple'
+      // }
     ],
     contentTwo: 'We do not own your private keys and cannot access your funds without your confirmation'
   },
