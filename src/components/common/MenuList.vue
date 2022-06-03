@@ -1,22 +1,15 @@
 <template>
     <ul class="menu-list ms-lg-auto">
-          <li class="menu-item has-sub">
-              <a href="#" class="menu-link menu-toggle">{{ SectionData.headerData.menuList.title }}</a>
-              <div class="menu-sub">
-                 <ul class="menu-list">
-                      <li class="menu-item" v-for="nav in SectionData.headerData.menuList.navList" :key="nav.id"><router-link :to="nav.path" class="menu-link">{{ nav.title }}</router-link></li>
-                 </ul>
-              </div>
+          <!-- <li class="menu-item">
+            <router-link to="/" class="menu-link">Home</router-link>
+          </li> -->
+          <li class="menu-item">
+            <router-link to="/explore" class="menu-link">Explore</router-link>
           </li>
-          <li class="menu-item has-sub">
-              <a href="#" class="menu-link menu-toggle">{{ SectionData.headerData.menuList2.title }}</a>
-              <div class="menu-sub">
-                 <ul class="menu-list">
-                      <li class="menu-item" v-for="nav in SectionData.headerData.menuList2.navList" :key="nav.id"><router-link :to="nav.path" class="menu-link">{{ nav.title }}</router-link></li>
-                 </ul>
-              </div>
+          <li class="menu-item">
+            <router-link to="/create-single" class="menu-link">Create</router-link>
           </li>
-          <li class="menu-item has-sub">
+          <!-- <li class="menu-item has-sub">
               <a href="#" class="menu-link menu-toggle">{{ SectionData.headerData.menuList3.title }}</a>
               <div class="menu-sub">
                  <ul class="menu-list">
@@ -36,7 +29,7 @@
                     </ul>
                 </div>
               </div>
-          </li>
+          </li> -->
      </ul>
 </template>
 

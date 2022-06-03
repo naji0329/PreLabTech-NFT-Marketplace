@@ -5,12 +5,12 @@
         <!-- Header main -->
         <HeaderMain></HeaderMain>
         <!-- hero -->
-        <HeroFour classname="hero-title" :title="SectionData.breadcrumbData.breadcrumbList.title" :lists="SectionData.breadcrumbData.breadcrumbList.navList"></HeroFour>
+        <HeroFour classname="hero-title" title="Collection" :lists="SectionData.breadcrumbData.breadcrumbList.navList"></HeroFour>
     </header>
-    <!-- Collections -->
-    <Collections></Collections>
     <!-- Explore section  -->
-    <!-- <ExploreSection></ExploreSection> -->
+    <ExploreSection></ExploreSection>
+    <!-- Collections -->
+    <!-- <Collections></Collections> -->
     <!-- top creators -->
     <!-- <TopCreators></TopCreators> -->
     <!-- Footer  -->

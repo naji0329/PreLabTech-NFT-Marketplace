@@ -34,6 +34,11 @@ const routes = [
     component: () => import('../pages/Explore.vue')
   },
   {
+    path: '/collection',
+    name: 'Collection',
+    component: () => import('../pages/Collection.vue')
+  },
+  {
     path: '/author',
     name: 'author',
     component: () => import('../pages/Author.vue')

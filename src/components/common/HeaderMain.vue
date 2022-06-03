@@ -7,7 +7,7 @@
                 <!-- mobile action -->
                 <MobileAction></MobileAction>
                 <!-- heder search -->
-                <!-- <HeaderSearch></HeaderSearch> -->
+                <HeaderSearch></HeaderSearch>
                 <!-- Menu -->
                 <Menu classname="btn-primary"></Menu>
                 <div class="header-overlay"></div>
@@ -19,7 +19,7 @@
 // @ is an alias to /src
 import Logo from '@/components/common/Logo.vue'
 import MobileAction from '@/components/common/MobileAction.vue'
-// import HeaderSearch from '@/components/common/HeaderSearch.vue'
+import HeaderSearch from '@/components/common/HeaderSearch.vue'
 import Menu from '@/components/common/Menu.vue'
 
 export default {
@@ -28,7 +28,7 @@ export default {
   components: {
     Logo,
     MobileAction,
-    // HeaderSearch,
+    HeaderSearch,
     Menu
   }
 }

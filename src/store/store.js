@@ -29,7 +29,7 @@ let SectionData = {
           path: ''
         },
         {
-          title: 'Explore'
+          title: 'Collection'
         }
       ]
     },
@@ -154,13 +154,13 @@ let SectionData = {
   btnDataFour: [
     {
       btnClass: 'btn-lg btn-grad',
-      title: 'Register Now',
-      path: 'register'
+      title: 'Explore',
+      path: 'explore'
     },
     {
       btnClass: 'btn-lg btn-outline-dark',
-      title: 'Create Store',
-      path: 'create'
+      title: 'Create',
+      path: 'create-single'
     }
   ],
   // Hero btn data
@@ -183,13 +183,14 @@ let SectionData = {
     inputPlaceholderText: 'Search item here...',
     menuList: {
       title: 'Home',
+      path: '/',
       navList: [
         {
           id: 1,
           title: 'Welcome',
           path: '/'
         },
-          ]
+      ]
     },
     menuList2: {
       title: 'PreLabTech NFT',
@@ -1811,7 +1812,7 @@ let SectionData = {
         price: '$26,220',
         img: require('@/images/thumb/art-5.jpg'),
         avatar: require('@/images/thumb/avatar.jpg'),
-        path: ''
+        path: '/collection'
       },
       {
         id: 2,
@@ -1819,7 +1820,7 @@ let SectionData = {
         price: '$24,497',
         img: require('@/images/thumb/art-6.jpg'),
         avatar: require('@/images/thumb/avatar-2.jpg'),
-        path: ''
+        path: '/collection'
       },
       {
         id: 3,
@@ -1827,7 +1828,7 @@ let SectionData = {
         price: '$26,220',
         img: require('@/images/thumb/art-7.jpg'),
         avatar: require('@/images/thumb/avatar-3.jpg'),
-        path: ''
+        path: '/collection'
       },
       {
         id: 4,
@@ -1835,7 +1836,7 @@ let SectionData = {
         price: '$11,356',
         img: require('@/images/thumb/art-8.jpg'),
         avatar: require('@/images/thumb/avatar-4.jpg'),
-        path: ''
+        path: '/collection'
       },
       {
         id: 5,
@@ -1843,7 +1844,7 @@ let SectionData = {
         price: '$4,234',
         img: require('@/images/thumb/art-9.jpg'),
         avatar: require('@/images/thumb/avatar-5.jpg'),
-        path: ''
+        path: '/collection'
       }
     ]
   },
@@ -2956,18 +2957,18 @@ let SectionData = {
       path: 'profile',
       icon: 'ni-user'
     },
-    {
-      id: 2,
-      title: 'Dashboard',
-      path: 'offers',
-      icon: 'ni-dashboard'
-    },
-    {
-      id: 3,
-      title: 'Account Settings',
-      path: 'account',
-      icon: 'ni-setting'
-    },
+    // {
+    //   id: 2,
+    //   title: 'Dashboard',
+    //   path: 'offers',
+    //   icon: 'ni-dashboard'
+    // },
+    // {
+    //   id: 3,
+    //   title: 'Account Settings',
+    //   path: 'account',
+    //   icon: 'ni-setting'
+    // },
     {
       id: 4,
       title: 'Help center',
@@ -4840,62 +4841,62 @@ let SectionData = {
       btnText: 'Connect',
       path: 'login'
     },
-    {
-      id: 2,
-      img: require('@/images/brand/bitski.svg'),
-      title: 'Bitski',
-      btnText: 'Connect',
-      path: 'login'
-    },
-    {
-      id: 3,
-      img: require('@/images/brand/fortmatic.svg'),
-      title: 'Fortmatic',
-      btnText: 'Connect',
-      path: 'login'
-    },
-    {
-      id: 4,
-      img: require('@/images/brand/torus.svg'),
-      title: 'Torus',
-      btnText: 'Connect',
-      path: 'login'
-    },
-    {
-      id: 5,
-      img: require('@/images/brand/coinbase.svg'),
-      title: 'Coinbase',
-      btnText: 'Connect',
-      path: 'login'
-    },
-    {
-      id: 6,
-      img: require('@/images/brand/walletconnect.svg'),
-      title: 'WalletConnect',
-      btnText: 'Connect',
-      path: 'login'
-    },
-    {
-      id: 7,
-      img: require('@/images/brand/bitski.svg'),
-      title: 'Portis',
-      btnText: 'Connect',
-      path: 'login'
-    },
-    {
-      id: 8,
-      img: require('@/images/brand/walletconnect.svg'),
-      title: 'Fortmatic',
-      btnText: 'Connect',
-      path: 'login'
-    },
-    {
-      id: 9,
-      img: require('@/images/brand/walletconnect.svg'),
-      title: 'Kaikas',
-      btnText: 'Connect',
-      path: 'login'
-    },
+    // {
+    //   id: 2,
+    //   img: require('@/images/brand/bitski.svg'),
+    //   title: 'Bitski',
+    //   btnText: 'Connect',
+    //   path: 'login'
+    // },
+    // {
+    //   id: 3,
+    //   img: require('@/images/brand/fortmatic.svg'),
+    //   title: 'Fortmatic',
+    //   btnText: 'Connect',
+    //   path: 'login'
+    // },
+    // {
+    //   id: 4,
+    //   img: require('@/images/brand/torus.svg'),
+    //   title: 'Torus',
+    //   btnText: 'Connect',
+    //   path: 'login'
+    // },
+    // {
+    //   id: 5,
+    //   img: require('@/images/brand/coinbase.svg'),
+    //   title: 'Coinbase',
+    //   btnText: 'Connect',
+    //   path: 'login'
+    // },
+    // {
+    //   id: 6,
+    //   img: require('@/images/brand/walletconnect.svg'),
+    //   title: 'WalletConnect',
+    //   btnText: 'Connect',
+    //   path: 'login'
+    // },
+    // {
+    //   id: 7,
+    //   img: require('@/images/brand/bitski.svg'),
+    //   title: 'Portis',
+    //   btnText: 'Connect',
+    //   path: 'login'
+    // },
+    // {
+    //   id: 8,
+    //   img: require('@/images/brand/walletconnect.svg'),
+    //   title: 'Fortmatic',
+    //   btnText: 'Connect',
+    //   path: 'login'
+    // },
+    // {
+    //   id: 9,
+    //   img: require('@/images/brand/walletconnect.svg'),
+    //   title: 'Kaikas',
+    //   btnText: 'Connect',
+    //   path: 'login'
+    // },
   ],
   commentData: {
     title: '3 Comments',
