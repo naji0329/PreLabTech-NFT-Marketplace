@@ -106,6 +106,9 @@
                                         <a href="#" data-bs-toggle="modal" data-bs-target="#placeBidModal" class="btn btn-primary d-block">{{ SectionData.itemDetailData.btnText }}</a>
                                     </li>
                                     <li class="flex-grow-1">
+                                        <a href="#" class="btn btn-primary d-block">Buy</a>
+                                    </li>
+                                    <li class="flex-grow-1">
                                         <div class="dropdown">
                                             <a href="#" class="btn bg-dark-dim d-block" data-bs-toggle="dropdown">{{ SectionData.itemDetailData.btnTextTwo }}</a>
                                             <div class="dropdown-menu card-generic p-2 keep-open w-100 mt-1">

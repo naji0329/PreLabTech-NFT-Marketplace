@@ -45,14 +45,14 @@
                                     <div class="card-price-wrap d-flex align-items-center justify-content-sm-between mb-3">
                                         <div class="me-5 me-sm-2">
                                             <span class="card-price-title">Price</span>
-                                            <span class="card-price-number">&dollar; {{ product.price }}</span>
+                                            <span class="card-price-number">{{ product.price }} ETH</span>
                                         </div>
                                         <div class="text-sm-end">
                                             <span class="card-price-title">Current bid</span>
                                             <span class="card-price-number">{{ product.priceTwo }} ETH</span>
                                         </div>
                                     </div><!-- end card-price-wrap -->
-                                    <router-link to="product" class="btn btn-sm btn-primary">Place Bid</router-link>
+                                    <router-link to="product" class="btn btn-sm btn-primary">View NFT</router-link>
                                 </div><!-- end card-body -->
                                 <router-link
                                   class="details"
