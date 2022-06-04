@@ -106,7 +106,7 @@
                                         <a href="#" data-bs-toggle="modal" data-bs-target="#placeBidModal" class="btn btn-primary d-block">{{ SectionData.itemDetailData.btnText }}</a>
                                     </li>
                                     <li class="flex-grow-1">
-                                        <a href="#" class="btn btn-primary d-block">Buy</a>
+                                        <a href="#" data-bs-toggle="modal" data-bs-target="#buyModal" class="btn btn-primary d-block">Buy</a>
                                     </li>
                                     <li class="flex-grow-1">
                                         <div class="dropdown">
@@ -150,9 +150,40 @@
                     </div><!-- end modal-content -->
                 </div><!-- end modal-dialog -->
             </div><!-- end modal-->
+             <!-- Modal -->
+            <div class="modal fade" id="buyModal" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Buy</h4>
+                            <button type="button" class="btn-close icon-btn" data-bs-dismiss="modal" aria-label="Close">
+                                <em class="ni ni-cross"></em>
+                            </button>
+                        </div><!-- end modal-header -->
+                        <div class="modal-body">
+                            <p class="mb-3">You are about to buy a NFT of <b>Meebits</b>.</p>
+                            <!-- <div class="mb-3">
+                                <label class="form-label">{{ SectionData.placeBidModal.labelText }}</label>
+                                <input type="text" class="form-control form-control-s1" placeholder="Enter bid">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" v-html="SectionData.placeBidModal.labelTextTwo"></label>
+                                <input type="text" class="form-control form-control-s1" value="1">
+                            </div> -->
+                            <ul class="total-bid-list mb-4">
+                                <li><span>Your balance</span> <span>10.67856 ETH</span></li>
+                                <li><span>NFT price</span> <span>3.75 ETH</span></li>
+                                <li><span>Service fee</span> <span>3.5%</span></li>
+                                <li><span>You will pay</span> <span>0.013325 ETH</span></li>
+                            </ul>
+                            <a :href="SectionData.placeBidModal.btnLink" class="btn btn-primary d-block">Buy</a>
+                        </div><!-- end modal-body -->
+                    </div><!-- end modal-content -->
+                </div><!-- end modal-dialog -->
+            </div><!-- end modal-->
     </section><!-- end item-detail-section -->
         <!-- Related product -->
-        <RelatedProduct></RelatedProduct>
+        <!-- <RelatedProduct></RelatedProduct> -->
         <!-- Footer  -->
         <Footer></Footer>
 </div><!-- end page-wrap -->

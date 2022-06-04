@@ -34,15 +34,26 @@
                                 <div class="card-image">
                                     <img :src="product.img" class="card-img-top" alt="art image">
                                 </div>
-                                <div class="card-body p-4">
-                                    <h5 class="card-title text-truncate mb-0">{{ product.title }}</h5>
-                                    <div class="card-author mb-1 d-flex align-items-center">
+                                <div class="card-body p-3">
+                                  <div class="d-flex justify-content-between">
+                                    <div>
+                                      <h5 class="card-title text-truncate mb-0">Meebits</h5>
+                                      <p>Meebits #{{product.id}}</p>
+                                    </div>
+                                    <div class="text-right" style="text-align: right">
+                                      <h5 class="card-price-title">Price</h5>
+                                      <p class="card-price-number">{{ product.price }} 
+                                        <img src="@/images/tokens/eth.png" width="10" height="10" alt="eth icon" >
+                                      </p>
+                                    </div>
+                                  </div>
+                                    <!-- <div class="card-author mb-1 d-flex align-items-center">
                                         <span class="me-1 card-author-by">By</span>
                                         <div class="custom-tooltip-wrap">
                                             <router-link :to="product.authorLink" class="custom-tooltip author-link">{{ product.author }}</router-link>
-                                        </div><!-- end custom-tooltip-wrap -->
-                                    </div><!-- end card-author -->
-                                    <div class="card-price-wrap d-flex align-items-center justify-content-sm-between">
+                                        </div>
+                                    </div> -->
+                                    <!-- <div class="card-price-wrap d-flex align-items-center justify-content-sm-between">
                                         <div class="me-5 me-sm-2">
                                             <span class="card-price-title">Price</span>
                                             <span class="card-price-number">{{ product.price }} ETH</span>
@@ -51,7 +62,7 @@
                                             <span class="card-price-title">Current bid</span>
                                             <span class="card-price-number">{{ product.priceTwo }} ETH</span>
                                         </div>
-                                    </div><!-- end card-price-wrap -->
+                                    </div> -->
                                     <!-- <router-link to="product" class="btn btn-sm btn-primary">View NFT</router-link> -->
                                 </div><!-- end card-body -->
                                 <router-link
@@ -364,7 +375,7 @@ export default {
           id: 1,
           img: require('@/images/thumb/nft-2.jpg'),
           imgLg: require('@/images/thumb/nft-lg.jpg'),
-          title: 'One Tribe Black Edition',
+          title: 'Meebits',
           content: 'Digital-only* "CB Galaxy" style Coke Boys LA sneakers wearable in the Decentraland metaverse',
           author: 'ZeniconStudio',
           authorLink: 'author',
@@ -380,7 +391,7 @@ export default {
           id: 2,
           img: require('@/images/thumb/nft3.jpg'),
           imgLg: require('@/images/thumb/nft-lg2.jpg'),
-          title: 'Operation Jade Fury',
+          title: 'Meebits',
           content: 'Digital-only* "CB Galaxy" style Coke Boys LA sneakers wearable in the Decentraland metaverse',
           author: 'CanvaNetwork',
           authorLink: 'author',
