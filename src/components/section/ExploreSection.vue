@@ -42,7 +42,7 @@
                                             <router-link :to="product.authorLink" class="custom-tooltip author-link">{{ product.author }}</router-link>
                                         </div><!-- end custom-tooltip-wrap -->
                                     </div><!-- end card-author -->
-                                    <div class="card-price-wrap d-flex align-items-center justify-content-sm-between mb-3">
+                                    <div class="card-price-wrap d-flex align-items-center justify-content-sm-between">
                                         <div class="me-5 me-sm-2">
                                             <span class="card-price-title">Price</span>
                                             <span class="card-price-number">{{ product.price }} ETH</span>
@@ -52,7 +52,7 @@
                                             <span class="card-price-number">{{ product.priceTwo }} ETH</span>
                                         </div>
                                     </div><!-- end card-price-wrap -->
-                                    <router-link to="product" class="btn btn-sm btn-primary">View NFT</router-link>
+                                    <!-- <router-link to="product" class="btn btn-sm btn-primary">View NFT</router-link> -->
                                 </div><!-- end card-body -->
                                 <router-link
                                   class="details"
