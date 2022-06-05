@@ -160,7 +160,7 @@ let SectionData = {
     {
       btnClass: 'btn-lg btn-outline-dark',
       title: 'Create',
-      path: 'create-single'
+      path: 'create'
     }
   ],
   // Hero btn data
@@ -4422,12 +4422,12 @@ let SectionData = {
         img: require('@/images/thumb/single-mobile.png'),
         path: 'create-single'
       },
-      // {
-      //   id: 1,
-      //   title: 'Mutiple',
-      //   img: require('@/images/thumb/multiple-mobile.png'),
-      //   path: 'create-multiple'
-      // }
+      {
+        id: 1,
+        title: 'Mutiple',
+        img: require('@/images/thumb/multiple-mobile.png'),
+        path: 'create-multiple'
+      }
     ],
     contentTwo: 'We do not own your private keys and cannot access your funds without your confirmation'
   },
