@@ -43,6 +43,10 @@
                                                     <p class="fw-semibold text-black text-truncate">{{ item.title }}</p>
                                                     <p class="small">{{ item.date }}</p>
                                                 </div>
+                                                <div>
+                                                    <p class="text-success" data-bs-toggle="modal" data-bs-target="#acceptModal" >Accept</p>
+                                                    <p class="text-danger"  data-bs-toggle="modal" data-bs-target="#declineModal" >Decline</p>
+                                                </div>
                                             </div><!-- end card -->
                                         </div><!-- end item-detail-tab-wrap -->
                                     </div><!-- end tab-pane -->
@@ -117,6 +121,23 @@
                                         </div>
                                     </li>
                                 </ul>
+                                <p class="mt-4">When user is owner of this NFT</p>
+                                <ul class="btns-group d-flex">
+                                    <li class="flex-grow-1">
+                                        <a href="#" data-bs-toggle="modal" data-bs-target="#listModal" class="btn btn-primary d-block">Sell</a>
+                                    </li>
+                                    <li class="flex-grow-1">
+                                        <a href="#" data-bs-toggle="modal" data-bs-target="#cancelListModal" class="btn btn-primary d-block">Cancel listing</a>
+                                    </li>
+                                    <li class="flex-grow-1">
+                                        <div class="dropdown">
+                                            <a href="#" class="btn bg-dark-dim d-block" data-bs-toggle="dropdown">{{ SectionData.itemDetailData.btnTextTwo }}</a>
+                                            <div class="dropdown-menu card-generic p-2 keep-open w-100 mt-1">
+                                                <router-link :to="icon.path" class="dropdown-item card-generic-item" v-for="(icon, i) in SectionData.socialShareList" :key="i"><em class="ni me-2" :class="icon.btnClass"></em>{{ icon.title }}</router-link>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
                             </div><!-- end item-detail-btns -->
                         </div><!-- end item-detail-content -->
                     </div><!-- end col -->
@@ -177,6 +198,100 @@
                                 <li><span>You will pay</span> <span>0.013325 ETH</span></li>
                             </ul>
                             <a :href="SectionData.placeBidModal.btnLink" class="btn btn-primary d-block">Buy</a>
+                        </div><!-- end modal-body -->
+                    </div><!-- end modal-content -->
+                </div><!-- end modal-dialog -->
+            </div><!-- end modal-->
+
+            <div class="modal fade" id="listModal" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">List item for sale</h4>
+                            <button type="button" class="btn-close icon-btn" data-bs-dismiss="modal" aria-label="Close">
+                                <em class="ni ni-cross"></em>
+                            </button>
+                        </div><!-- end modal-header -->
+                        <div class="modal-body">
+                            <p class="mb-3">You are about to list your NFT of <b>Meebits</b>.</p>
+                            <div class="mb-3">
+                                <label class="form-label">List Price</label>
+                                <input type="text" class="form-control form-control-s1" placeholder="Enter list price">
+                            </div>
+                            <!-- <div class="mb-3">
+                                <label class="form-label" v-html="SectionData.placeBidModal.labelTextTwo"></label>
+                                <input type="text" class="form-control form-control-s1" value="1">
+                            </div> -->
+                            <!-- <ul class="total-bid-list mb-4">
+                                <li><span>Your balance</span> <span>10.67856 ETH</span></li>
+                                <li><span>NFT price</span> <span>3.75 ETH</span></li>
+                                <li><span>Service fee</span> <span>3.5%</span></li>
+                                <li><span>You will pay</span> <span>0.013325 ETH</span></li>
+                            </ul> -->
+                            <a :href="SectionData.placeBidModal.btnLink" class="btn btn-primary d-block">List</a>
+                        </div><!-- end modal-body -->
+                    </div><!-- end modal-content -->
+                </div><!-- end modal-dialog -->
+            </div><!-- end modal-->
+
+            <div class="modal fade" id="cancelListModal" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Are you sure you want to cancel your listing?</h4>
+                            <button type="button" class="btn-close icon-btn" data-bs-dismiss="modal" aria-label="Close">
+                                <em class="ni ni-cross"></em>
+                            </button>
+                        </div><!-- end modal-header -->
+                        <div class="modal-body">
+                            <p class="mb-3">Canceling your listing will unpublish this sale from Our Marketplace and requires a transaction to make sure it will never be fulfillable.</p>
+                            
+                            <div class="d-flex justify-content-center gap-5">
+                                <a href="#" data-bs-dismiss="modal" aria-label="Close" class="btn btn-normal d-block">Never mind</a>
+                                <a :href="SectionData.placeBidModal.btnLink" class="btn btn-primary d-block">Cancel listing</a>
+                            </div>
+                        </div><!-- end modal-body -->
+                    </div><!-- end modal-content -->
+                </div><!-- end modal-dialog -->
+            </div><!-- end modal-->
+            
+            <div class="modal fade" id="acceptModal" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Are you sure you want to accept this bid?</h4>
+                            <button type="button" class="btn-close icon-btn" data-bs-dismiss="modal" aria-label="Close">
+                                <em class="ni ni-cross"></em>
+                            </button>
+                        </div><!-- end modal-header -->
+                        <div class="modal-body">
+                            <p class="mb-3">Accepting this bid will transfer ownership of this NFT and requires a transaction to make sure it will never be fulfillable.</p>
+                            
+                            <div class="d-flex justify-content-center gap-5">
+                                <a href="#" data-bs-dismiss="modal" aria-label="Close" class="btn btn-normal d-block">Never mind</a>
+                                <a :href="SectionData.placeBidModal.btnLink" class="btn btn-primary d-block">Accpet</a>
+                            </div>
+                        </div><!-- end modal-body -->
+                    </div><!-- end modal-content -->
+                </div><!-- end modal-dialog -->
+            </div><!-- end modal-->
+
+            <div class="modal fade" id="declineModal" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Are you sure you want to decline this bid?</h4>
+                            <button type="button" class="btn-close icon-btn" data-bs-dismiss="modal" aria-label="Close">
+                                <em class="ni ni-cross"></em>
+                            </button>
+                        </div><!-- end modal-header -->
+                        <div class="modal-body">
+                            <p class="mb-3">Declining this bid action requires a transaction to make sure it will never be fulfillable.</p>
+                            
+                            <div class="d-flex justify-content-center gap-5">
+                                <a href="#" data-bs-dismiss="modal" aria-label="Close" class="btn btn-normal d-block">Never mind</a>
+                                <a :href="SectionData.placeBidModal.btnLink" class="btn btn-primary d-block">Decline</a>
+                            </div>
                         </div><!-- end modal-body -->
                     </div><!-- end modal-content -->
                 </div><!-- end modal-dialog -->
