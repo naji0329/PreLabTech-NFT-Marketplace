@@ -2784,6 +2784,47 @@ let SectionData = {
     img: require('@/images/thumb/avatar-8.jpg'),
     coverImg: require('@/images/thumb/bread-bg-2.jpg')
   },
+  profile: {
+    profileNav: [
+      {
+        id: 1,
+        isActive: 'active',
+        title: 'My items',
+        slug: 'my-items-tab',
+        bsTarget: '#my-items'
+      },
+      {
+        id: 2,
+        title: 'Listed items',
+        slug: 'listed-items-tab',
+        bsTarget: '#listed-items'
+      },
+      {
+        id: 3,
+        title: 'Auctions',
+        slug: 'auctions-tab',
+        bsTarget: '#auctions'
+      },
+      {
+        id: 4,
+        title: 'Offer made',
+        slug: 'offer-made-tab',
+        bsTarget: '#offer-made'
+      },
+      {
+        id: 5,
+        title: 'Offer received',
+        slug: 'offer-received-tab',
+        bsTarget: '#offer-received'
+      },
+      {
+        id: 6,
+        title: 'Activities',
+        slug: 'activities-tab',
+        bsTarget: '#activities'
+      },
+    ]
+  },
   authorSidebarData: {
     authorTabNav: [
       {

@@ -27,91 +27,120 @@
         <!-- end col -->
         <div class="col-xl-9 ps-xl-4">
           <div class="author-items-wrap">
-            <h3>{{ SectionData.profileData.title }}</h3>
-            <div class="gap-2x"></div>
-            <!-- end gap -->
-            <div class="row g-gs">
-              <div class="col-md-4" v-for="item in itemsLoaded" :key="item.id">
-                <div class="card card-full">
-                  <div class="card-image">
-                    <img :src="item.img" class="card-img-top" alt="art image" />
+              <ul class="nav nav-tabs nav-tabs-s1" id="myTab" role="tablist">
+                  <li class="nav-item" role="presentation" v-for="list in SectionData.profile.profileNav" :key="list.id">
+                      <button class="nav-link" :class="list.isActive" :id="list.slug" data-bs-toggle="tab" :data-bs-target="list.bsTarget" type="button">{{ list.title }}</button>
+                  </li>
+              </ul>
+              <div class="gap-2x"></div><!-- end gap-2x -->
+              <div class="tab-content" id="myTabContent">
+                  <div class="tab-pane fade show active" id="my-items" role="tabpanel" aria-labelledby="my-items-tab">
+                      <div class="row g-gs">
+                          <div class="col-md-4" v-for="item in SectionData.productData.onSaleList" :key="item.id">
+                              <div class="card card-full">
+                                  <div class="card-image">
+                                      <img :src="item.img" class="card-img-top" alt="art image">
+                                  </div>
+                                  <div class="card-body p-4">
+                                      <h5 class="card-title text-truncate mb-0">{{ item.title }}</h5>
+                                      <div class="card-author mb-1 d-flex align-items-center">
+                                          <span class="me-1 card-author-by">By</span>
+                                          <div class="custom-tooltip-wrap">
+                                              <router-link :to="item.authorLink" class="custom-tooltip author-link">{{ item.author }}</router-link>
+                                          </div><!-- end custom-tooltip-wrap -->
+                                      </div><!-- end card-author -->
+                                      <div class="card-price-wrap d-flex align-items-center justify-content-between mb-3">
+                                          <div class="me-2">
+                                              <span class="card-price-title">Price</span>
+                                              <span class="card-price-number">{{ item.price }}</span>
+                                          </div>
+                                          <div>
+                                              <span class="card-price-title">Curren bid</span>
+                                              <span class="card-price-number">{{ item.priceTwo }} ETH</span>
+                                          </div>
+                                      </div><!-- end card-price-wrap -->
+                                  </div><!-- end card-body -->
+                                  <router-link
+                                      class="details"
+                                      :to="{
+                                          name: 'ProductDetail',
+                                          params: {
+                                          id: item.id,
+                                          title: item.title,
+                                          imgLg: item.imgLg,
+                                          metaText: item.metaText,
+                                          metaTextTwo: item.metaTextTwo,
+                                          metaTextThree: item.metaTextThree,
+                                          content: item.content,
+                                          }
+                                      }"
+                              >
+                              </router-link>
+                              </div><!-- end card -->
+                          </div><!-- end col -->
+                      </div><!-- row -->
+                  </div><!-- end tab-pane -->
+                  <div class="tab-pane fade" id="listed-items" role="tabpanel" aria-labelledby="listed-items-tab">
+                      <div class="row g-gs">
+                          <div class="col-md-4" v-for="item in SectionData.productData.ownedList" :key="item.id">
+                              <div class="card card-full">
+                                  <div class="card-image">
+                                      <img :src="item.img" class="card-img-top" alt="art image">
+                                  </div>
+                                  <div class="card-body p-4">
+                                      <h5 class="card-title text-truncate mb-0">{{ item.title  }}</h5>
+                                      <div class="card-author mb-1 d-flex align-items-center">
+                                          <span class="me-1 card-author-by">By</span>
+                                          <div class="custom-tooltip-wrap">
+                                              <router-link :to="item.authorLink" class="custom-tooltip author-link">{{ item.author }}</router-link>
+                                          </div><!-- end custom-tooltip-wrap -->
+                                      </div><!-- end card-author -->
+                                      <div class="card-price-wrap d-flex align-items-center justify-content-between mb-3">
+                                          <div class="me-2">
+                                              <span class="card-price-title">List Price</span>
+                                              <span class="card-price-number">10 ETH</span>
+                                          </div>
+                                          <div>
+                                              <span class="card-price-title">Curren bid</span>
+                                              <span class="card-price-number">15 ETH</span>
+                                          </div>
+                                      </div><!-- end card-price-wrap -->
+                                  </div><!-- end card-body -->
+                                  <router-link
+                                      class="details"
+                                      :to="{
+                                          name: 'ProductDetail',
+                                          params: {
+                                          id: item.id,
+                                          title: item.title,
+                                          imgLg: item.imgLg,
+                                          metaText: item.metaText,
+                                          metaTextTwo: item.metaTextTwo,
+                                          metaTextThree: item.metaTextThree,
+                                          content: item.content,
+                                          }
+                                      }"
+                                  >
+                                  </router-link>
+                              </div><!-- end card -->
+                          </div><!-- end col -->
+                      </div><!-- row -->
+                  </div><!-- end tab-pane -->
+                  <div class="tab-pane fade" id="auctions" role="tabpanel" aria-labelledby="auctions-tab">
+                    <h1>auctinos</h1>
                   </div>
-                  <div class="card-body p-4">
-                    <h5 class="card-title text-truncate mb-0">
-                      {{ item.title }}
-                    </h5>
-                    <div class="card-author mb-1 d-flex align-items-center">
-                      <span class="me-1 card-author-by">By</span>
-                      <div class="custom-tooltip-wrap">
-                        <router-link
-                          :to="item.authorLink"
-                          class="custom-tooltip author-link"
-                          >{{ item.author }}</router-link
-                        >
-                      </div>
-                      <!-- end custom-tooltip-wrap -->
-                    </div>
-                    <!-- end card-author -->
-                    <div
-                      class="card-price-wrap d-flex align-items-center justify-content-between mb-3"
-                    >
-                      <div class="me-2">
-                        <span class="card-price-title">Price</span>
-                        <span class="card-price-number">{{ item.price }}</span>
-                      </div>
-                      <div>
-                        <span class="card-price-title">Current bid</span>
-                        <span class="card-price-number">{{
-                          item.priceTwo
-                        }}</span>
-                      </div>
-                    </div>
-                    <!-- end card-price-wrap -->
-                    <ul class="btns-group">
-                      <li>
-                        <a
-                          href="#"
-                          class="btn btn-sm bg-danger-dim"
-                          data-bs-toggle="modal"
-                          data-bs-target="#deleteModal"
-                          >Delete</a
-                        >
-                      </li>
-                    </ul>
+                  <div class="tab-pane fade" id="offer-made" role="tabpanel" aria-labelledby="offer-made-tab">
+                    <h1>offer-made-</h1>
                   </div>
-                  <!-- end card-body -->
-                  <router-link
-                    class="details"
-                    :to="{
-                      name: 'ProductDetail',
-                      params: {
-                        id: item.id,
-                        title: item.title,
-                        imgLg: item.imgLg,
-                        metaText: item.metaText,
-                        metaTextTwo: item.metaTextTwo,
-                        metaTextThree: item.metaTextThree,
-                        content: item.content,
-                      },
-                    }"
-                  >
-                  </router-link>
-                </div>
-                <!-- end card -->
-              </div>
-            </div>
-            <!-- row -->
-            <div class="text-center">
-              <a
-                href="#"
-                @click.prevent="loadMore"
-                v-if="currentPage < items.length"
-                class="btn-link btn-link-s1 mt-4 mt-md-5"
-                >Load More</a
-              >
-            </div>
-          </div>
-          <!-- end author-items-wrap -->
+                  <div class="tab-pane fade" id="offer-received" role="tabpanel" aria-labelledby="offer-received-tab">
+                    <h1>offer-received</h1>
+                  </div>
+                  <div class="tab-pane fade" id="activities" role="tabpanel" aria-labelledby="activities-tab">
+                    <h1>activities</h1>
+                  </div>
+              </div><!-- end tab-content -->
+          </div><!-- end author-items-wrap -->
+          
         </div>
         <!-- end col-lg-8 -->
       </div>

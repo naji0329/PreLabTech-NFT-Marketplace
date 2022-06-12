@@ -5,8 +5,16 @@
       <!-- Header main -->
       <HeaderDashboard></HeaderDashboard>
       <!-- hero -->
-      <AuthorHero avatarSize="avatar-3" :isCopyInput="true" :coverimg="SectionData.authorPersonalData.coverImg" :img="SectionData.authorPersonalData.img" :title="SectionData.authorPersonalData.title" :username="SectionData.authorPersonalData.userName" :btntext="SectionData.authorPersonalData.btnText" :btnlink="SectionData.authorPersonalData.btnLink"></AuthorHero>
-  
+      <AuthorHero
+        avatarSize="avatar-3"
+        :isCopyInput="true"
+        :coverimg="SectionData.authorPersonalData.coverImg"
+        :img="SectionData.authorPersonalData.img"
+        :title="SectionData.authorPersonalData.title"
+        :username="SectionData.authorPersonalData.userName"
+        :btntext="SectionData.authorPersonalData.btnText"
+        :btnlink="SectionData.authorPersonalData.btnLink"
+      ></AuthorHero>
     </header>
     <!-- Author section  -->
     <ProfileSection></ProfileSection>
@@ -25,6 +33,6 @@ export default {
     return {
       SectionData,
     };
-  }
+  },
 };
 </script>
