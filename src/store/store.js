@@ -2799,12 +2799,12 @@ let SectionData = {
         slug: 'listed-items-tab',
         bsTarget: '#listed-items'
       },
-      {
-        id: 3,
-        title: 'Auctions',
-        slug: 'auctions-tab',
-        bsTarget: '#auctions'
-      },
+      // {
+      //   id: 3,
+      //   title: 'Auctions',
+      //   slug: 'auctions-tab',
+      //   bsTarget: '#auctions'
+      // },
       {
         id: 4,
         title: 'Offer made',
@@ -2817,12 +2817,12 @@ let SectionData = {
         slug: 'offer-received-tab',
         bsTarget: '#offer-received'
       },
-      {
-        id: 6,
-        title: 'Activities',
-        slug: 'activities-tab',
-        bsTarget: '#activities'
-      },
+      // {
+      //   id: 6,
+      //   title: 'Activities',
+      //   slug: 'activities-tab',
+      //   bsTarget: '#activities'
+      // },
     ]
   },
   authorSidebarData: {

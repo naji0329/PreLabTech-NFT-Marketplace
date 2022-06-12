@@ -49,7 +49,7 @@
                                               <router-link :to="item.authorLink" class="custom-tooltip author-link">{{ item.author }}</router-link>
                                           </div><!-- end custom-tooltip-wrap -->
                                       </div><!-- end card-author -->
-                                      <div class="card-price-wrap d-flex align-items-center justify-content-between mb-3">
+                                      <div class="card-price-wrap d-flex align-items-center justify-content-between">
                                           <div class="me-2">
                                               <span class="card-price-title">Price</span>
                                               <span class="card-price-number">{{ item.price }}</span>
@@ -59,6 +59,10 @@
                                               <span class="card-price-number">{{ item.priceTwo }} ETH</span>
                                           </div>
                                       </div><!-- end card-price-wrap -->
+                                      <div class="d-flex justify-content-between mt-3">
+                                        <p class="btn btn-sm btn-primary text-light" data-bs-toggle="modal" data-bs-target="#listModal" >List NFT</p>
+                                        <router-link to="item.path" class="btn btn-sm btn-primary">VIew Detail</router-link>
+                                      </div>
                                   </div><!-- end card-body -->
                                   <router-link
                                       class="details"
@@ -95,7 +99,7 @@
                                               <router-link :to="item.authorLink" class="custom-tooltip author-link">{{ item.author }}</router-link>
                                           </div><!-- end custom-tooltip-wrap -->
                                       </div><!-- end card-author -->
-                                      <div class="card-price-wrap d-flex align-items-center justify-content-between mb-3">
+                                      <div class="card-price-wrap d-flex align-items-center justify-content-between">
                                           <div class="me-2">
                                               <span class="card-price-title">List Price</span>
                                               <span class="card-price-number">10 ETH</span>
@@ -105,6 +109,10 @@
                                               <span class="card-price-number">15 ETH</span>
                                           </div>
                                       </div><!-- end card-price-wrap -->
+                                  <div class="d-flex justify-content-between mt-3">
+                                    <p class="btn btn-sm btn-primary text-light" data-bs-toggle="modal" data-bs-target="#cancelListModal" >Delist NFT</p>
+                                    <router-link to="item.path" class="btn btn-sm btn-primary">VIew Detail</router-link>
+                                  </div>
                                   </div><!-- end card-body -->
                                   <router-link
                                       class="details"
@@ -126,14 +134,50 @@
                           </div><!-- end col -->
                       </div><!-- row -->
                   </div><!-- end tab-pane -->
-                  <div class="tab-pane fade" id="auctions" role="tabpanel" aria-labelledby="auctions-tab">
+                  <!-- <div class="tab-pane fade" id="auctions" role="tabpanel" aria-labelledby="auctions-tab">
                     <h1>auctinos</h1>
-                  </div>
+                  </div> -->
                   <div class="tab-pane fade" id="offer-made" role="tabpanel" aria-labelledby="offer-made-tab">
-                    <h1>offer-made-</h1>
+                      <div class="d-flex justify-content-between w-100">
+                        <p>You made offer to <router-link to="/product-details-v1-1"><span class="text-primary">Palliman #1208</span></router-link>. <small>(Offer price: 0.072 ETH)</small></p> 
+                        <p>1 week ago</p>
+                        <p class="text-danger" data-bs-toggle="modal" data-bs-target="#cancelBidModal">Cancel</p>
+                      </div>
+                      <div class="d-flex justify-content-between w-100">
+                        <p>You made offer to <router-link to="/product-details-v1-1"><span class="text-primary">Palliman #1208</span></router-link>. <small>(Offer price: 0.072 ETH)</small></p> 
+                        <p>1 week ago</p>
+                        <p class="text-danger" data-bs-toggle="modal" data-bs-target="#cancelBidModal">Cancel</p>
+                      </div>
+                      <div class="d-flex justify-content-between w-100">
+                        <p>You made offer to <router-link to="/product-details-v1-1"><span class="text-primary">Palliman #1208</span></router-link>. <small>(Offer price: 0.072 ETH)</small></p> 
+                        <p>1 week ago</p>
+                        <p class="text-success">Confirmed</p>
+                      </div>
+                      <div class="d-flex justify-content-between w-100">
+                        <p>You made offer to <router-link to="/product-details-v1-1"><span class="text-primary">Palliman #1208</span></router-link>. <small>(Offer price: 0.072 ETH)</small></p> 
+                        <p>1 week ago</p>
+                        <p class="text-success">Confirmed</p>
+                      </div>
                   </div>
                   <div class="tab-pane fade" id="offer-received" role="tabpanel" aria-labelledby="offer-received-tab">
-                    <h1>offer-received</h1>
+                      <div class="d-flex justify-content-between w-100">
+                        <p><b>Kamran Ahmed</b> bidded to your <router-link to="/product-details-v1-1"><span class="text-primary">Palliman #1208</span></router-link>. <small>(bid price: 0.072 ETH)</small></p> 
+                        <p>1 week ago</p>
+                        <div class="d-flex gap-2">
+                          <p class="text-success" data-bs-toggle="modal" data-bs-target="#acceptModal">Accept</p>
+                          <p class="text-danger" data-bs-toggle="modal" data-bs-target="#declineModal">Decline</p>
+                        </div>
+                      </div>
+                      <div class="d-flex justify-content-between w-100">
+                        <p><b>Kamran Ahmed</b> bidded to your <router-link to="/product-details-v1-1"><span class="text-primary">Palliman #1208</span></router-link>. <small>(bid price: 0.072 ETH)</small></p> 
+                        <p>1 week ago</p>
+                        <p class="text-success">Confirmed</p>
+                      </div>
+                      <div class="d-flex justify-content-between w-100">
+                        <p><b>Kamran Ahmed</b> bidded to your <router-link to="/product-details-v1-1"><span class="text-primary">Palliman #1208</span></router-link>. <small>(bid price: 0.072 ETH)</small></p> 
+                        <p>1 week ago</p>
+                        <p class="text-success">Confirmed</p>
+                      </div>
                   </div>
                   <div class="tab-pane fade" id="activities" role="tabpanel" aria-labelledby="activities-tab">
                     <h1>activities</h1>
@@ -177,6 +221,123 @@
       <!-- end modal-dialog -->
     </div>
     <!-- end modal-->
+
+
+    <div class="modal fade" id="listModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">List item for sale</h4>
+                    <button type="button" class="btn-close icon-btn" data-bs-dismiss="modal" aria-label="Close">
+                        <em class="ni ni-cross"></em>
+                    </button>
+                </div><!-- end modal-header -->
+                <div class="modal-body">
+                    <p class="mb-3">You are about to list your NFT of <b>Meebits</b>.</p>
+                    <div class="mb-3">
+                        <label class="form-label">List Price</label>
+                        <input type="text" class="form-control form-control-s1" placeholder="Enter list price">
+                    </div>
+                    <!-- <div class="mb-3">
+                        <label class="form-label" v-html="SectionData.placeBidModal.labelTextTwo"></label>
+                        <input type="text" class="form-control form-control-s1" value="1">
+                    </div> -->
+                    <!-- <ul class="total-bid-list mb-4">
+                        <li><span>Your balance</span> <span>10.67856 ETH</span></li>
+                        <li><span>NFT price</span> <span>3.75 ETH</span></li>
+                        <li><span>Service fee</span> <span>3.5%</span></li>
+                        <li><span>You will pay</span> <span>0.013325 ETH</span></li>
+                    </ul> -->
+                    <a :href="SectionData.placeBidModal.btnLink" class="btn btn-primary d-block">List</a>
+                </div><!-- end modal-body -->
+            </div><!-- end modal-content -->
+        </div><!-- end modal-dialog -->
+    </div><!-- end modal-->
+
+    <div class="modal fade" id="cancelListModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Are you sure you want to cancel your listing?</h4>
+                    <button type="button" class="btn-close icon-btn" data-bs-dismiss="modal" aria-label="Close">
+                        <em class="ni ni-cross"></em>
+                    </button>
+                </div><!-- end modal-header -->
+                <div class="modal-body">
+                    <p class="mb-3">Canceling your listing will unpublish this sale from Our Marketplace and requires a transaction to make sure it will never be fulfillable.</p>
+                    
+                    <div class="d-flex justify-content-center gap-5">
+                        <a href="#" data-bs-dismiss="modal" aria-label="Close" class="btn btn-normal d-block">Never mind</a>
+                        <a :href="SectionData.placeBidModal.btnLink" class="btn btn-primary d-block">Cancel listing</a>
+                    </div>
+                </div><!-- end modal-body -->
+            </div><!-- end modal-content -->
+        </div><!-- end modal-dialog -->
+    </div><!-- end modal-->
+    
+    <div class="modal fade" id="cancelBidModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Are you sure you want to cancel your Bid?</h4>
+                    <button type="button" class="btn-close icon-btn" data-bs-dismiss="modal" aria-label="Close">
+                        <em class="ni ni-cross"></em>
+                    </button>
+                </div><!-- end modal-header -->
+                <div class="modal-body">
+                    <p class="mb-3">Canceling your listing will unpublish this sale from Our Marketplace and requires a transaction to make sure it will never be fulfillable.</p>
+                    
+                    <div class="d-flex justify-content-center gap-5">
+                        <a href="#" data-bs-dismiss="modal" aria-label="Close" class="btn btn-normal d-block">Never mind</a>
+                        <a :href="SectionData.placeBidModal.btnLink" class="btn btn-primary d-block">Cancel Bid</a>
+                    </div>
+                </div><!-- end modal-body -->
+            </div><!-- end modal-content -->
+        </div><!-- end modal-dialog -->
+    </div><!-- end modal-->
+    
+    <div class="modal fade" id="acceptModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Are you sure you want to accept this bid?</h4>
+                    <button type="button" class="btn-close icon-btn" data-bs-dismiss="modal" aria-label="Close">
+                        <em class="ni ni-cross"></em>
+                    </button>
+                </div><!-- end modal-header -->
+                <div class="modal-body">
+                    <p class="mb-3">Accepting this bid will transfer ownership of this NFT and requires a transaction to make sure it will never be fulfillable.</p>
+                    
+                    <div class="d-flex justify-content-center gap-5">
+                        <a href="#" data-bs-dismiss="modal" aria-label="Close" class="btn btn-normal d-block">Never mind</a>
+                        <a :href="SectionData.placeBidModal.btnLink" class="btn btn-primary d-block">Accpet</a>
+                    </div>
+                </div><!-- end modal-body -->
+            </div><!-- end modal-content -->
+        </div><!-- end modal-dialog -->
+    </div><!-- end modal-->
+
+    <div class="modal fade" id="declineModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Are you sure you want to decline this bid?</h4>
+                    <button type="button" class="btn-close icon-btn" data-bs-dismiss="modal" aria-label="Close">
+                        <em class="ni ni-cross"></em>
+                    </button>
+                </div><!-- end modal-header -->
+                <div class="modal-body">
+                    <p class="mb-3">Declining this bid action requires a transaction to make sure it will never be fulfillable.</p>
+                    
+                    <div class="d-flex justify-content-center gap-5">
+                        <a href="#" data-bs-dismiss="modal" aria-label="Close" class="btn btn-normal d-block">Never mind</a>
+                        <a :href="SectionData.placeBidModal.btnLink" class="btn btn-primary d-block">Decline</a>
+                    </div>
+                </div><!-- end modal-body -->
+            </div><!-- end modal-content -->
+        </div><!-- end modal-dialog -->
+    </div><!-- end modal-->
+
     <!-- Modal -->
   </section>
   <!-- end author-section -->
