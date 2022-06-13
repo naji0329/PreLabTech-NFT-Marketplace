@@ -7,7 +7,7 @@
             <router-link to="/explore" class="menu-link">Explore</router-link>
           </li>
           <li class="menu-item">
-            <router-link to="/create-single" class="menu-link">Create</router-link>
+            <router-link to="/create" class="menu-link">Create</router-link>
           </li>
           <li class="menu-item has-sub">
               <a href="#" class="menu-link menu-toggle">{{ SectionData.headerData.menuList3.title }}</a>

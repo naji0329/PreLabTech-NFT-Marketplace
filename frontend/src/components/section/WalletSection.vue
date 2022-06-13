@@ -48,6 +48,7 @@
 <script>
 // Import component data. You can change the data in the store to reflect in all component
 import SectionData from '@/store/store.js'
+import AuthService from "@/services/AuthService.js";
 
 
 export default {
@@ -63,6 +64,12 @@ export default {
     connectMetamaskWallet : async function() {
       const [userAddress] = await window.ethereum.enable();
       this.metamaskWallet = userAddress;
+
+      if(userAddress) {
+        console.log("login with Metamask");
+        this.login();
+      }
+
     },
     connectPhantomWallet : async function() {
       const { solana } = window;
@@ -74,7 +81,23 @@ export default {
         // { code: 4001, message: 'User rejected the request.' }
         }
       }
-    }
+    },    
+    login: async function() {
+      try {
+        // const credentials = {
+        //   email: this.email,
+        //   password: this.password,
+        // };
+        const response = await AuthService.loginWithMetamask(this.metamaskWallet);
+        console.log('response', response);
+        // this.msg = response.msg;
+        // alert(this.msg);
+        // this.$router.push("/offers");
+      } catch (error) {
+        this.msg = error.response.data.msg;
+        alert(this.msg);
+      }
+    },
   }
 }
 </script>

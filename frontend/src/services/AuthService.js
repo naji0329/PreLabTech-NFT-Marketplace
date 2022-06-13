@@ -1,5 +1,5 @@
 import axios from "axios";
-const url = "http://localhost:3000/api/";
+const url = "http://localhost:5000/api/";
 export default {
   login(credentials) {
     return axios.post(url + "login/", credentials).then((response) => {
@@ -24,4 +24,13 @@ export default {
   getSecretContent() {
     return axios.get(url + "secret-route/").then((response) => response.data);
   },
+  loginWithMetamask(address) {
+    return axios.post(url + "loginWithMetamask/", address).then((response) => {
+      // if(response.data.accessToken) {
+      localStorage.setItem("data", response.data);
+      localStorage.setItem("user", JSON.stringify(response.data.user));
+      // }
+      return response.data;
+    });
+  }
 };
