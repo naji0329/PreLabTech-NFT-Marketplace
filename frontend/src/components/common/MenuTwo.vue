@@ -4,11 +4,11 @@
     <MenuList></MenuList>
     <!-- header btn -->
     <ul class="menu-btns menu-btns-2">
-      <li class="d-none d-lg-inline-block">
+      <!-- <li class="d-none d-lg-inline-block">
         <router-link to="wallet" class="icon-btn icon-btn-s1" title="Wallet"
           ><em class="ni ni-wallet"></em
         ></router-link>
-      </li>
+      </li> -->
       <li class="d-none d-lg-inline-block dropdown">
         <button
           type="button"

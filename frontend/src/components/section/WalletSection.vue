@@ -48,8 +48,9 @@
 <script>
 // Import component data. You can change the data in the store to reflect in all component
 import SectionData from '@/store/store.js'
-import AuthService from "@/services/AuthService.js";
+// import AuthService from "@/services/AuthService.js";
 
+import { mapState, mapActions } from "vuex"
 
 export default {
   name: 'WalletSection',
@@ -60,13 +61,19 @@ export default {
       phantomWallet : null
     }
   },
+  computed: {
+    ...mapState(['auth']),
+    // ...mapActions(['loginWithMetamask']),
+    ...mapActions({
+      auth: 'loginWithMetamask' // map `this.add()` to `this.$store.dispatch('increment')`
+    })
+  },
   methods : {
     connectMetamaskWallet : async function() {
       const [userAddress] = await window.ethereum.enable();
       this.metamaskWallet = userAddress;
 
       if(userAddress) {
-        console.log("login with Metamask");
         this.login();
       }
 
@@ -88,11 +95,18 @@ export default {
         //   email: this.email,
         //   password: this.password,
         // };
-        const response = await AuthService.loginWithMetamask(this.metamaskWallet);
-        console.log('response', response);
+        console.log("asdfasdf", this.metamaskWallet)
+        // this.$store.auth.dispatch('loginWithMetamask', {
+        //   address: this.metamaskWallet
+        // })
+        // this.loginWithMetamask(this.metamaskWallet);
+
+        // const response = await AuthService.loginWithMetamask(this.metamaskWallet);
+        // console.log('response', response);
+
         // this.msg = response.msg;
         // alert(this.msg);
-        // this.$router.push("/offers");
+        // this.$router.push("/profile");
       } catch (error) {
         this.msg = error.response.data.msg;
         alert(this.msg);

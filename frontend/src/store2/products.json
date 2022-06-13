@@ -1,0 +1,30 @@
+[
+  {
+    "id": 1,
+    "title": "Item 1",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Alias commodi eaque exercitationem, explicabo fuga hic illo ipsa minima mollitia optio possimus, quae quas recusandae repellendus sequi sit temporibus ullam voluptatem.",
+    "image": "https://via.placeholder.com/150x100",
+    "price": "68.0"
+  },
+  {
+    "id": 2,
+    "title": "Item 2",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Alias commodi eaque exercitationem, explicabo fuga hic illo ipsa minima mollitia optio possimus, quae quas recusandae repellendus sequi sit temporibus ullam voluptatem.",
+    "image": "https://via.placeholder.com/150x100",
+    "price": "28.0"
+  },
+  {
+    "id": 3,
+    "title": "Item 3",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Alias commodi eaque exercitationem, explicabo fuga hic illo ipsa minima mollitia optio possimus, quae quas recusandae repellendus sequi sit temporibus ullam voluptatem.",
+    "image": "https://via.placeholder.com/150x100",
+    "price": "56.0"
+  },
+  {
+    "id": 4,
+    "title": "Item 4",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Alias commodi eaque exercitationem, explicabo fuga hic illo ipsa minima mollitia optio possimus, quae quas recusandae repellendus sequi sit temporibus ullam voluptatem.",
+    "image": "https://via.placeholder.com/150x100",
+    "price": "43.0"
+  }
+]

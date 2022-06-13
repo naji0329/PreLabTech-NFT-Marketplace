@@ -1,7 +1,7 @@
 import { createApp } from "vue";
 import App from "./App.vue";
 import router from "./router";
-// import store from "./store";
+import store from "./store";
 
 // vue app
 const app = createApp(App);
@@ -170,4 +170,4 @@ app.component("SecuritySection", SecuritySection);
 app.component("ThemeSwitcher", ThemeSwitcher);
 
 // vue app
-app.use(router).mount("#app");
+app.use(store).use(router).mount("#app");

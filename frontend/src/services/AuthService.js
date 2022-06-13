@@ -24,8 +24,9 @@ export default {
   getSecretContent() {
     return axios.get(url + "secret-route/").then((response) => response.data);
   },
+
   loginWithMetamask(address) {
-    return axios.post(url + "loginWithMetamask/", address).then((response) => {
+    return axios.post(url + "auth/loginWithMetamask/", {address: address}).then((response) => {
       // if(response.data.accessToken) {
       localStorage.setItem("data", response.data);
       localStorage.setItem("user", JSON.stringify(response.data.user));

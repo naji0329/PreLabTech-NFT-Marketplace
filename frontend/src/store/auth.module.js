@@ -1,12 +1,27 @@
 import AuthService from '../services/AuthService';
-const user = JSON.parse(localStorage.getItem('user'));
+
+const user = localStorage.getItem('user');
+
 const initialState = user
   ? { status: { loggedIn: true }, user }
   : { status: { loggedIn: false }, user: null };
+
 export const auth = {
   namespaced: true,
   state: initialState,
   actions: {
+    loginWithMetamask({ commit }, address) {
+      return AuthService.loginWithMetamask(address).then(
+        user => {
+          commit('loginSuccess', user);
+          return Promise.resolve(user);
+        },
+        error => {
+          commit('loginFailure');
+          return Promise.reject(error);
+        }
+      );
+    },
     login({ commit }, user) {
       return AuthService.login(user).then(
         user => {
@@ -54,6 +69,11 @@ export const auth = {
     },
     registerFailure(state) {
       state.status.loggedIn = false;
+    }
+  },
+  getters: {
+    isLoggedIn: (state) => () => {
+      return state.status.loggedIn;
     }
   }
 };

@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken');
 const config = require('config');
 const { check, validationResult } = require('express-validator');
 
+
 const User = require('../../models/User');
 
 // @route    GET api/auth
@@ -74,5 +75,53 @@ router.post(
     }
   }
 );
+
+
+// @route    POST api/auth/loginWithMetamask
+// @desc     Authenticate user & get token
+// @access   Public
+router.post(
+  '/loginWithMetamask',
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    const { address } = req.body;
+
+    try {
+      let user = await User.findOne({ address });
+
+      if (!user) {
+        user = new User({
+          ethereumAddress: address
+        });
+        await user.save();
+        user = await User.findOne({ ethereumAddress: address });
+      }
+
+      const payload = {
+        user: {
+          id: user.id
+        }
+      };
+
+      jwt.sign(
+        payload,
+        config.get('jwtSecret'),
+        { expiresIn: '5 days' },
+        (err, token) => {
+          if (err) throw err;
+          res.json({ token });
+        }
+      );
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send('Server error');
+    }
+  }
+);
+
 
 module.exports = router;

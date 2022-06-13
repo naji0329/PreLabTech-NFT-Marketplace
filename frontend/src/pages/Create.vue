@@ -41,6 +41,8 @@
 // Import component data. You can change the data in the store to reflect in all component
 import SectionData from '@/store/store.js'
 
+import {mapState, mapGetters} from "vuex"
+
 export default {
     name: 'Create',
     data () {
@@ -48,10 +50,12 @@ export default {
             SectionData
         }
     },
-    beforeCreate () {
-        const userData = localStorage.getItem('user');
-        console.log('afsdfasdf', userData)
-        if (!userData) {
+    computed: {
+        ...mapState(['auth']),
+        ...mapGetters(['isLoggedIn'])
+    },
+    mounted () {
+        if (!this.isLoggedIn) {
             this.$router.push({ name: 'wallet' })
         }
     }
