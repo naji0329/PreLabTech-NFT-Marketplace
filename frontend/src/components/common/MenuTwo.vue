@@ -63,10 +63,11 @@
 <script>
 // Import component data. You can change the data in the store to reflect in all component
 import SectionData from "@/store/store.js";
-import AuthService from "@/services/AuthService.js";
 
 // @ is an alias to /src
 import MenuList from "@/components/common/MenuList.vue";
+
+import { mapActions, mapState } from 'vuex'
 
 export default {
   name: "MenuTwo",
@@ -122,16 +123,15 @@ export default {
 
     themeSwitcher(".theme-toggler");
   },
+  computed: {
+    ...mapState(['auth'])
+  },
   methods: {
-    async logout() {
-      // localStorage.removeItem('user');
-      // this.$router.push("/login");
-      const response = await AuthService.logout();
-      console.log(response);
-      this.msg = response;
-      alert(this.msg);
-      this.$router.push("/login");
-    },
+    ...mapActions({_logout: "auth/logout"}),
+    logout: function () {
+      this._logout();
+      this.$router.push({ name: "Home"})
+    }
   },
 };
 </script>

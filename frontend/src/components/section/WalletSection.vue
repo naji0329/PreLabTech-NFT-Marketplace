@@ -89,9 +89,9 @@ export default {
     },    
     login: async function() {
       try { 
-        this.loginWithMetamask(this.metamaskWallet);
+        await this.loginWithMetamask(this.metamaskWallet);
         if (this.auth.status.loggedIn) {
-          this.$router.go(-1)
+            this.$router.push({ name: "profile"})
         }
       } catch (error) {
         this.msg = error.response.data.msg;

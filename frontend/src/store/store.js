@@ -2789,7 +2789,7 @@ let SectionData = {
       {
         id: 1,
         isActive: 'active',
-        title: 'My items',
+        title: 'My NFTs',
         slug: 'my-items-tab',
         bsTarget: '#my-items'
       },
@@ -2799,24 +2799,30 @@ let SectionData = {
         slug: 'listed-items-tab',
         bsTarget: '#listed-items'
       },
+      {
+        id: 3,
+        title: 'Offers',
+        slug: 'offers-tab',
+        bsTarget: '#offer'
+      },
       // {
       //   id: 3,
       //   title: 'Auctions',
       //   slug: 'auctions-tab',
       //   bsTarget: '#auctions'
       // },
-      {
-        id: 4,
-        title: 'Offer made',
-        slug: 'offer-made-tab',
-        bsTarget: '#offer-made'
-      },
-      {
-        id: 5,
-        title: 'Offer received',
-        slug: 'offer-received-tab',
-        bsTarget: '#offer-received'
-      },
+      // {
+      //   id: 4,
+      //   title: 'Offers made',
+      //   slug: 'offer-made-tab',
+      //   bsTarget: '#offer-made'
+      // },
+      // {
+      //   id: 5,
+      //   title: 'Offer received',
+      //   slug: 'offer-received-tab',
+      //   bsTarget: '#offer-received'
+      // },
       // {
       //   id: 6,
       //   title: 'Activities',

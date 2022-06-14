@@ -49,19 +49,9 @@
                                               <router-link :to="item.authorLink" class="custom-tooltip author-link">{{ item.author }}</router-link>
                                           </div><!-- end custom-tooltip-wrap -->
                                       </div><!-- end card-author -->
-                                      <div class="card-price-wrap d-flex align-items-center justify-content-between">
-                                          <div class="me-2">
-                                              <span class="card-price-title">Price</span>
-                                              <span class="card-price-number">{{ item.price }}</span>
-                                          </div>
-                                          <div>
-                                              <span class="card-price-title">Curren bid</span>
-                                              <span class="card-price-number">{{ item.priceTwo }} ETH</span>
-                                          </div>
-                                      </div><!-- end card-price-wrap -->
                                       <div class="d-flex justify-content-between mt-3">
-                                        <p class="btn btn-sm btn-primary text-light" data-bs-toggle="modal" data-bs-target="#listModal" >List NFT</p>
-                                        <router-link to="item.path" class="btn btn-sm btn-primary">VIew Detail</router-link>
+                                        <p class="btn btn-sm btn-primary text-light" data-bs-toggle="modal" data-bs-target="#listModal" >List</p>
+                                        <router-link to="item.path" class="btn btn-sm btn-primary">VIew</router-link>
                                       </div>
                                   </div><!-- end card-body -->
                                   <router-link
@@ -101,17 +91,69 @@
                                       </div><!-- end card-author -->
                                       <div class="card-price-wrap d-flex align-items-center justify-content-between">
                                           <div class="me-2">
-                                              <span class="card-price-title">List Price</span>
+                                              <span class="card-price-title">Listed Price</span>
                                               <span class="card-price-number">10 ETH</span>
                                           </div>
                                           <div>
-                                              <span class="card-price-title">Curren bid</span>
+                                              <span class="card-price-title">Offer Price</span>
                                               <span class="card-price-number">15 ETH</span>
                                           </div>
                                       </div><!-- end card-price-wrap -->
                                   <div class="d-flex justify-content-between mt-3">
-                                    <p class="btn btn-sm btn-primary text-light" data-bs-toggle="modal" data-bs-target="#cancelListModal" >Delist NFT</p>
-                                    <router-link to="item.path" class="btn btn-sm btn-primary">VIew Detail</router-link>
+                                    <p class="btn btn-sm btn-primary text-light" data-bs-toggle="modal" data-bs-target="#cancelListModal" >Delist</p>
+                                    <p class="btn btn-sm btn-primary text-light" data-bs-toggle="modal" data-bs-target="#acceptModal" >Accpet</p>
+                                    <!-- <router-link to="item.path" class="btn btn-sm btn-primary">Accpet</router-link> -->
+                                  </div>
+                                  </div><!-- end card-body -->
+                                  <router-link
+                                      class="details"
+                                      :to="{
+                                          name: 'ProductDetail',
+                                          params: {
+                                          id: item.id,
+                                          title: item.title,
+                                          imgLg: item.imgLg,
+                                          metaText: item.metaText,
+                                          metaTextTwo: item.metaTextTwo,
+                                          metaTextThree: item.metaTextThree,
+                                          content: item.content,
+                                          }
+                                      }"
+                                  >
+                                  </router-link>
+                              </div><!-- end card -->
+                          </div><!-- end col -->
+                      </div><!-- row -->
+                  </div><!-- end tab-pane -->
+                  <div class="tab-pane fade" id="offers" role="tabpanel" aria-labelledby="offers-tab">
+                      <div class="row g-gs">
+                          <div class="col-md-4" v-for="item in SectionData.productData.ownedList" :key="item.id">
+                              <div class="card card-full">
+                                  <div class="card-image">
+                                      <img :src="item.img" class="card-img-top" alt="art image">
+                                  </div>
+                                  <div class="card-body p-4">
+                                      <h5 class="card-title text-truncate mb-0">{{ item.title  }}</h5>
+                                      <div class="card-author mb-1 d-flex align-items-center">
+                                          <span class="me-1 card-author-by">By</span>
+                                          <div class="custom-tooltip-wrap">
+                                              <router-link :to="item.authorLink" class="custom-tooltip author-link">{{ item.author }}</router-link>
+                                          </div><!-- end custom-tooltip-wrap -->
+                                      </div><!-- end card-author -->
+                                      <div class="card-price-wrap d-flex align-items-center justify-content-between">
+                                          <div class="me-2">
+                                              <span class="card-price-title">Listed Price</span>
+                                              <span class="card-price-number">10 ETH</span>
+                                          </div>
+                                          <div>
+                                              <span class="card-price-title">Offered Price</span>
+                                              <span class="card-price-number">15 ETH</span>
+                                          </div>
+                                      </div><!-- end card-price-wrap -->
+                                  <div class="d-flex justify-content-between mt-3">
+                                    <p class="btn btn-sm btn-primary text-light" data-bs-toggle="modal" data-bs-target="#cancelListModal" >Delist</p>
+                                    <p class="btn btn-sm btn-primary text-light" data-bs-toggle="modal" data-bs-target="#acceptModal" >Accpet</p>
+                                    <!-- <router-link to="item.path" class="btn btn-sm btn-primary">Accpet</router-link> -->
                                   </div>
                                   </div><!-- end card-body -->
                                   <router-link

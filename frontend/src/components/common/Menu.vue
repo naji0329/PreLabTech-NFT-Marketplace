@@ -40,7 +40,7 @@
               <p
                 class="dropdown-item card-generic-item"
                 href=""
-                @click="logout()"
+                @click="this.logout()"
               >
                 <em class="ni ni-power me-2"></em>Logout
               </p>
@@ -74,6 +74,8 @@ import SectionData from '@/store/store.js'
 // @ is an alias to /src
 import MenuList from '@/components/common/MenuList.vue'
 
+import { mapActions, mapState } from 'vuex'
+
 export default {
   name: 'Menu',
   props: ['classname'],
@@ -83,6 +85,16 @@ export default {
   data () {
     return {
       SectionData
+    }
+  },
+  computed: {
+    ...mapState(['auth'])
+  },
+  methods : {
+    ...mapActions({_logout: "auth/logout"}),
+    logout: function () {
+      this._logout();
+      this.$router.push({ name: "Home"})
     }
   }
 }
