@@ -74,7 +74,7 @@ export const auth = {
     }
   },
   getters: {
-    isLoggoedIn: (state) => () => {
+    isLoggedIn: (state) => () => {
       return state.status.loggedIn;
     }
   }

@@ -52,10 +52,10 @@ export default {
     },
     computed: {
         ...mapState(['auth']),
-        ...mapGetters(['auth/isLoggedIn'])
+        ...mapGetters({isLoggedIn: ['auth/isLoggedIn']})
     },
     mounted () {
-        if (!this.isLoggedIn) {
+        if (!this.auth.status.loggedIn) {
             this.$router.push({ name: 'wallet' })
         }
     }

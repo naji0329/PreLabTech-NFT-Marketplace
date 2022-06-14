@@ -50,7 +50,7 @@
 import SectionData from '@/store/store.js'
 // import AuthService from "@/services/AuthService.js";
 
-import { mapState, mapActions } from "vuex"
+import { mapState, mapActions, mapGetters } from "vuex"
 
 export default {
   name: 'WalletSection',
@@ -62,7 +62,8 @@ export default {
     }
   },
   computed: {
-    ...mapState(['auth'])
+    ...mapState(['auth']),
+    ...mapGetters({isLoggoedIn: ['auth/isLoggoedIn']})
   },
   methods : {
     ...mapActions({loginWithMetamask: "auth/loginWithMetamask"}),
@@ -89,11 +90,9 @@ export default {
     login: async function() {
       try { 
         this.loginWithMetamask(this.metamaskWallet);
-        
-        // await this.$store.dispatch("auth/loginWithMetamask", this.metamaskWallet);
-        // if(this.auth.status.loggedIn) {
-        //   this.$router.push("/profile");
-        // }
+        if (this.auth.status.loggedIn) {
+          this.$router.go(-1)
+        }
       } catch (error) {
         this.msg = error.response.data.msg;
         alert(this.msg);
