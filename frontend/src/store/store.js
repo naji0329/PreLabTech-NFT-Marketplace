@@ -2803,7 +2803,7 @@ let SectionData = {
         id: 3,
         title: 'Offers',
         slug: 'offers-tab',
-        bsTarget: '#offer'
+        bsTarget: '#offers'
       },
       // {
       //   id: 3,
