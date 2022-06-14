@@ -52,7 +52,7 @@ export default {
     },
     computed: {
         ...mapState(['auth']),
-        ...mapGetters(['isLoggedIn'])
+        ...mapGetters(['auth/isLoggedIn'])
     },
     mounted () {
         if (!this.isLoggedIn) {

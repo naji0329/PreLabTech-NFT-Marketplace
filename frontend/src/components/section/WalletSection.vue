@@ -62,13 +62,10 @@ export default {
     }
   },
   computed: {
-    ...mapState(['auth']),
-    // ...mapActions(['loginWithMetamask']),
-    ...mapActions({
-      auth: 'loginWithMetamask' // map `this.add()` to `this.$store.dispatch('increment')`
-    })
+    ...mapState(['auth'])
   },
   methods : {
+    ...mapActions({loginWithMetamask: "auth/loginWithMetamask"}),
     connectMetamaskWallet : async function() {
       const [userAddress] = await window.ethereum.enable();
       this.metamaskWallet = userAddress;
@@ -90,23 +87,13 @@ export default {
       }
     },    
     login: async function() {
-      try {
-        // const credentials = {
-        //   email: this.email,
-        //   password: this.password,
-        // };
-        console.log("asdfasdf", this.metamaskWallet)
-        // this.$store.auth.dispatch('loginWithMetamask', {
-        //   address: this.metamaskWallet
-        // })
-        // this.loginWithMetamask(this.metamaskWallet);
-
-        // const response = await AuthService.loginWithMetamask(this.metamaskWallet);
-        // console.log('response', response);
-
-        // this.msg = response.msg;
-        // alert(this.msg);
-        // this.$router.push("/profile");
+      try { 
+        this.loginWithMetamask(this.metamaskWallet);
+        
+        // await this.$store.dispatch("auth/loginWithMetamask", this.metamaskWallet);
+        // if(this.auth.status.loggedIn) {
+        //   this.$router.push("/profile");
+        // }
       } catch (error) {
         this.msg = error.response.data.msg;
         alert(this.msg);

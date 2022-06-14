@@ -8,7 +8,9 @@ const initialState = user
 
 export const auth = {
   namespaced: true,
-  state: initialState,
+  state: {
+    ...initialState
+  },
   actions: {
     loginWithMetamask({ commit }, address) {
       return AuthService.loginWithMetamask(address).then(
@@ -72,7 +74,7 @@ export const auth = {
     }
   },
   getters: {
-    isLoggedIn: (state) => () => {
+    isLoggoedIn: (state) => () => {
       return state.status.loggedIn;
     }
   }
