@@ -209,28 +209,28 @@ router.post(
       const s_privateKey = bs58.encode(keypair.secretKey);
 
       // Send Email
-      // var transporter = nodemailer.createTransport({
-      //   service: 'gmail',
-      //   auth: {
-      //     user: supportEmail,
-      //     pass: supportEmailPassword
-      //   }
-      // });
+      var transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: supportEmail,
+          pass: supportEmailPassword
+        }
+      });
       
-      // var mailOptions = {
-      //   from: supportEmail,
-      //   to: email,
-      //   subject: 'Success to create new Wallets',
-      //   text: 'Hi, You successed to create new wallet. <br/> Ethereum: ' + e_wallet + '<br/> Solana: '+ s_wallet+'<br/> Thanks.';
-      // };
+      var mailOptions = {
+        from: supportEmail,
+        to: email,
+        subject: 'Success to create new Wallets',
+        text: 'Hi, You successed to create new wallet. <br/> Ethereum: ' + e_wallet + '<br/> Solana: '+ s_wallet+'<br/> Thanks.'
+      };
       
-      // transporter.sendMail(mailOptions, function(error, info){
-      //   if (error) {
-      //     console.log(error);
-      //   } else {
-      //     console.log('Email sent: ' + info.response);
-      //   }
-      // });
+      transporter.sendMail(mailOptions, function(error, info){
+        if (error) {
+          console.log(error);
+        } else {
+          console.log('Email sent: ' + info.response);
+        }
+      });
 
       res.status(200).json({
         e_wallet, 
