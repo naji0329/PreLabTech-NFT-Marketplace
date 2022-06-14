@@ -43,10 +43,10 @@
                                                     <p class="fw-semibold text-black text-truncate">{{ item.title }}</p>
                                                     <p class="small">{{ item.date }}</p>
                                                 </div>
-                                                <div>
+                                                <!-- <div>
                                                     <p class="text-success" data-bs-toggle="modal" data-bs-target="#acceptModal" >Accept</p>
                                                     <p class="text-danger"  data-bs-toggle="modal" data-bs-target="#declineModal" >Decline</p>
-                                                </div>
+                                                </div> -->
                                             </div><!-- end card -->
                                         </div><!-- end item-detail-tab-wrap -->
                                     </div><!-- end tab-pane -->
@@ -121,7 +121,7 @@
                                         </div>
                                     </li>
                                 </ul>
-                                <p class="mt-4">When user is owner of this NFT</p>
+                                <!-- <p class="mt-4">When user is owner of this NFT</p>
                                 <ul class="btns-group d-flex">
                                     <li class="flex-grow-1">
                                         <a href="#" data-bs-toggle="modal" data-bs-target="#listModal" class="btn btn-primary d-block">Sell</a>
@@ -137,7 +137,7 @@
                                             </div>
                                         </div>
                                     </li>
-                                </ul>
+                                </ul> -->
                             </div><!-- end item-detail-btns -->
                         </div><!-- end item-detail-content -->
                     </div><!-- end col -->

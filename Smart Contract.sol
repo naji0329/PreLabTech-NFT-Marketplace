@@ -1,15 +1,3 @@
-    |
-    |  ERC-721 NFT Marketplace
-    |
-    |----------------------------
-    |
-    |  >  Matcha: Fully featured ERC-721 Token, with Buy, 
-    |     Sell and Auction NFT Marketplace
-    |
-
-
-*/
-
 pragma solidity ^0.8.3;
 
 /**

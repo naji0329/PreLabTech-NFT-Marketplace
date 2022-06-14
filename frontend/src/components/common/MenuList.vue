@@ -9,15 +9,15 @@
           <li class="menu-item">
             <router-link to="/create" class="menu-link">Create</router-link>
           </li>
-          <li class="menu-item has-sub">
+          <!-- <li class="menu-item has-sub">
               <a href="#" class="menu-link menu-toggle">{{ SectionData.headerData.menuList3.title }}</a>
               <div class="menu-sub">
                  <ul class="menu-list">
                       <li class="menu-item" v-for="nav in SectionData.headerData.menuList3.navList" :key="nav.id"><router-link :to="nav.path" class="menu-link">{{ nav.title }}</router-link></li>
                  </ul>
               </div>
-          </li>
-          <li class="menu-item has-sub">
+          </li> -->
+          <!-- <li class="menu-item has-sub">
               <a href="#" class="menu-link menu-toggle">{{ SectionData.headerData.menuList4.title }}</a>
               <div class="menu-sub menu-mega">
                 <div class="menu-mega-row">
@@ -29,7 +29,7 @@
                     </ul>
                 </div>
               </div>
-          </li>
+          </li> -->
      </ul>
 </template>
 
