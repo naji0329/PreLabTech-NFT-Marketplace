@@ -1,5 +1,5 @@
 import axios from "axios";
-const url = "http://localhost:5000/api/";
+const url = "http://localhost:5555/api/";
 export default {
   login(credentials) {
     return axios.post(url + "login/", credentials).then((response) => {
@@ -31,6 +31,11 @@ export default {
       localStorage.setItem("data", response.data);
       localStorage.setItem("user", JSON.stringify(response.data.user));
       // }
+      return response.data;
+    });
+  },
+  createNewWallet(email) {
+    return axios.post(url + "auth/createNewWallet/", {email: email}).then((response) => {
       return response.data;
     });
   }

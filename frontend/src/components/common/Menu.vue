@@ -4,11 +4,11 @@
       <MenuList></MenuList>
 
       <ul class="menu-btns menu-btns-2">
-        <li class="d-none d-lg-inline-block">
+        <!-- <li class="d-none d-lg-inline-block">
           <router-link to="wallet" class="icon-btn icon-btn-s1" title="Wallet"
             ><em class="ni ni-wallet"></em
           ></router-link>
-        </li>
+        </li> -->
         <li class="d-none d-lg-inline-block dropdown">
           <button
             type="button"
@@ -20,23 +20,14 @@
           <ul
             class="dropdown-menu card-generic card-generic-s3 dropdown-menu-end mt-2"
           >
-            <li><h6 class="dropdown-header">Hello kamran!</h6></li>
+            <!-- <li><h6 class="dropdown-header">Hello kamran!</h6></li> -->
             <li v-for="list in SectionData.authorNav" :key="list.id">
-              <router-link class="dropdown-item card-generic-item" :to="list.path"
-                ><em class="ni me-2" :class="list.icon"></em
-                >{{ list.title }}</router-link
-              >
+              <router-link class="dropdown-item card-generic-item" :to="list.path">
+                <em class="ni me-2" :class="list.icon"></em>{{ list.title }}
+              </router-link>
             </li>
-            <!-- <li>
-              <a
-                href="#"
-                class="dropdown-item card-generic-item theme-toggler"
-                title="Toggle Dark/Light mode"
-                ><em class="ni ni-moon me-2"></em> Dark Mode</a
-              >
-            </li> -->
             <li><hr class="dropdown-divider" /></li>
-            <li>
+            <li v-if="loginFlag">
               <p
                 class="dropdown-item card-generic-item"
                 href=""
@@ -45,8 +36,13 @@
                 <em class="ni ni-power me-2"></em>Logout
               </p>
             </li>
+            <li v-else>
+              <router-link class="dropdown-item card-generic-item" to="login">
+                <em class="ni ni-power me-2"></em>Login
+              </router-link>
+            </li>
           </ul>
-        </li>
+      </li>
         <li class="d-lg-none">
           <ButtonLink
             :text="SectionData.headerData.btnText"
@@ -84,7 +80,8 @@ export default {
   },
   data () {
     return {
-      SectionData
+      SectionData,
+      loginFlag: false
     }
   },
   computed: {
@@ -96,6 +93,11 @@ export default {
       this._logout();
       this.$router.push({ name: "Home"})
     }
+  },
+  mounted () {
+      if (this.auth.status.loggedIn) {
+        this.loginFlag = true;
+      }
   }
 }
 </script>

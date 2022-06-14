@@ -7,6 +7,7 @@
     </header>
     <!-- login section -->
     <loginSection></loginSection>
+
     <!-- Blog  -->
     <Footer></Footer>
 </div><!-- end page-wrap -->

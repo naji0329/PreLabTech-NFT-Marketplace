@@ -387,6 +387,8 @@
 // Import component data. You can change the data in the store to reflect in all component
 import SectionData from "@/store/store.js";
 
+import {mapState, mapGetters} from "vuex"
+
 export default {
   name: "ProfileSection",
   data() {
@@ -502,10 +504,16 @@ export default {
   computed: {
     itemsLoaded() {
       return this.items.slice(0, this.currentPage);
-      
     },
-  },
+    ...mapState(['auth']),
+    ...mapGetters({isLoggedIn: ['auth/isLoggedIn']})
 
+  },
+  mounted () {
+    if (!this.auth.status.loggedIn) {
+        this.$router.push({ name: 'wallet' })
+    }
+  }
 };
 </script>
 

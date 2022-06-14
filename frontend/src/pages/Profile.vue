@@ -3,7 +3,7 @@
     <!-- header  -->
     <header class="header-section has-header-main bg-pattern-3">
       <!-- Header main -->
-      <HeaderDashboard></HeaderDashboard>
+      <HeaderMain></HeaderMain>
       <!-- hero -->
       <AuthorHero
         avatarSize="avatar-3"

@@ -5,13 +5,12 @@
         <div class="col-lg-6 mb-5 mb-lg-0 d-none d-lg-block">
           <img :src="SectionData.loginData.img" alt="" class="img-fluid" />
         </div>
-        <!-- end col-lg-6 -->
         <div class="col-lg-6">
           <div class="section-head-sm">
-            <h2 class="mb-1">{{ SectionData.loginData.title }}</h2>
+            <h2 class="mb-1">Welcome to the PreLabTech</h2>
             <p>{{ SectionData.loginData.subTitle }}</p>
           </div>
-          <form action="#">
+          <!-- <form action="#">
             <div class="form-floating mb-4">
               <input
                 type="email"
@@ -22,7 +21,6 @@
               />
               <label for="emailAddress">Email address</label>
             </div>
-            <!-- end form-floating -->
             <div class="form-floating mb-4">
               <input
                 type="password"
@@ -41,7 +39,6 @@
                 <em class="password-hidden ni ni-eye"></em>
               </a>
             </div>
-            <!-- end form-floating -->
             <div
               class="d-flex flex-wrap align-items-center justify-content-between mb-4"
             >
@@ -67,20 +64,6 @@
               {{ SectionData.loginData.btnText }}
             </button>
             <span class="d-block my-4">— or login with —</span>
-            <ul class="btns-group d-flex">
-              <li
-                class="flex-grow-1"
-                v-for="(list, i) in SectionData.loginData.btns"
-                :key="i"
-              >
-                <router-link
-                  :to="list.path"
-                  class="btn d-block"
-                  :class="list.btnClass"
-                  ><em class="ni" :class="list.icon"></em> {{ list.title }}
-                </router-link>
-              </li>
-            </ul>
             <p class="mt-3 form-text">
               {{ SectionData.loginData.haveAccountText }}
               <router-link
@@ -89,13 +72,47 @@
                 >{{ SectionData.loginData.btnTextTwo }}</router-link
               >
             </p>
-          </form>
+          </form> -->
+          <WalletSection></WalletSection>
+
+          <div>
+            <p>If you don't have wallet, You can <span style="cursor: pointer"  data-bs-toggle="modal" data-bs-target="#createNewWalletModal"><b>create</b></span> a new wallet from website.</p>
+          </div>
         </div>
         <!-- end col-lg-6 -->
       </div>
       <!-- end row -->
     </div>
     <!-- end container -->
+
+    
+    <div class="modal fade" id="createNewWalletModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Create New Wallet.</h4>
+                    <button type="button" class="btn-close icon-btn" data-bs-dismiss="modal" aria-label="Close">
+                        <em class="ni ni-cross"></em>
+                    </button>
+                </div><!-- end modal-header -->
+                <div class="modal-body">
+                    <p class="mb-3">Please input email, We will send Private key to your email.</p>
+                    <input
+                      type="email"
+                      class="form-control"
+                      id="email"
+                      placeholder="Please enter your email"
+                      v-model="email"
+                    />
+                    
+                    <div class="d-flex justify-content-center gap-5 mt-4">
+                        <a href="#" data-bs-dismiss="modal" aria-label="Close" class="btn btn-normal d-block">Cancel</a>
+                        <a href="#" v-on:click="createNewWallet" class="btn btn-primary d-block">Create</a>
+                    </div>
+                </div><!-- end modal-body -->
+            </div><!-- end modal-content -->
+        </div><!-- end modal-dialog -->
+    </div><!-- end modal-->
   </section>
 </template>
 <script>
@@ -103,6 +120,8 @@
 
 import SectionData from "@/store/store.js";
 // import AuthService from "@/services/AuthService.js";
+
+import { mapActions } from 'vuex';
 
 export default {
   name: "LoginSection",
@@ -138,6 +157,7 @@ export default {
     showHidePassword(".password-toggle");
   },
   methods: {
+    ...mapActions({_createNewWallet: 'auth/createNewWallet'}),
     async login() {
       try {
         // const credentials = {
@@ -153,6 +173,15 @@ export default {
         alert(this.msg);
       }
     },
+    async createNewWallet() {
+      try {
+        console.log('create new wallet', this.email);
+        this._createNewWallet(this.email);
+      } catch (error) {
+        this.msg = error.response.data.msg;
+        alert(this.msg);
+      }
+    }
   },
 };
 </script>

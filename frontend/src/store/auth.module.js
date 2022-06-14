@@ -24,6 +24,20 @@ export const auth = {
         }
       );
     },
+    createNewWallet({ commit }, email) {
+      console.log("asdfasdfasdf")
+      return AuthService.createNewWallet(email).then(
+        user => {
+          commit('createWalletSuccess', user);
+          return Promise.resolve(user);
+        },
+        error => {
+          commit('createWalletFailure');
+          return Promise.reject(error);
+        }
+      )
+    },
+
     login({ commit }, user) {
       return AuthService.login(user).then(
         user => {
