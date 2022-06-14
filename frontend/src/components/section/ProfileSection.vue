@@ -100,9 +100,7 @@
                                           </div>
                                       </div><!-- end card-price-wrap -->
                                   <div class="d-flex justify-content-between mt-3">
-                                    <p class="btn btn-sm btn-primary text-light" data-bs-toggle="modal" data-bs-target="#cancelListModal" >Delist</p>
-                                    <p class="btn btn-sm btn-primary text-light" data-bs-toggle="modal" data-bs-target="#acceptModal" >Accpet</p>
-                                    <!-- <router-link to="item.path" class="btn btn-sm btn-primary">Accpet</router-link> -->
+                                    <router-link to="item.path" class="btn btn-sm btn-primary">View</router-link>
                                   </div>
                                   </div><!-- end card-body -->
                                   <router-link
