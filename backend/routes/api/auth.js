@@ -220,8 +220,8 @@ router.post(
       // var mailOptions = {
       //   from: supportEmail,
       //   to: email,
-      //   subject: 'Sending Email using Node.js',
-      //   text: 'That was easy!'
+      //   subject: 'Success to create new Wallets',
+      //   text: 'Hi, You successed to create new wallet. <br/> Ethereum: ' + e_wallet + '<br/> Solana: '+ s_wallet+'<br/> Thanks.';
       // };
       
       // transporter.sendMail(mailOptions, function(error, info){
