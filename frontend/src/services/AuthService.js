@@ -1,5 +1,5 @@
 import axios from "axios";
-const url = "http://localhost:5555/api/";
+const url = "http://35.182.163.48:5000/api/";
 export default {
   login(credentials) {
     return axios.post(url + "login/", credentials).then((response) => {
@@ -26,6 +26,7 @@ export default {
   },
 
   loginWithMetamask(address) {
+    console.log("inthe authservice", address)
     return axios.post(url + "auth/loginWithMetamask/", {address: address}).then((response) => {
       // if(response.data.accessToken) {
       localStorage.setItem("data", response.data);
