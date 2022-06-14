@@ -66,13 +66,21 @@ export default {
     ...mapGetters({isLoggoedIn: ['auth/isLoggoedIn']})
   },
   methods : {
-    ...mapActions({loginWithMetamask: "auth/loginWithMetamask"}),
+    ...mapActions({loginWithMetamask: "auth/loginWithMetamask", loginWithPhantom: "auth/loginWithPhantom"}),
     connectMetamaskWallet : async function() {
       const [userAddress] = await window.ethereum.enable();
       this.metamaskWallet = userAddress;
 
       if(userAddress) {
-        this.login();
+        try { 
+          await this.loginWithMetamask(this.metamaskWallet);
+          if (this.auth.status.loggedIn) {
+              this.$router.push({ name: "profile"})
+          }
+        } catch (error) {
+          this.msg = error.response.data.msg;
+          alert(this.msg);
+        }
       }
 
     },
@@ -82,22 +90,21 @@ export default {
         try {
           const response = await solana.connect();
           this.phantomWallet = response.publicKey.toString();
+          
+          try { 
+            await this.loginWithPhantom(this.phantomWallet);
+            if (this.auth.status.loggedIn) {
+                this.$router.push({ name: "profile"})
+            }
+          } catch (error) {
+            this.msg = error.response.data.msg;
+            alert(this.msg);
+          }
         } catch (err) {
         // { code: 4001, message: 'User rejected the request.' }
         }
       }
-    },    
-    login: async function() {
-      try { 
-        await this.loginWithMetamask(this.metamaskWallet);
-        if (this.auth.status.loggedIn) {
-            this.$router.push({ name: "profile"})
-        }
-      } catch (error) {
-        this.msg = error.response.data.msg;
-        alert(this.msg);
-      }
-    },
+    }
   }
 }
 </script>

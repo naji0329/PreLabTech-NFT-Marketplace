@@ -24,15 +24,24 @@ export const auth = {
         }
       );
     },
-    createNewWallet({ commit }, email) {
-      console.log("asdfasdfasdf")
-      return AuthService.createNewWallet(email).then(
+    loginWithPhantom({ commit }, address) {
+      return AuthService.loginWithPhantom(address).then(
         user => {
-          commit('createWalletSuccess', user);
+          commit('loginSuccess', user);
           return Promise.resolve(user);
         },
         error => {
-          commit('createWalletFailure');
+          commit('loginFailure');
+          return Promise.reject(error);
+        }
+      );
+    },
+    createNewWallet(email) {
+      return AuthService.createNewWallet(email).then(
+        res => {
+          return Promise.resolve(res);
+        },
+        error => {
           return Promise.reject(error);
         }
       )

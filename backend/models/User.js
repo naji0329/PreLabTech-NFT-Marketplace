@@ -16,6 +16,9 @@ const UserSchema = new mongoose.Schema({
   ethereumAddress: {
     type: String,
   },
+  solanaAddress: {
+    type: String,
+  },
   date: {
     type: Date,
     default: Date.now

@@ -96,18 +96,39 @@
                     </button>
                 </div><!-- end modal-header -->
                 <div class="modal-body">
-                    <p class="mb-3">Please input email, We will send Private key to your email.</p>
-                    <input
-                      type="email"
-                      class="form-control"
-                      id="email"
-                      placeholder="Please enter your email"
-                      v-model="email"
-                    />
+                    <div v-if="!createdWallet.flag">
+                      <p class="mb-3">Please input email, We will send Private key to your email.</p>
+                      <input
+                        type="email"
+                        class="form-control"
+                        id="email"
+                        placeholder="Please enter your email"
+                        v-model="email"
+                      />
+                    </div>
+                    <div v-else>
+                      <p>New Wallet Created! We sent Private key of Ethereum and Solana wallet to your email.</p>
+                      <br/>
+
+                      <p><b>Ethereum:</b></p> 
+                      <div class="d-flex justify-content-end position-relative">
+                        <p v-on:click="copyEWallet">{{this.createdWallet.e_wallet}} </p> &nbsp;&nbsp;&nbsp;
+                        <img src="@/images/copy.png" width="20" height="20" alt="" class="img-fluid" v-on:click="copyEWallet" style="cursor: pointer;" title="Copy Ethereum Wallet Address"/>
+                        <p class="position-absolute" style="top: 25px; right: 0;" v-if="showEWallet">Copied</p>
+                      </div>
+                      
+                      <p><b>Solana:</b></p>
+                      <div class="d-flex justify-content-end position-relative">
+                        <p v-on:click="copySWallet">{{this.createdWallet.s_wallet}} </p> &nbsp;&nbsp;&nbsp;
+                        <img src="@/images/copy.png" width="20" height="20" alt="" class="img-fluid" v-on:click="copySWallet" style="cursor: pointer;" title="Copy Solana Wallet Address"/>
+                        <p class="position-absolute" style="top: 25px; right: 0;" v-if="showSWallet">Copied</p>
+                      </div>
+                    </div>
                     
                     <div class="d-flex justify-content-center gap-5 mt-4">
                         <a href="#" data-bs-dismiss="modal" aria-label="Close" class="btn btn-normal d-block">Cancel</a>
-                        <a href="#" v-on:click="createNewWallet" class="btn btn-primary d-block">Create</a>
+                        <a href="#" v-if="!createdWallet.flag" v-on:click="createNewWallet" class="btn btn-primary d-block">Create</a>
+                        <a href="#" v-else class="btn btn-primary d-block" data-bs-dismiss="modal" aria-label="Close">Ok</a>
                     </div>
                 </div><!-- end modal-body -->
             </div><!-- end modal-content -->
@@ -131,6 +152,11 @@ export default {
       email: "",
       password: "",
       msg: "",
+      createdWallet: {
+        flag: false
+      },
+      showEWallet: false,
+      showSWallet: false
     };
   },
   mounted() {
@@ -174,13 +200,34 @@ export default {
       }
     },
     async createNewWallet() {
+      this.createdWallet.flag = false;
       try {
         console.log('create new wallet', this.email);
-        this._createNewWallet(this.email);
+        const res = await this._createNewWallet(this.email);
+        console.log('ressssse', res)
+        if(res.e_wallet && res.s_wallet) {
+          this.createdWallet.e_wallet = res.e_wallet;
+          this.createdWallet.s_wallet = res.s_wallet;
+          this.createdWallet.flag = true;
+        }
       } catch (error) {
         this.msg = error.response.data.msg;
         alert(this.msg);
       }
+    },
+    copyEWallet() {
+      navigator.clipboard.writeText(this.createdWallet.e_wallet);
+      this.showEWallet = true;
+      setTimeout(() => {
+        this.showEWallet = false;
+      }, 1000)
+    },
+    copySWallet() {
+      navigator.clipboard.writeText(this.createdWallet.s_wallet);
+      this.showSWallet = true;
+      setTimeout(() => {
+        this.showSWallet = false;
+      }, 1000)
     }
   },
 };
