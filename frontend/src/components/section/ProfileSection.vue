@@ -511,7 +511,7 @@ export default {
   },
   mounted () {
     if (!this.auth.status.loggedIn) {
-        this.$router.push({ name: 'wallet' })
+        this.$router.push({ name: 'login' })
     }
   }
 };
