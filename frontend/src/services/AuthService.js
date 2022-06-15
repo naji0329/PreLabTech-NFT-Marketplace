@@ -1,5 +1,5 @@
 import axios from "axios";
-const url = "http://localhost:5000/api/";
+const url = "http://35.182.163.48:5000/api/";
 export default {
   login(credentials) {
     return axios.post(url + "login/", credentials).then((response) => {
