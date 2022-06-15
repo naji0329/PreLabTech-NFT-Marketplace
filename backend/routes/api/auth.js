@@ -196,6 +196,7 @@ router.post(
     }
 
     const { email } = req.body;
+    console.log('email', email);
 
     try {
       // Create new E Wallet
