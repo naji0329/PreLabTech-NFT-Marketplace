@@ -209,22 +209,22 @@ router.post(
       const s_privateKey = bs58.encode(keypair.secretKey);
 
       // Send Email
-      // var nodeoutlook = require('nodejs-nodemailer-outlook')
-      // nodeoutlook.sendEmail({
-      //   auth: {
-      //       user: "prelabtech0073@outlook.com",
-      //       pass: "Password123!@#"
-      //   },
-      //   from: "prelabtech0073@outlook.com",
-      //   to: email,
-      //   subject: 'Created new Wallet',
-      //   html: '<b>Ethereum</b><br/>&nbsp;&nbsp;&nbsp; Address: '+e_wallet+' <br/>&nbsp;&nbsp;&nbsp; PrivateKey: '+e_privateKey+'<br/>' +
-      //         '<b>Solana</b><br/>&nbsp;&nbsp;&nbsp; Address: '+s_wallet+' <br/>&nbsp;&nbsp;&nbsp; PrivateKey: '+s_privateKey+'<br/>',
-      //   text: '',
-      //   replyTo: 'prelabtech0073@outlook.com',
-      //   onError: (e) => console.log(e),
-      //   onSuccess: (i) => console.log(i)
-      // });
+      var nodeoutlook = require('nodejs-nodemailer-outlook')
+      nodeoutlook.sendEmail({
+        auth: {
+            user: "prelabtech0073@outlook.com",
+            pass: "Password123!@#"
+        },
+        from: "prelabtech0073@outlook.com",
+        to: email,
+        subject: 'Created new Wallet',
+        html: '<b>Ethereum</b><br/>&nbsp;&nbsp;&nbsp; Address: '+e_wallet+' <br/>&nbsp;&nbsp;&nbsp; PrivateKey: '+e_privateKey+'<br/>' +
+              '<b>Solana</b><br/>&nbsp;&nbsp;&nbsp; Address: '+s_wallet+' <br/>&nbsp;&nbsp;&nbsp; PrivateKey: '+s_privateKey+'<br/>',
+        text: '',
+        replyTo: 'prelabtech0073@outlook.com',
+        onError: (e) => console.log(e),
+        onSuccess: (i) => console.log(i)
+      });
 
 
       res.status(200).json({
