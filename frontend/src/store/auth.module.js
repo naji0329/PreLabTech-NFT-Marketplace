@@ -36,9 +36,11 @@ export const auth = {
         }
       );
     },
-    createNewWallet(email) {
+    createNewWallet({ commit }, email) {
+      console.log('ddddddddddddd', email);
       return AuthService.createNewWallet(email).then(
         res => {
+          commit('createNewWalletSuccess', user);
           return Promise.resolve(res);
         },
         error => {
@@ -94,6 +96,9 @@ export const auth = {
     },
     registerFailure(state) {
       state.status.loggedIn = false;
+    },
+    createNewWalletSuccess() {
+      console.log("createNewWalletSuccess")
     }
   },
   getters: {

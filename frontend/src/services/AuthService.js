@@ -45,6 +45,7 @@ export default {
     });
   },
   createNewWallet(email) {
+    console.log('ssssssemail', email);
     return axios.post(url + "auth/createNewWallet/", {email: email}).then((response) => {
       return response.data;
     });
