@@ -76,7 +76,7 @@
           <WalletSection></WalletSection>
 
           <div>
-            <p>If you don't have wallet, You can <span style="cursor: pointer"  data-bs-toggle="modal" data-bs-target="#createNewWalletModal"><b>create</b></span> a new wallet from website.</p>
+            <p>If you don't have wallet, You can <span style="cursor: pointer"  data-bs-toggle="modal" data-bs-target="#createNewWalletModal" v-on:click="this.createdWallet.flag = false"><b>create</b></span> a new wallet from website.</p>
           </div>
         </div>
         <!-- end col-lg-6 -->
@@ -96,7 +96,8 @@
                     </button>
                 </div><!-- end modal-header -->
                 <div class="modal-body">
-                    <div v-if="!createdWallet.flag">
+                  {{this.createdWallet.flag}}
+                    <div v-if="!this.createdWallet.flag">
                       <p class="mb-3">Please input email, We will send Private key to your email.</p>
                       <input
                         type="email"
