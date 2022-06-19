@@ -3004,12 +3004,12 @@ let SectionData = {
       path: 'profile',
       icon: 'ni-user'
     },
-    // {
-    //   id: 2,
-    //   title: 'Dashboard',
-    //   path: 'offers',
-    //   icon: 'ni-dashboard'
-    // },
+    {
+      id: 2,
+      title: 'My Collections',
+      path: 'my-collections',
+      icon: 'ni-dashboard'
+    },
     // {
     //   id: 3,
     //   title: 'Account Settings',

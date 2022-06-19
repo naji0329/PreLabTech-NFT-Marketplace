@@ -90,7 +90,7 @@ router.post(
 
 
 // @route    POST api/auth/loginWithPhantom
-// @desc     Authenticate user & get token
+// @desc     loginWithPhantom
 // @access   Public
 router.post(
   '/loginWithPhantom',
@@ -126,9 +126,10 @@ router.post(
         { expiresIn: '5 days' },
         (err, token) => {
           if (err) throw err;
-          res.json({ token });
+          res.json({ token, chian: "ethereum" });
         }
-      );
+      )
+      ;
     } catch (err) {
       console.error(err.message);
       res.status(500).send('Server error');
@@ -138,7 +139,7 @@ router.post(
 
 
 // @route    POST api/auth/loginWithMetamask
-// @desc     Authenticate user & get token
+// @desc     loginWithMetamask
 // @access   Public
 router.post(
   '/loginWithMetamask',
@@ -173,7 +174,7 @@ router.post(
         { expiresIn: '5 days' },
         (err, token) => {
           if (err) throw err;
-          res.json({ token });
+          res.json({ token, chian: "ethereum" });
         }
       );
     } catch (err) {

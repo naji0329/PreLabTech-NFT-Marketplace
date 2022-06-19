@@ -74,6 +74,7 @@ export default {
       if(userAddress) {
         try { 
           await this.loginWithMetamask(this.metamaskWallet);
+          console.log("asdfasdfas", this.auth);
           if (this.auth.status.loggedIn) {
               this.$router.push({ name: "profile"})
           }
@@ -82,7 +83,6 @@ export default {
           alert(this.msg);
         }
       }
-
     },
     connectPhantomWallet : async function() {
       const { solana } = window;

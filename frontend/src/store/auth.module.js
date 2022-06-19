@@ -20,7 +20,7 @@ export const auth = {
         },
         error => {
           commit('loginFailure');
-          return Promise.reject(error);
+        return Promise.reject(error);
         }
       );
     },

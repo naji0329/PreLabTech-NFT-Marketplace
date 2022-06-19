@@ -139,6 +139,11 @@ const routes = [
     component: () => import('../pages/Profile.vue')
   },
   {
+    path: '/my-collections',
+    name: 'my-collections',
+    component: () => import('../pages/MyCollection.vue')
+  },
+  {
     path: '/account',
     name: 'account',
     component: () => import('../pages/Account.vue')
@@ -177,6 +182,11 @@ const routes = [
     path: '/create-multiple',
     name: 'create-multiple',
     component: () => import('../pages/CreateMultiple.vue')
+  },
+  {
+    path: '/create-collection',
+    name: 'create-collection',
+    component: () => import('../pages/CreateCollection.vue')
   },
   {
     path: '/contact',
