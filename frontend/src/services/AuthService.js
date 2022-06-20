@@ -1,5 +1,8 @@
 import axios from "axios";
-const url = "http://127.0.0.1:5000/api/";
+
+import constants from '@/constants/constant.js';
+const url = constants.url;
+
 export default {
   login(credentials) {
     return axios.post(url + "login/", credentials).then((response) => {
@@ -30,7 +33,7 @@ export default {
     return axios.post(url + "auth/loginWithMetamask/", {address: address}).then((response) => {
       // if(response.data.accessToken) {
       localStorage.setItem("data", response.data);
-      localStorage.setItem("user", JSON.stringify(response.data.user));
+      localStorage.setItem("user", JSON.stringify(response.data));
       // }
       return response.data;
     });

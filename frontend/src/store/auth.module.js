@@ -2,9 +2,13 @@ import AuthService from '../services/AuthService';
 
 const user = localStorage.getItem('user');
 
+console.log("localstoreage user", user)
+
 const initialState = user
-  ? { status: { loggedIn: true }, user }
+  ? { status: { loggedIn: true }, user: JSON.parse(user) }
   : { status: { loggedIn: false }, user: null };
+
+
 
 export const auth = {
   namespaced: true,
@@ -104,6 +108,9 @@ export const auth = {
   getters: {
     isLoggedIn: (state) => () => {
       return state.status.loggedIn;
+    },
+    currentChain: (state) => () => {
+      return state.user.chain;
     }
   }
 };

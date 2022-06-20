@@ -10,7 +10,7 @@ async function main() {
 
   console.log("Account balance:", (await deployer.getBalance()).toString());
 
-  const Token = await ethers.getContractFactory("TokenSwap");
+  const Token = await ethers.getContractFactory("NFTMarketplace");
   const token = await Token.deploy();
 
   console.log("Contract address:", token.address);
@@ -33,7 +33,7 @@ function saveFrontendFiles(token) {
     JSON.stringify({ Token: token.address }, undefined, 2)
   );
 
-  const TokenArtifact = artifacts.readArtifactSync("TokenSwap");
+  const TokenArtifact = artifacts.readArtifactSync("NFTMarketplace");
 
   fs.writeFileSync(
     frontendContractsDir + "/NFT.json",

@@ -126,7 +126,7 @@ router.post(
         { expiresIn: '5 days' },
         (err, token) => {
           if (err) throw err;
-          res.json({ token, chian: "ethereum" });
+          res.json({ token, chain: "ethereum", address: address });
         }
       )
       ;
@@ -174,7 +174,7 @@ router.post(
         { expiresIn: '5 days' },
         (err, token) => {
           if (err) throw err;
-          res.json({ token, chian: "ethereum" });
+          res.json({ token, chain: "ethereum", address: address });
         }
       );
     } catch (err) {
