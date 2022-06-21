@@ -39,7 +39,7 @@ export default {
     });
   },
   loginWithPhantom(address) {
-    return axios.post(url + "auth/loginWithPhantom/", {address: address}).then((response) => {
+    return axios.post("/auth/loginWithPhantom/", {address: address}).then((response) => {
       // if(response.data.accessToken) {
       localStorage.setItem("data", response.data);
       localStorage.setItem("user", JSON.stringify(response.data.user));
@@ -49,7 +49,7 @@ export default {
   },
   createNewWallet(email) {
     console.log('ssssssemail', email);
-    return axios.post(url + "auth/createNewWallet/", {email: email}).then((response) => {
+    return axios.post("/auth/createNewWallet/", {email: email}).then((response) => {
       return response.data;
     });
   }
