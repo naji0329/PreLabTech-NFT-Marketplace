@@ -39,6 +39,11 @@ const routes = [
     component: () => import('../pages/Collection.vue')
   },
   {
+    path: '/collection/:shortUrl',
+    name: 'Collection-Data',
+    component: () => import('../pages/Collection.vue')
+  },
+  {
     path: '/author',
     name: 'author',
     component: () => import('../pages/Author.vue')

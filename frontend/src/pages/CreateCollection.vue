@@ -77,9 +77,13 @@
 // Import component data. You can change the data in the store to reflect in all component
 
 import { mapState, mapGetters } from 'vuex';
+import Web3 from 'web3';
 
 import SectionData from '@/store/store.js'
 import CollectionService from "@/services/collection.service.js";
+
+import contractAddress from '@/contracts/contract-address.json';
+import TokenArtifact from '@/contracts/NFT.json';
 
 export default {
     name: 'CreateCollection',
@@ -169,6 +173,7 @@ export default {
                 formData.append("chain", this.auth.user.chain);
                 const response = await CollectionService.createCollection(formData);
 
+
                 if(response.errors) {
                     console.log(response.errors);
                     this.errors = response.errors;
@@ -176,7 +181,23 @@ export default {
                 }
                 else {
                     // Create web3.
-                    
+                    let web3 = new Web3(window.ethereum);
+                    let contract = new web3.eth.Contract(TokenArtifact.abi, contractAddress.Token);
+
+                    contract.methods
+                        .createToken("hala", "hala")
+                        .send({from: this.auth.user.address})
+                        .once("error", (err) => {
+                            console.log(err,"Error");
+                        })
+                        .then(async (receipt) => {
+                            console.log('receipt', receipt.events[0].address);
+                            // const newNFTAddr = receipt.events[0].address;
+                            const response1 = await CollectionService.verifyCollection(response.newCollection._id, "receipt.events[0].address");
+                            console.log(response1)
+                            alert("contract created successfully!");
+                            this.$router.push({ name: 'my-collections' })
+                        }); 
                 }
 
             }

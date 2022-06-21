@@ -29,16 +29,14 @@ router.post(
       const form = new formidable.IncomingForm();
       form.parse(req, async function (err, fields, files) {
 
-        let errors = {};
-        if(fields.name == null || fields.name == "" || fields.name == "null") errors.name = "Name is empty.";
-        if(fields.name == null || fields.symbol == "" || fields.symbol == "null") errors.symbol = "Name is empty.";
-        if(fields.name == null || fields.shortUrl == "" || fields.shortUrl == "null") errors.shortUrl = "shortUrl is empty.";
+        // let errors = {};
+        // if(fields.name == null || fields.name == "" || fields.name == "null") errors.name = "Name is empty.";
+        // if(fields.symbol == null || fields.symbol == "" || fields.symbol == "null") errors.symbol = "Name is empty.";
+        // if(fields.shortUrl == null || fields.shortUrl == "" || fields.shortUrl == "null") errors.shortUrl = "shortUrl is empty.";
 
-        if(errors) {
-          return res.json({errors});
-        } 
-
-
+        // if(errors) {
+        //   return res.json({errors});
+        // } 
 
         let coverImageName = null; 
         if(files.coverImage) {
@@ -91,5 +89,48 @@ router.post(
     }
   }
 );
+
+router.post('/verifyCollection', async (req, res) => {
+  try {
+    const {_id, contract_address} = req.body;
+
+    let collection = await Collection.findOne({ _id: _id });
+
+    let collectinFields = {
+      status: 1,
+      contract_address: contract_address
+    }
+    if (collection) {
+      // Using upsert option (creates new doc if no match is found):
+      collection = await Collection.findOneAndUpdate(
+        { _id: _id },
+        { $set: collectinFields },
+        { new: true, upsert: true, setDefaultsOnInsert: true }
+      );
+      
+      return res.json(collection);
+
+    }
+
+    
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send('Server error');
+  }
+})
+
+router.post('/getCollectionData', async (req, res) => {
+  try {
+    const {address, chain} = req.body;
+
+    let collections = await Collection.find({ owner: address, status: 1 });
+
+    res.json(collections);
+
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send('Server error');
+  }
+})
 
 module.exports = router;

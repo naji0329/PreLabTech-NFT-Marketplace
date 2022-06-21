@@ -1,13 +1,13 @@
 <template>
 <div class="page-wrap">
-    <!-- header  -->
-    <header class="header-section has-header-main">
-        <!-- Header main -->
-        <HeaderMain></HeaderMain>
-        <!-- hero -->
-        <HeroFour classname="hero-title" title="My Collections"></HeroFour>
-    </header>
-    <!-- Explore section  -->
+  <!-- header  -->
+  <header class="header-section has-header-main">
+      <!-- Header main -->
+      <HeaderMain></HeaderMain>
+      <!-- hero -->
+      <HeroFour classname="hero-title" title="My Collections"></HeroFour>
+  </header>
+  <!-- Explore section  -->
 
 
   <div class="container">
@@ -16,7 +16,7 @@
     </router-link>
   </div>
 
-  <CreateCollectionSection></CreateCollectionSection>
+  <MyCollectionSection></MyCollectionSection>
   <Footer></Footer>
 </div><!-- end page-wrap -->
 </template>

@@ -30,6 +30,9 @@ const UserSchema = new mongoose.Schema({
   coverImage: {
     type: String
   },
+  status: {
+    type: String
+  },
   date: {
     type: Date,
     default: Date.now

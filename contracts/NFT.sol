@@ -1,11 +1,10 @@
 // SPDX-License-Identifier: MIT
-
 pragma solidity ^0.8.3;
 
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract NFTContract is ERC721Enumerable, Ownable {
+contract NFT is ERC721Enumerable, Ownable {
     using Strings for uint256;
 
     string public baseURI = "";
@@ -71,22 +70,5 @@ contract NFTContract is ERC721Enumerable, Ownable {
     // This withdraws the contract's balance of ETH to the Owner's (whoever launched the contract) address.
     function withdraw() public payable onlyOwner {
         require(payable(msg.sender).send(address(this).balance));
-    }
-}
-
-contract NFTMarketplace {
-    string public name;
-    uint256 public age;
-    NFTContract public nftContract;
-
-    constructor() {}
-
-    function createToken(string memory _name, string memory _symbol)
-        public
-        returns (address _contractAddr)
-    {
-        nftContract = new NFTContract(_name, _symbol);
-        _contractAddr = address(nftContract);
-        return _contractAddr;
     }
 }

@@ -2,6 +2,8 @@
 
 /frontend/node_modules
 /frontend/dist
+/frontend/src/images/collections/cover
+/frontend/src/images/collections/logo
 
 /backend/node_modules
 /backend/config/default.json

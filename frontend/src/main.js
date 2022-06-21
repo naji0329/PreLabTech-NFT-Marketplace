@@ -96,7 +96,7 @@ import PaymentMethodSection from "./components/section/PaymentMethodSection.vue"
 import SellerSettingSection from "./components/section/SellerSettingSection.vue";
 import NotificationSection from "./components/section/NotificationSection.vue";
 import SecuritySection from "./components/section/SecuritySection.vue";
-import CreateCollectionSection from "./components/section/CreateCollectionSection.vue";
+import MyCollectionSection from "./components/section/MyCollectionSection.vue";
 import ThemeSwitcher from "./components/common/ThemeSwitcher.vue";
 
 // Global page components register
@@ -168,7 +168,7 @@ app.component("PaymentMethodSection", PaymentMethodSection);
 app.component("SellerSettingSection", SellerSettingSection);
 app.component("NotificationSection", NotificationSection);
 app.component("SecuritySection", SecuritySection);
-app.component("CreateCollectionSection", CreateCollectionSection);
+app.component("MyCollectionSection", MyCollectionSection);
 app.component("ThemeSwitcher", ThemeSwitcher);
 
 // vue app
