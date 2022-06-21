@@ -24,7 +24,7 @@
                                         <p class="file-name mb-4" id="logo-file-name">PNG, GIF, JPG. Max 100mb.</p>
                                         <input id="logo-file-upload" class="file-upload-input" data-target="logo-file-name" type="file" @change="uploadLogoImage" hidden ref="logoImage">
                                         <label for="logo-file-upload" class="input-label btn btn-primary">Choose File</label>
-                                        <p class="px-3 text-red"><small v-if="errors.name">{{errors.logoImage}}</small></p>
+                                        <p class="px-3 text-red"><small v-if="errors.logoImage">{{errors.logoImage}}</small></p>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -33,7 +33,7 @@
                                         <p class="file-name mb-4" id="cover-file-name">PNG, GIF, JPG. Max 100mb.</p>
                                         <input id="cover-file-upload" class="file-upload-input" data-target="cover-file-name" type="file" @change="uploadCoverImage" hidden ref="coverImage">
                                         <label for="cover-file-upload" class="input-label btn btn-primary">Choose File</label>
-                                        <p class="px-3 text-red"><small v-if="errors.name">{{errors.coverImage}}</small></p>
+                                        <p class="px-3 text-red"><small v-if="errors.coverImage">{{errors.coverImage}}</small></p>
                                     </div>
                                 </div>
                             </div>
@@ -185,15 +185,13 @@ export default {
                     let contract = new web3.eth.Contract(TokenArtifact.abi, contractAddress.Token);
 
                     contract.methods
-                        .createToken("hala", "hala")
+                        .createToken(this.contractData.name, this.contractData.symbol)
                         .send({from: this.auth.user.address})
                         .once("error", (err) => {
                             console.log(err,"Error");
                         })
                         .then(async (receipt) => {
-                            console.log('receipt', receipt.events[0].address);
-                            // const newNFTAddr = receipt.events[0].address;
-                            const response1 = await CollectionService.verifyCollection(response.newCollection._id, "receipt.events[0].address");
+                            const response1 = await CollectionService.verifyCollection(response.newCollection._id, receipt.events[0].address);
                             console.log(response1)
                             alert("contract created successfully!");
                             this.$router.push({ name: 'my-collections' })

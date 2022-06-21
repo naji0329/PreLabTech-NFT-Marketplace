@@ -27,6 +27,7 @@
     "express-validator": "^6.8.1",
     "formidable": "^2.0.1",
     "gravatar": "^1.8.1",
+    "ipfs-api": "^26.1.2",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.11.8",
     "nodejs-nodemailer-outlook": "^1.2.4",

@@ -26,6 +26,7 @@ app.use(express.json());
 app.use('/api/users', require('./routes/api/users'));
 app.use('/api/auth', require('./routes/api/auth'));
 app.use('/api/collection', require('./routes/api/collection'));
+app.use('/api/nft', require('./routes/api/nft'));
 
 
 app.use('/api/profile', require('./routes/api/profile'));

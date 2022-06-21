@@ -21,11 +21,12 @@
                                 <h5 class="mb-3">Upload file</h5>
                                 <div class="file-upload-wrap">
                                     <p class="file-name mb-4" id="file-name">PNG, GIF, WEBP, MP4 or MP3. Max 100mb.</p>
-                                    <input id="file-upload" class="file-upload-input" data-target="file-name" type="file" hidden>
+                                    <input id="file-upload" class="file-upload-input" data-target="file-name" type="file" @change="uploadFile" hidden ref="file" >
                                     <label for="file-upload" class="input-label btn btn-primary">Choose File</label>
                                 </div>
+                                <p class="px-3 text-red"><small v-if="errors.file">{{errors.file}}</small></p>
                             </div><!-- end form-item -->
-                            <div class="form-item mb-4">
+                            <!-- <div class="form-item mb-4">
                                 <h5 class="mb-3">Select Method</h5>
                                 <ul class="row g-3 nav nav-tabs nav-tabs-s2" id="myTab" role="tablist">
                                     <li class="nav-item col-4 col-sm-4 col-lg-3" role="presentation" v-for="list in SectionData.selectMethodTabNav" :key="list.id">
@@ -40,8 +41,8 @@
                                         <div class="form-create-tab-wrap">
                                             <label class="mb-2 form-label">Price</label>
                                             <input type="text" class="form-control form-control-s1" placeholder="Enter a price for item">
-                                        </div><!-- end form-create-tab-wrap -->
-                                    </div><!-- end tab-pane -->
+                                        </div>
+                                    </div>
                                     <div class="tab-pane fade" id="timed-auction" role="tabpanel" aria-labelledby="timed-auction-tab">
                                         <div class="form-create-tab-wrap">
                                             <label class="mb-2 form-label">Minimum bid</label>
@@ -50,23 +51,23 @@
                                                 <div class="col-lg-6">
                                                     <label class="mb-2 form-label">Starting date</label>
                                                     <input type="date" class="form-control form-control-s1">
-                                                </div><!-- end col-lg-6 -->
+                                                </div>
                                                 <div class="col-lg-6">
                                                     <label class="mb-2 form-label">Expiration date</label>
                                                     <input type="date" class="form-control form-control-s1">
-                                                </div><!-- end col-lg-6 -->
-                                            </div><!-- end row -->
-                                        </div><!-- end form-create-tab-wrap -->
-                                    </div><!-- end tab-pane -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="tab-pane fade" id="open-for-bids" role="tabpanel" aria-labelledby="open-for-bids-tab">
                                         <div class="form-create-tab-wrap">
                                             <label class="mb-2 form-label">Minimum bid</label>
                                             <input type="text" class="form-control form-control-s1" placeholder="Enter Minimum bid">
-                                        </div><!-- end form-create-tab-wrap -->
-                                    </div><!-- end tab-pane -->
-                                </div><!-- end tab-content -->
-                            </div><!-- end form-item -->
-                            <div class="form-item mb-3">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> -->
+                            <!-- <div class="form-item mb-3">
                                 <div class="switch-wrap">
                                     <div class="d-flex align-items-center justify-content-between">
                                         <div class="me-2">
@@ -75,34 +76,43 @@
                                         </div>
                                         <div class="form-check form-switch form-switch-s1">
                                             <input class="form-check-input checkbox-switcher" data-target="switch-content-unlock" type="checkbox">
-                                        </div><!-- end form-check -->
-                                    </div><!-- end d-flex -->
+                                        </div>
+                                    </div>
                                     <div class="switch-content-unlock mt-4" id="switch-content-unlock">
                                         <input type="text" name="text" class="form-control form-control-s1" placeholder="Access key, code to redeem or link to a file...">
                                     </div>
-                                </div><!-- end switch-wrap -->
-                            </div><!-- end form-item -->
+                                </div>
+                            </div> -->
                             <div class="form-item mb-4">
                                 <h5 class="mb-1">Choose collection</h5>
                                 <p class="form-text mb-3">This is the collection where your item will appear.</p>
-                                <v-select class="generic-select" v-model="selected" :options="options"></v-select>
+                                <!-- <v-select class="generic-select" v-model="selected" :options="options"></v-select> -->
+
+                                <v-select 
+                                    v-model="NFTData.collection"
+                                    :options="collections" 
+                                    label="name"
+                                ></v-select>
+                                <p class="px-3 text-red"><small v-if="errors.collection">{{errors.collection}}</small></p>
                             </div><!-- end form-item -->
                             <div class="form-item mb-4">
                                 <div class="mb-4">
-                                    <label class="mb-2 form-label">Title</label>
-                                    <input type="text" class="form-control form-control-s1" placeholder="e. g. Redeemable T-Shirt with logo">
+                                    <label class="mb-2 form-label">Name</label>
+                                    <input type="text" class="form-control form-control-s1" v-model="NFTData.name" placeholder="e. g. Redeemable T-Shirt with logo">
+                                    <p class="px-3 text-red"><small v-if="errors.name">{{errors.name}}</small></p>
                                 </div>
                                 <div class="mb-4">
                                     <label class="mb-2 form-label">Description</label>
-                                    <textarea name="message" class="form-control form-control-s1" placeholder="e. g. After purchasing you’ll be able to get the real T-Shirt"></textarea>
+                                    <textarea name="message" class="form-control form-control-s1" v-model="NFTData.description" placeholder="e. g. After purchasing you’ll be able to get the real T-Shirt"></textarea>
+                                    <p class="px-3 text-red"><small v-if="errors.description">{{errors.description}}</small></p>
                                 </div>
-                                <div class="mb-3">
+                                <!-- <div class="mb-3">
                                     <label class="mb-2 form-label">Royalties</label>
                                     <input type="text" class="form-control form-control-s1" placeholder="e.g 10%">
                                     <p class="form-text mt-1">Suggested: 0, 10%, 20%, 30%. Maximum is 70%</p>
-                                </div>
+                                </div> -->
                             </div><!-- end form-item -->
-                            <button class="btn btn-primary" type="button">Create Item</button>
+                            <button class="btn btn-primary" type="button" v-on:click="createNFT()">Create Item</button>
                         </form>
                     </div><!-- endn col -->
                 </div><!-- row-->
@@ -114,71 +124,134 @@
 </template>
 
 <script>
+
+import { mapState, mapGetters } from 'vuex';
+import Web3 from 'web3';
 // Import component data. You can change the data in the store to reflect in all component
 import SectionData from '@/store/store.js'
+import NFTService from "@/services/nft.service.js";
+import CollectionService from "@/services/collection.service.js";
+
+import erc721abi from '@/contracts/abi/erc721.json';
+
 export default {
-  name: 'CreateSingle',
-  data () {
-    return {
-      SectionData,
-      selected: 'Select Collection',
-      options: [
-        'Select Collection',
-        'Abstraction',
-        'Patternlicious',
-        'Skecthify',
-        'Cartoonism',
-        'Virtuland',
-        'Papercut'
-      ]
-    }
-  },
-  mounted () {
-    /*==============File upload =============== */
-    function fileUpload(selector) {
-    let elem = document.querySelectorAll(selector);
-    if(elem.length > 0) {
-        elem.forEach(item => {
-        item.addEventListener("change", function(){
-            var target = document.getElementById(item.dataset.target);
-            var allowedExtensions  = ["jpg", "png", "gif", "webp", "mp4", "mp3"];
-            var fileExtension  = this.value.split(".").pop();
-            var lastDot = this.value.lastIndexOf('.');
-            var ext = this.value.substring(lastDot + 1);
-            var extTxt = target.value = ext;
-
-            if(!allowedExtensions.includes(fileExtension)) {
-            alert(extTxt + " file type not allowed, Please upload jpg, png, gif, webp, mp4 or mp3 file");
-            target.innerHTML = "Please upload jpg, png, gif, webp, mp4 or mp3 file";
-            }else {
-            target.innerHTML = item.files[0].name;
+    name: 'CreateSingle',
+    data () {
+        return {
+            SectionData,
+            collections: [],
+            NFTData: {
+                name: null,
+                description: null,
+                file: null,
+                collection: null
+            },
+            errors: {
+                collection: null
             }
-        })
-        })
-    }
-    }
+        }
+    },
+    computed: {
+        ...mapState(['auth']),
+        ...mapGetters({currentChain: ['auth/currentChain']})
+    },
+    async mounted () {
+        /*==============File upload =============== */
+        function fileUpload(selector) {
+            let elem = document.querySelectorAll(selector);
+            if(elem.length > 0) {
+                elem.forEach(item => {
+                item.addEventListener("change", function(){
+                    var target = document.getElementById(item.dataset.target);
+                    var allowedExtensions  = ["jpg", "png", "gif", "webp", "mp4", "mp3"];
+                    var fileExtension  = this.value.split(".").pop();
+                    var lastDot = this.value.lastIndexOf('.');
+                    var ext = this.value.substring(lastDot + 1);
+                    var extTxt = target.value = ext;
 
-    fileUpload(".file-upload-input");
-
-    /*  ============== Unlock once purchased Checkbox switcher ============= */
-    function checkboxSwitcher(selector) {
-    let elem = document.querySelectorAll(selector);
-    if(elem.length > 0) {
-        elem.forEach(item => {
-        item.addEventListener("change", function(){
-            let target = document.getElementById(item.dataset.target);
-            if(this.checked) {
-            target.classList.add("is-shown");
-            }else {
-            target.classList.remove("is-shown");
+                    if(!allowedExtensions.includes(fileExtension)) {
+                        alert(extTxt + " file type not allowed, Please upload jpg, png, gif, webp, mp4 or mp3 file");
+                        target.innerHTML = "Please upload jpg, png, gif, webp, mp4 or mp3 file";
+                    }else {
+                        target.innerHTML = item.files[0].name;
+                    }
+                })
+                })
             }
-        });
-        });
-    }
-    }
+        }
 
-    checkboxSwitcher(".checkbox-switcher");
+        fileUpload(".file-upload-input");
 
-  }
+        /*  ============== Unlock once purchased Checkbox switcher ============= */
+        function checkboxSwitcher(selector) {
+            let elem = document.querySelectorAll(selector);
+            if(elem.length > 0) {
+                elem.forEach(item => {
+                item.addEventListener("change", function(){
+                    let target = document.getElementById(item.dataset.target);
+                    if(this.checked) {
+                    target.classList.add("is-shown");
+                    }else {
+                    target.classList.remove("is-shown");
+                    }
+                });
+                });
+            }
+        }
+
+        checkboxSwitcher(".checkbox-switcher");
+
+        const _colletions = await CollectionService.getCollections(this.auth.user.address, this.auth.user.chain);
+        this.collections = _colletions;    
+    },
+    methods: {
+        uploadFile() {
+            this.NFTData.file = this.$refs.file.files[0];
+        },
+        async createNFT() {
+            this.errors = {};
+            if(this.NFTData.file == null) { this.errors.file = "Please select file"; return false; }
+            if(this.NFTData.collection == null) { this.errors.collection = "Please select collection."; return false; }
+            if(!this.NFTData.name) { this.errors.name = "Please select file"; return false; }
+            if(!this.NFTData.description) { this.errors.description = "Please select file"; return false; }
+            
+            const formData = new FormData();
+            formData.append("file", this.NFTData.file);
+            formData.append("name", this.NFTData.name); 
+            formData.append("description", this.NFTData.description);
+            formData.append('collection', this.collection)
+                        
+            if(await this.currentChain() == "ethereum") {
+                formData.append("creater", this.auth.user.address);
+                formData.append("chain", this.auth.user.chain);
+
+                const response = await NFTService.createNFT(formData);
+
+                
+                if(response.errors) {
+                    console.log(response.errors);
+                    this.errors = response.errors;
+                    return ;
+                }
+                else {
+                    // Create web3.
+                    let web3 = new Web3(window.ethereum);
+                    let contract = new web3.eth.Contract(erc721abi, this.NFTData.collection.contract_address);
+                                        
+                    contract.methods
+                        .mint(this.auth.user.address, 1)
+                        .send({from: this.auth.user.address})
+                        .once("error", (err) => {
+                            console.log(err,"Error");
+                        })
+                        .then(async (receipt) => {
+                            console.log(receipt)
+                        }); 
+                }
+            }
+
+        }
+
+    },
 }
 </script>

@@ -120,9 +120,6 @@ export default {
 
     const response1 = await CollectionService.getNFTData(this.collectionData._id);
     console.log('response1',response1);
-
-    
-
   },
   methods: {
     address: function (str) {
