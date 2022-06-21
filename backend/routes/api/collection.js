@@ -119,7 +119,7 @@ router.post('/verifyCollection', async (req, res) => {
   }
 })
 
-router.post('/getCollectionData', async (req, res) => {
+router.post('/getCollections', async (req, res) => {
   try {
     const {address, chain} = req.body;
 
@@ -127,6 +127,27 @@ router.post('/getCollectionData', async (req, res) => {
 
     res.json(collections);
 
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send('Server error');
+  }
+})
+
+router.post('/getCollectionData', async (req, res) => {
+  try {
+    const {shortUrl, chain} = req.body;
+    let collectionData = await Collection.findOne({ shortUrl: shortUrl, status: 1 });
+    res.json(collectionData);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send('Server error');
+  }
+})
+
+router.get('/getNFTData/:_id', async (req, res) => {
+  try {
+    const NFTData = await Collection.findById(req.params._id);
+    res.json(NFTData);
   } catch (error) {
     console.error(error.message);
     res.status(500).send('Server error');

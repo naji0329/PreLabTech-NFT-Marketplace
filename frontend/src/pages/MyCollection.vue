@@ -36,6 +36,10 @@ export default {
     return {
       SectionData
     }
-  }
+  },
+  mounted() {
+    
+  },
+
 }
 </script>

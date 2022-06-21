@@ -76,7 +76,7 @@ export default {
   async beforeMount () {
 
     // Get user colleciton data by address
-    const response = await CollectionService.getCollectionData(this.auth.user.address, this.auth.user.chain);
+    const response = await CollectionService.getCollections(this.auth.user.address, this.auth.user.chain);
     this.collectionData = response;
     
     

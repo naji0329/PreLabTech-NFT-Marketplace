@@ -3001,13 +3001,13 @@ let SectionData = {
     {
       id: 1,
       title: 'Profile',
-      path: 'profile',
+      path: '/profile',
       icon: 'ni-user'
     },
     {
       id: 2,
       title: 'My Collections',
-      path: 'my-collections',
+      path: '/my-collections',
       icon: 'ni-dashboard'
     },
     // {
@@ -3019,7 +3019,7 @@ let SectionData = {
     {
       id: 4,
       title: 'Help center',
-      path: 'contact',
+      path: '/contact',
       icon: 'ni-question-alt'
     }
   ],

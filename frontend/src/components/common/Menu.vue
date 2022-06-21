@@ -37,7 +37,7 @@
               </p>
             </li>
             <li v-else>
-              <router-link class="dropdown-item card-generic-item" to="login">
+              <router-link class="dropdown-item card-generic-item" to="/login">
                 <em class="ni ni-power me-2"></em>Login
               </router-link>
             </li>

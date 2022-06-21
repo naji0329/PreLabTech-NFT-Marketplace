@@ -14,8 +14,18 @@ export default {
       return response.data;
     });
   },
-  getCollectionData(address, chain) {
-    return axios.post(url + "collection/getCollectionData", { address, chain }).then((response) => {
+  getCollections(address, chain) {
+    return axios.post(url + "collection/getCollections", { address, chain }).then((response) => {
+      return response.data;
+    });
+  },
+  getCollectionData(shortUrl, chain) {
+    return axios.post(url + "collection/getCollectionData", { shortUrl, chain }).then((response) => {
+      return response.data;
+    });
+  },
+  getNFTData(_id) {
+    return axios.get(url + "collection/getNFTData/"+_id).then((response) => {
       return response.data;
     });
   }
