@@ -11,6 +11,9 @@ const Schema = new mongoose.Schema({
   file: {
     type: String
   },
+  ipfs_path: {
+    type: String
+  },
   chain: {
     type: String
   },

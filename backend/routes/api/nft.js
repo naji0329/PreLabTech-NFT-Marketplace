@@ -24,24 +24,12 @@ router.post(
       const form = new formidable.IncomingForm();
       form.parse(req, async function (err, fields, files) {
 
-        let fileName = null; 
-        if(files.file) {
-          const oldpath = files.file.filepath;
-          fileName = Date.now() + path.extname(files.file.originalFilename);
-          const newpath = './../frontend/src/images/nfts/' + fileName;
-          const readStream=fs.createReadStream(oldpath);
-          const writeStream=fs.createWriteStream(newpath);
-          readStream.pipe(writeStream);
-          readStream.on('end',function(){
-           fs.unlinkSync(oldpath);
-          });
-        }
-  
-  
-        const _nft = new NFT({
+        
+        let _nft = new NFT({
           name: fields.name,
           description: fields.description,
-          file: fileName,
+          file: "",
+          ipfs_path: "",
           chain: fields.chain,
           creater: fields.creater,
           collection_id: fields.collection._id,
@@ -49,26 +37,35 @@ router.post(
           collection_symbol: fields.collection.symbol,
           contract_address: fields.collection.contract_address,
         });
-  
-        
-        const _newNFT = await _nft.save();
 
-        // Upload File to IPFS
+        if(files.file) {
+          const oldpath = files.file.filepath;
+          const fileName = Date.now() + path.extname(files.file.originalFilename);
+          const newpath = './../frontend/src/images/nfts/' + fileName;
+          const readStream=fs.createReadStream(oldpath);
+          const writeStream=fs.createWriteStream(newpath);
+          readStream.pipe(writeStream);
+          readStream.on('end',function(){
+            fs.unlinkSync(oldpath);
 
-        let uploadFile = fs.readFileSync(files.file.filepath);
-        let tempBuffer = new Buffer(uploadFile);
-        ipfs.files.add(tempBuffer, function (err, file) {
-          if (err) {
-            console.log(err);
-          }
-          console.log(file)
-        })
 
-        
-        console.log(_newNFT);
-        
-        res.status(200).json({ _newNFT });
-        
+            // Upload File to IPFS
+            let uploadFile = fs.readFileSync('./../frontend/src/images/nfts/' + fileName);
+            let tempBuffer = new Buffer(uploadFile);
+            ipfs.files.add(tempBuffer, async function (err, file) {
+              if (err) {
+                console.log(err);
+              }
+
+              _nft.ipfs_path = file[0].hash;
+              _nft.file = fileName;
+
+              const _newNFT = await _nft.save();
+              return res.status(200).json({ _newNFT });
+            })
+          });
+        }
+
       });
 
     } catch (err) {
