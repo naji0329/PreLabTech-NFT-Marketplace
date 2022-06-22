@@ -239,7 +239,7 @@ export default {
                     let contract = new web3.eth.Contract(erc721abi, this.NFTData.collection.contract_address);
                                         
                     contract.methods
-                        .mint(this.auth.user.address, 1)
+                        .mint(this.auth.user.address, ""+response._newNFT.metadata_url)
                         .send({from: this.auth.user.address})
                         .once("error", (err) => {
                             console.log(err,"Error");
