@@ -10,7 +10,7 @@ async function main() {
 
   console.log("Account balance:", (await deployer.getBalance()).toString());
 
-  const Token = await ethers.getContractFactory("NFT");
+  const Token = await ethers.getContractFactory("ERC721NFT");
   const token = await Token.deploy("hala", "hala");
 
   console.log("Contract address:", token.address);
@@ -33,7 +33,7 @@ function saveFrontendFiles(token) {
     JSON.stringify({ Token: token.address }, undefined, 2)
   );
 
-  const TokenArtifact = artifacts.readArtifactSync("NFT");
+  const TokenArtifact = artifacts.readArtifactSync("ERC721NFT");
 
   fs.writeFileSync(
     frontendContractsDir + "/NFT.json",

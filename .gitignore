@@ -4,6 +4,8 @@
 /frontend/dist
 /frontend/src/images/collections/cover
 /frontend/src/images/collections/logo
+/frontend/src/images/nfts/file
+/frontend/src/images/nfts/metadata
 
 /backend/node_modules
 /backend/config/default.json

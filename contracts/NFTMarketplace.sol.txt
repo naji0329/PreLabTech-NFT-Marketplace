@@ -4,13 +4,13 @@ pragma solidity ^0.8.3;
 
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "./NFT.sol";
+import "./ERC721NFT.sol";
 
 contract NFTMarketplace {
     string public name;
     uint256 public age;
 
-    NFT public nft;
+    ERC721NFT public erc721nft;
 
     constructor() {}
 
@@ -18,8 +18,8 @@ contract NFTMarketplace {
         public
         returns (address _contractAddr)
     {
-        nft = new NFT(_name, _symbol);
-        _contractAddr = address(nft);
+        erc721nft = new ERC721NFT(_name, _symbol);
+        _contractAddr = address(erc721nft);
         return _contractAddr;
     }
 }
