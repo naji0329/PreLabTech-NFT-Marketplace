@@ -14,6 +14,9 @@ const Schema = new mongoose.Schema({
   ipfs_path: {
     type: String
   },
+  metadata_url: {
+    type: String
+  },
   chain: {
     type: String
   },

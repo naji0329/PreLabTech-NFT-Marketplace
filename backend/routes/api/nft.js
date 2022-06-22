@@ -40,8 +40,9 @@ router.post(
 
         if(files.file) {
           const oldpath = files.file.filepath;
-          const fileName = Date.now() + path.extname(files.file.originalFilename);
-          const newpath = './../frontend/src/images/nfts/' + fileName;
+          const cTimestamp = Date.now();
+          const fileName = cTimestamp + path.extname(files.file.originalFilename);
+          const newpath = './../frontend/src/images/nfts/file/' + fileName;
           const readStream=fs.createReadStream(oldpath);
           const writeStream=fs.createWriteStream(newpath);
           readStream.pipe(writeStream);
@@ -50,7 +51,7 @@ router.post(
 
 
             // Upload File to IPFS
-            let uploadFile = fs.readFileSync('./../frontend/src/images/nfts/' + fileName);
+            let uploadFile = fs.readFileSync('./../frontend/src/images/nfts/file/' + fileName);
             let tempBuffer = new Buffer(uploadFile);
             ipfs.files.add(tempBuffer, async function (err, file) {
               if (err) {
@@ -60,8 +61,42 @@ router.post(
               _nft.ipfs_path = file[0].hash;
               _nft.file = fileName;
 
-              const _newNFT = await _nft.save();
-              return res.status(200).json({ _newNFT });
+              // Metadata Generate
+              const metadata = {
+                "name": _nft.name,
+                "description": _nft.description,
+                "image": "https://ipfs.io/ipfs/"+_nft.ipfs_path,
+                "animation_url": "",
+                "external_url": "",
+              }
+              const jsonString = JSON.stringify(metadata)
+
+              fs.writeFile(`./../frontend/src/images/nfts/metadata/${cTimestamp}.json`, jsonString, err => {
+                if (err) {
+                    console.log('Error writing file', err)
+                } else {
+
+                  // Upload Metadata to IPFS
+                  let uploadFile = fs.readFileSync(`./../frontend/src/images/nfts/metadata/${cTimestamp}.json`);
+                  let tempMetadataBuffer = new Buffer(uploadFile);
+                  ipfs.files.add(tempMetadataBuffer, async function (err, file_metadata) {
+                    if (err) {
+                      console.log(err);
+                    }
+
+                    _nft.metadata_url = file_metadata[0].hash;
+
+                    const _newNFT = await _nft.save();
+                    return res.status(200).json({ _newNFT });
+
+                  })
+
+
+                }
+              })
+
+
+
             })
           });
         }
