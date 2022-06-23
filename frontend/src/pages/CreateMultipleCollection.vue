@@ -86,7 +86,7 @@ import contractAddress from '@/contracts/contract-address.json';
 import TokenArtifact from '@/contracts/NFT.json';
 
 export default {
-    name: 'CreateMultipleCollection.vue',
+    name: 'CreateSingleCollection',
     data () {
         return {
             SectionData,

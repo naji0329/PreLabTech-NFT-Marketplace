@@ -1,8 +1,8 @@
 require("@nomiclabs/hardhat-waffle");
 require("@nomiclabs/hardhat-etherscan");
 
-const testWallet = ['cf0a505cd94ebb8ad425ec1fc64211b93bef1a105e2840ea25e5f0185ff29e9a'];
-const mainWallet = ['cf0a505cd94ebb8ad425ec1fc64211b93bef1a105e2840ea25e5f0185ff29e9a'];  // Deployed with FOr Monstars Wallet.
+const testWallet = ['b827fe8e67880accf98683ef4cdd0d2d229adfc69e8a1209bfc5d99f70611a7b'];
+const mainWallet = ['b827fe8e67880accf98683ef4cdd0d2d229adfc69e8a1209bfc5d99f70611a7b'];  // Deployed with FOr Monstars Wallet.
 
 
 const mnemonic = "";
@@ -35,7 +35,7 @@ module.exports = {
       gasPrice: 20000000000,
       accounts: testWallet
     },
-    bsc_testnet: {
+    testbsc: {
       url: "https://data-seed-prebsc-1-s1.binance.org:8545/",
       chainId: 97,
       gasPrice: 20000000000,
@@ -80,10 +80,10 @@ module.exports = {
   etherscan: {
     // Your API key for Etherscan
     // Obtain one at https://bscscan.com/
-    // apiKey: "4R4PWC5XJU4KI7H4T3S3MJ8WMKT8NWJU2K",//bscscan
+    apiKey: "4R4PWC5XJU4KI7H4T3S3MJ8WMKT8NWJU2K",//bscscan
     // apiKey: "ERD4CBR4TE95MSZ43V98VJ2ISSMM4ZR2VX",//polygonscan
     // apiKey: '5U4M1GAVKJ14A856IDCVTU9833AYPBZ1YC' //ftmscan
-    apiKey: "VH2CKUS6SV7VSCR2TFR5YU5PJPU33TQS1X", // Etherscan
+    // apiKey: "VH2CKUS6SV7VSCR2TFR5YU5PJPU33TQS1X", // Etherscan
     // apiKey: "7AWY9EDD7D6BQHN6SF645D23X84PKYEC3U" // AVALANCHE
   },
 };
