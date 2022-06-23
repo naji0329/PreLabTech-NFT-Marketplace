@@ -86,7 +86,7 @@ import contractAddress from '@/contracts/contract-address.json';
 import TokenArtifact from '@/contracts/NFT.json';
 
 export default {
-    name: 'CreateCollection',
+    name: 'CreateSingleCollection',
     data () {
         return {
             SectionData,

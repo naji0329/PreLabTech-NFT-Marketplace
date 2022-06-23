@@ -188,10 +188,20 @@ const routes = [
     name: 'create-multiple',
     component: () => import('../pages/CreateMultiple.vue')
   },
+  // {
+  //   path: '/create-collection',
+  //   name: 'create-collection',
+  //   component: () => import('../pages/CreateCollection.vue')
+  // },
   {
-    path: '/create-collection',
-    name: 'create-collection',
-    component: () => import('../pages/CreateCollection.vue')
+    path: '/create-single-collection',
+    name: 'create-single-collection',
+    component: () => import('../pages/CreateSingleCollection.vue')
+  },
+  {
+    path: '/create-multiple-collection',
+    name: 'create-multiple-collection',
+    component: () => import('../pages/CreateMultipleCollection.vue')
   },
   {
     path: '/contact',
