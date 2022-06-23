@@ -1,0 +1,7 @@
+{
+    "mongoURI": "mongodb+srv://root:root@cluster0.pvc3u.mongodb.net/?retryWrites=true&w=majority",
+    "jwtSecret": "secret",
+    "githubToken": "<yoursecrectaccesstoken>",
+    "supportEmail": "oxstocksweb@gmail.com",
+    "supportEmailPassword": "OxStocks.com"
+} 
