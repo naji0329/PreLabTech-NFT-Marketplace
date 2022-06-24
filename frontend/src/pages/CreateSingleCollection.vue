@@ -62,7 +62,8 @@
                                     <p class="px-3 text-red"><small v-if="errors.shortUrl">{{errors.shortUrl}}</small></p>
                                 </div>
                             </div><!-- end form-item -->
-                            <button class="btn btn-primary" type="button" v-on:click="createCollection">Create</button>
+                            <button class="btn btn-primary" type="button" v-on:click="createCollection" v-if="!isLoading">Create</button>
+                            <button class="btn btn-primary" type="button" disabled v-else>Loading...</button>
                         </form>
                     </div><!-- endn col -->
                 </div><!-- row-->
@@ -98,7 +99,8 @@ export default {
                 logoImage: null,
                 coverImage: null
             },
-            errors: {}
+            errors: {},
+            isLoading: false
         }
     },
     mounted () {
@@ -160,6 +162,17 @@ export default {
             this.contractData.coverImage = this.$refs.coverImage.files[0];
         },
         async createCollection() {
+
+            this.errors = {};
+            if(this.contractData.logoImage == null) { this.errors.logoImage = "Please select logo image"; return false; }
+            if(this.contractData.coverImage == null) { this.errors.coverImage = "Please select cover image"; return false; }
+            if(this.contractData.name == null) { this.errors.name = "Please input name."; return false; }
+            if(this.contractData.symbol == null) { this.errors.symbol = "Please input symbol."; return false; }
+            if(this.contractData.description == null) { this.errors.description = "Please input description."; return false; }
+            if(this.contractData.shortUrl == null) { this.errors.shortUrl = "Please input short url."; return false; }
+
+            this.isLoading = true;
+            
             const formData = new FormData();
             formData.append("logoImage", this.contractData.logoImage);  
             formData.append("coverImage", this.contractData.coverImage);  
@@ -177,6 +190,7 @@ export default {
                 if(response.errors) {
                     console.log(response.errors);
                     this.errors = response.errors;
+                    this.isLoading = true;
                     return ;
                 }
                 else {
@@ -189,15 +203,20 @@ export default {
                         .send({from: this.auth.user.address})
                         .once("error", (err) => {
                             console.log(err,"Error");
+                            this.isLoading = true;
                         })
                         .then(async (receipt) => {
                             const response1 = await CollectionService.verifyCollection(response.newCollection._id, receipt.events[0].address);
                             console.log(response1)
                             alert("contract created successfully!");
+                            this.isLoading = true;
                             this.$router.push({ name: 'my-collections' })
                         }); 
                 }
 
+            }
+            else {
+                this.isLoading = true;
             }
 
         }
