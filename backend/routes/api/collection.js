@@ -42,7 +42,7 @@ router.post(
         if(files.coverImage) {
           const oldpath = files.coverImage.filepath;
           coverImageName = Date.now() + path.extname(files.coverImage.originalFilename);
-          const newpath = './../frontend/src/images/collections/cover/' + coverImageName;
+          const newpath = './../frontend/public/files/collections/cover/' + coverImageName;
           const readStream=fs.createReadStream(oldpath);
           const writeStream=fs.createWriteStream(newpath);
           readStream.pipe(writeStream);
@@ -55,7 +55,7 @@ router.post(
         if(files.logoImage) {
           const oldpath = files.logoImage.filepath;
           logoImageName = Date.now() + path.extname(files.logoImage.originalFilename);
-          const newpath = './../frontend/src/images/collections/logo/' + logoImageName;
+          const newpath = './../frontend/public/files/collections/logo/' + logoImageName;
           const readStream=fs.createReadStream(oldpath);
           const writeStream=fs.createWriteStream(newpath);
           readStream.pipe(writeStream);

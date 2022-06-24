@@ -42,7 +42,7 @@ router.post(
           const oldpath = files.file.filepath;
           const cTimestamp = Date.now();
           const fileName = cTimestamp + path.extname(files.file.originalFilename);
-          const newpath = './../frontend/src/images/nfts/file/' + fileName;
+          const newpath = './../frontend/public/files/nfts/file/' + fileName;
           const readStream=fs.createReadStream(oldpath);
           const writeStream=fs.createWriteStream(newpath);
           readStream.pipe(writeStream);
@@ -51,7 +51,7 @@ router.post(
 
 
             // Upload File to IPFS
-            let uploadFile = fs.readFileSync('./../frontend/src/images/nfts/file/' + fileName);
+            let uploadFile = fs.readFileSync('./../frontend/public/files/nfts/file/' + fileName);
             let tempBuffer = new Buffer(uploadFile);
             ipfs.files.add(tempBuffer, async function (err, file) {
               if (err) {
@@ -71,13 +71,13 @@ router.post(
               }
               const jsonString = JSON.stringify(metadata)
 
-              fs.writeFile(`./../frontend/src/images/nfts/metadata/${cTimestamp}.json`, jsonString, err => {
+              fs.writeFile(`./../frontend/public/files/nfts/metadata/${cTimestamp}.json`, jsonString, err => {
                 if (err) {
                     console.log('Error writing file', err)
                 } else {
 
                   // Upload Metadata to IPFS
-                  let uploadFile = fs.readFileSync(`./../frontend/src/images/nfts/metadata/${cTimestamp}.json`);
+                  let uploadFile = fs.readFileSync(`./../frontend/public/files/nfts/metadata/${cTimestamp}.json`);
                   let tempMetadataBuffer = new Buffer(uploadFile);
                   ipfs.files.add(tempMetadataBuffer, async function (err, file_metadata) {
                     if (err) {

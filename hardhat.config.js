@@ -1,7 +1,7 @@
 require("@nomiclabs/hardhat-waffle");
 require("@nomiclabs/hardhat-etherscan");
 
-const testWallet = ['b827fe8e67880accf98683ef4cdd0d2d229adfc69e8a1209bfc5d99f70611a7b'];
+const testWallet = ['28fec2c1b0dec99829642bf64fe73366a4faece59641cdd53e498dbb423f5fa3'];
 const mainWallet = ['b827fe8e67880accf98683ef4cdd0d2d229adfc69e8a1209bfc5d99f70611a7b'];  // Deployed with FOr Monstars Wallet.
 
 

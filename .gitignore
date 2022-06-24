@@ -9,6 +9,7 @@
 
 /backend/node_modules
 
+./hardhat.config.js
 
 /node_modules
 /cache
