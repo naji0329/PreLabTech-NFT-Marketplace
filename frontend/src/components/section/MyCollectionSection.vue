@@ -26,11 +26,11 @@
               <swiper-slide v-for="item in collectionData" :key="item._id" class="h-auto">
                   <router-link :to="'/collection/'+item.shortUrl" class="card card-full card-collection">
                     <div style="height: 100px; overflow: hidden;">
-                      <!-- <img v-bind:src="require(`@/images/collections/cover/`+item.logoImage)" class="card-img-top" alt="birds art image"> -->
+                      <!-- <img v-bind:src="`@/images/collections/cover/`+item.logoImage"  class="card-img-top" > -->
                     </div>
                       <div class="card-body card-body-s1">
                           <div class="avatar avatar-1">
-                                <!-- <img v-bind:src="require(`@/images/collections/logo/`+item.logoImage)" alt="avatar" class="rounded-circle"> -->
+                              <!-- <img v-bind:src="require(`@/images/collections/logo/`+item.logoImage)" alt="avatar" class="rounded-circle"> -->
                           </div><!-- end avatar -->
                           <h4 class="card-title mt-4 mb-2 pt-1">{{ item.title }}</h4>
                           <p class="fw-semibold text-secondary">{{ item.description }}</p>

@@ -172,7 +172,7 @@ export default {
             if(this.contractData.shortUrl == null) { this.errors.shortUrl = "Please input short url."; return false; }
 
             this.isLoading = true;
-            
+
             const formData = new FormData();
             formData.append("logoImage", this.contractData.logoImage);  
             formData.append("coverImage", this.contractData.coverImage);  
@@ -190,7 +190,7 @@ export default {
                 if(response.errors) {
                     console.log(response.errors);
                     this.errors = response.errors;
-                    this.isLoading = true;
+                    this.isLoading = false;
                     return ;
                 }
                 else {
@@ -203,20 +203,20 @@ export default {
                         .send({from: this.auth.user.address})
                         .once("error", (err) => {
                             console.log(err,"Error");
-                            this.isLoading = true;
+                            this.isLoading = false;
                         })
                         .then(async (receipt) => {
                             const response1 = await CollectionService.verifyCollection(response.newCollection._id, receipt.events[0].address);
                             console.log(response1)
                             alert("contract created successfully!");
-                            this.isLoading = true;
+                            this.isLoading = false;
                             this.$router.push({ name: 'my-collections' })
                         }); 
                 }
 
             }
             else {
-                this.isLoading = true;
+                this.isLoading = false;
             }
 
         }
