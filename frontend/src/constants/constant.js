@@ -1,5 +1,7 @@
-const url = "http://127.0.0.1:5000/api/";
+import NFTMarketplace_ContractAddress from '@/contracts/marketplace/contract-address.json';
+import NFTMarketplace_TokenArtifact from '@/contracts/NFT.json';
 
 export default {
-    url: url
+    NFTMarketplace_ContractAddress: NFTMarketplace_ContractAddress,
+    NFTMarketplace_TokenArtifact: NFTMarketplace_TokenArtifact
 }

@@ -1,28 +1,51 @@
 const { ethers, network } = require("hardhat");
+const fs = require("fs");
 
 async function main() {
-
   console.log(network.name);
-
   const [deployer] = await ethers.getSigners();
-
   console.log("Deploying contracts with the account:", deployer.address);
-
   console.log("Account balance:", (await deployer.getBalance()).toString());
 
-  const Token = await ethers.getContractFactory("NFTMarketplace");
-  const token = await Token.deploy();
-
-  console.log("Contract address:", token.address);
-
-  saveFrontendFiles(token);
+  await deploy_nft_marketplacec_contract();
+  // await deploy_erc721_contract();
+  // await deploy_erc1155_contract();
 }
-  
-function saveFrontendFiles(token) {
-  const fs = require("fs");
-  const directory_name = "frontend/src/contracts";
 
+async function deploy_nft_marketplacec_contract() {
+  const contractName = "NFTMarketplace";
+  const Token = await ethers.getContractFactory(contractName);
+  const token = await Token.deploy("hala", "hala");
+  console.log("NFTMarketplace Contract address:", token.address);
+
+  const directory_name = "frontend/src/contracts/marketplace";
   const frontendContractsDir = __dirname + "/../" + directory_name;
+  saveFrontendFiles(token, frontendContractsDir, contractName);
+}
+
+async function deploy_erc721_contract() {
+  const contractName = "ERC721NFT";
+  const Token = await ethers.getContractFactory(contractName);
+  const token = await Token.deploy();
+  console.log("NFTMarketplace Contract address:", token.address);
+
+  const directory_name = "frontend/src/contracts/erc721";
+  const frontendContractsDir = __dirname + "/../" + directory_name;
+  saveFrontendFiles(token, frontendContractsDir, contractName);
+}
+
+async function deploy_erc1155_contract() {
+  const contractName = "ERC1155NFT";
+  const Token = await ethers.getContractFactory(contractName);
+  const token = await Token.deploy();
+  console.log("NFTMarketplace Contract address:", token.address);
+
+  const directory_name = "frontend/src/contracts/erc1155";
+  const frontendContractsDir = __dirname + "/../" + directory_name;
+  saveFrontendFiles(token, frontendContractsDir, contractName);
+}
+
+function saveFrontendFiles(token, frontendContractsDir, contractName) {
 
   if (!fs.existsSync(frontendContractsDir)) {
     fs.mkdirSync(frontendContractsDir);
@@ -33,7 +56,7 @@ function saveFrontendFiles(token) {
     JSON.stringify({ Token: token.address }, undefined, 2)
   );
 
-  const TokenArtifact = artifacts.readArtifactSync("NFTMarketplace");
+  const TokenArtifact = artifacts.readArtifactSync(contractName);
 
   fs.writeFileSync(
     frontendContractsDir + "/NFT.json",

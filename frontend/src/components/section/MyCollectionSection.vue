@@ -32,7 +32,7 @@
                           <div class="avatar avatar-1">
                               <img v-bind:src="'/files/collections/logo/'+item.logoImage" alt="avatar" class="rounded-circle">
                           </div><!-- end avatar -->
-                          <h4 class="card-title mt-4 mb-2 pt-1">{{ item.title }}</h4>
+                          <h4 class="card-title mt-4 mb-2 pt-1">{{ item.name }}</h4>
                           <p class="fw-semibold text-secondary">{{ item.description }}</p>
                       </div><!-- end card-body -->
                   </router-link><!-- end card -->
@@ -68,7 +68,6 @@ export default {
     return {
       SectionData,
       collectionData: null,
-      coverImage: "1655742395919.jpg"
     }
   },
   computed: {
@@ -76,12 +75,9 @@ export default {
       ...mapGetters({currentChain: ['auth/currentChain']})
   },
   async beforeMount () {
-
     // Get user colleciton data by address
     const response = await CollectionService.getCollections(this.auth.user.address, this.auth.user.chain);
     this.collectionData = response;
-    
-    
   },
   methods: {
   },

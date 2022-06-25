@@ -11,8 +11,8 @@
                 <div class="row justify-content-center">
                     <div class="col-lg-8">
                         <div class="section-head-sm">
-                            <router-link :to="SectionData.createSingleData.path" class="btn-link fw-semibold"><em class="ni ni-arrow-left"></em> {{SectionData.createSingleData.btnText }}</router-link>
-                            <h1 class="mt-2">Create a Collection</h1>
+                            <router-link to="/my-collections" class="btn-link fw-semibold"><em class="ni ni-arrow-left"></em> {{SectionData.createSingleData.btnText }}</router-link>
+                            <h1 class="mt-2">Create a Multiple Collection</h1>
                         </div>
                     </div><!-- end col -->
                     <div class="col-lg-8">
@@ -62,7 +62,8 @@
                                     <p class="px-3 text-red"><small v-if="errors.shortUrl">{{errors.shortUrl}}</small></p>
                                 </div>
                             </div><!-- end form-item -->
-                            <button class="btn btn-primary" type="button" v-on:click="createCollection">Create</button>
+                            <button class="btn btn-primary" type="button" v-on:click="createCollection" v-if="!isLoading">Create</button>
+                            <button class="btn btn-primary" type="button" disabled v-else>Loading...</button>
                         </form>
                     </div><!-- endn col -->
                 </div><!-- row-->
@@ -82,11 +83,11 @@ import Web3 from 'web3';
 import SectionData from '@/store/store.js'
 import CollectionService from "@/services/collection.service.js";
 
-import contractAddress from '@/contracts/contract-address.json';
-import TokenArtifact from '@/contracts/NFT.json';
+import NFTMarketplace_ContractAddress from '@/constants/constant.js';
+import NFTMarketplace_TokenArtifact from '@/constants/constant.js';
 
 export default {
-    name: 'CreateSingleCollection',
+    name: 'CreateMultipleCollection',
     data () {
         return {
             SectionData,
@@ -98,7 +99,8 @@ export default {
                 logoImage: null,
                 coverImage: null
             },
-            errors: {}
+            errors: {},
+            isLoading: false
         }
     },
     mounted () {
@@ -147,6 +149,11 @@ export default {
 
         checkboxSwitcher(".checkbox-switcher");
 
+        
+                    // let web3 = new Web3(window.ethereum);
+                    // let contract = new web3.eth.Contract(NFTMarketplace_TokenArtifact.abi, NFTMarketplace_ContractAddress.Token);
+console.log('contract', NFTMarketplace_TokenArtifact);
+
     },
     computed: {
         ...mapState(['auth']),
@@ -160,6 +167,17 @@ export default {
             this.contractData.coverImage = this.$refs.coverImage.files[0];
         },
         async createCollection() {
+
+            this.errors = {};
+            if(this.contractData.logoImage == null) { this.errors.logoImage = "Please select logo image"; return false; }
+            if(this.contractData.coverImage == null) { this.errors.coverImage = "Please select cover image"; return false; }
+            if(this.contractData.name == null) { this.errors.name = "Please input name."; return false; }
+            if(this.contractData.symbol == null) { this.errors.symbol = "Please input symbol."; return false; }
+            if(this.contractData.description == null) { this.errors.description = "Please input description."; return false; }
+            if(this.contractData.shortUrl == null) { this.errors.shortUrl = "Please input short url."; return false; }
+
+            this.isLoading = true;
+
             const formData = new FormData();
             formData.append("logoImage", this.contractData.logoImage);  
             formData.append("coverImage", this.contractData.coverImage);  
@@ -177,27 +195,33 @@ export default {
                 if(response.errors) {
                     console.log(response.errors);
                     this.errors = response.errors;
+                    this.isLoading = false;
                     return ;
                 }
                 else {
                     // Create web3.
                     let web3 = new Web3(window.ethereum);
-                    let contract = new web3.eth.Contract(TokenArtifact.abi, contractAddress.Token);
+                    let contract = new web3.eth.Contract(NFTMarketplace_TokenArtifact.abi, NFTMarketplace_ContractAddress.Token);
 
                     contract.methods
                         .createToken(this.contractData.name, this.contractData.symbol)
                         .send({from: this.auth.user.address})
                         .once("error", (err) => {
                             console.log(err,"Error");
+                            this.isLoading = false;
                         })
                         .then(async (receipt) => {
                             const response1 = await CollectionService.verifyCollection(response.newCollection._id, receipt.events[0].address);
                             console.log(response1)
                             alert("contract created successfully!");
+                            this.isLoading = false;
                             this.$router.push({ name: 'my-collections' })
                         }); 
                 }
 
+            }
+            else {
+                this.isLoading = false;
             }
 
         }

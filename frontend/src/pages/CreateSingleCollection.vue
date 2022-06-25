@@ -11,8 +11,8 @@
                 <div class="row justify-content-center">
                     <div class="col-lg-8">
                         <div class="section-head-sm">
-                            <router-link :to="SectionData.createSingleData.path" class="btn-link fw-semibold"><em class="ni ni-arrow-left"></em> {{SectionData.createSingleData.btnText }}</router-link>
-                            <h1 class="mt-2">Create a Collection</h1>
+                            <router-link to="/my-collections" class="btn-link fw-semibold"><em class="ni ni-arrow-left"></em> {{SectionData.createSingleData.btnText }}</router-link>
+                            <h1 class="mt-2">Create a Single Collection</h1>
                         </div>
                     </div><!-- end col -->
                     <div class="col-lg-8">

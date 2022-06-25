@@ -123,10 +123,14 @@ router.post('/getCollections', async (req, res) => {
   try {
     const {address, chain} = req.body;
 
-    let collections = await Collection.find({ owner: address, status: 1 });
+    let searchForm = {status: 1};
+    if(address) searchForm.owner = address;
+    if(chain) searchForm.chain = chain;
 
+    console.log("get collections with this search", searchForm)
+
+    let collections = await Collection.find(searchForm);
     res.json(collections);
-
   } catch (error) {
     console.error(error.message);
     res.status(500).send('Server error');

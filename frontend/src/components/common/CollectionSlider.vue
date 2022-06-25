@@ -16,15 +16,17 @@
      }"
      :loop="true"
      :pagination="{ clickable: true }" class="swiper-container-space">
-        <swiper-slide v-for="item in SectionData.collectionData.collectionList" :key="item.id" class="h-auto">
-            <router-link :to="item.path" class="card card-full card-collection">
-                <img :src="item.img" class="card-img-top" alt="birds art image">
+        <swiper-slide v-for="item in collectionData" :key="item.id" class="h-auto">
+            <router-link :to="'/collection/'+item.shortUrl" class="card card-full card-collection">
+              <div style="height: 200px; overflow: hidden;">
+                <img v-bind:src="'/files/collections/cover/'+item.coverImage" class="card-img-top" >
+              </div>
                 <div class="card-body card-body-s1">
                     <div class="avatar avatar-1">
-                          <img :src="item.avatar" alt="avatar" class="rounded-circle">
+                          <img v-bind:src="'/files/collections/logo/'+item.logoImage" class="rounded-circle">
                     </div><!-- end avatar -->
                     <h4 class="card-title mt-4 mb-2 pt-1">{{ item.title }}</h4>
-                    <p class="fw-semibold text-secondary">{{ item.price }}</p>
+                    <p class="fw-semibold text-secondary">{{ item.description }}</p>
                 </div><!-- end card-body -->
             </router-link><!-- end card -->
         </swiper-slide>
@@ -42,6 +44,9 @@ SwiperCore.use([Pagination]);
 
 // Import Swiper Vue.js components
 import { Swiper, SwiperSlide } from 'swiper/vue';
+import { mapState, mapGetters } from 'vuex';
+
+import CollectionService from "@/services/collection.service.js";
 
 export default {
   name: 'CollectionSlider',
@@ -51,8 +56,18 @@ export default {
   },
   data () {
     return {
-      SectionData
+      SectionData,
+      collectionData: null,
     }
+  },
+  computed: {
+      ...mapState(['auth']),
+      ...mapGetters({currentChain: ['auth/currentChain']})
+  },
+  async beforeMount () {
+    // Get user colleciton data by address
+    const response = await CollectionService.getCollections(null);
+    this.collectionData = response;
   },
   setup() {
       return{
