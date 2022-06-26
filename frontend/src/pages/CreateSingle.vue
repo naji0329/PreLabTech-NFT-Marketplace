@@ -126,13 +126,13 @@
 <script>
 
 import { mapState, mapGetters } from 'vuex';
-import Web3 from 'web3';
+// import Web3 from 'web3';
 // Import component data. You can change the data in the store to reflect in all component
 import SectionData from '@/store/store.js'
 import NFTService from "@/services/nft.service.js";
 import CollectionService from "@/services/collection.service.js";
 
-import erc721abi from '@/contracts/abi/erc721.json';
+// import erc721abi from '@/contracts/abi/erc721.json';
 
 export default {
     name: 'CreateSingle',
@@ -235,18 +235,19 @@ export default {
                 }
                 else {
                     // Create web3.
-                    let web3 = new Web3(window.ethereum);
-                    let contract = new web3.eth.Contract(erc721abi, this.NFTData.collection.contract_address);
+                    console.log("asdfasd")
+                    // let web3 = new Web3(window.ethereum);
+                    // let contract = new web3.eth.Contract(erc721abi, this.NFTData.collection.contract_address);
                                         
-                    contract.methods
-                        .mint(this.auth.user.address, ""+response._newNFT.metadata_url)
-                        .send({from: this.auth.user.address})
-                        .once("error", (err) => {
-                            console.log(err,"Error");
-                        })
-                        .then(async (receipt) => {
-                            console.log(receipt)
-                        }); 
+                    // contract.methods
+                    //     .mint(this.auth.user.address, ""+response._newNFT.metadata_url)
+                    //     .send({from: this.auth.user.address})
+                    //     .once("error", (err) => {
+                    //         console.log(err,"Error");
+                    //     })
+                    //     .then(async (receipt) => {
+                    //         console.log(receipt)
+                    //     }); 
                 }
             }
 

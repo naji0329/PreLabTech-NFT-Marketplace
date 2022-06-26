@@ -15,7 +15,7 @@ async function main() {
 async function deploy_nft_marketplacec_contract() {
   const contractName = "NFTMarketplace";
   const Token = await ethers.getContractFactory(contractName);
-  const token = await Token.deploy("hala", "hala");
+  const token = await Token.deploy();
   console.log("NFTMarketplace Contract address:", token.address);
 
   const directory_name = "frontend/src/contracts/marketplace";
@@ -26,7 +26,7 @@ async function deploy_nft_marketplacec_contract() {
 async function deploy_erc721_contract() {
   const contractName = "ERC721NFT";
   const Token = await ethers.getContractFactory(contractName);
-  const token = await Token.deploy();
+  const token = await Token.deploy("hala", "hala");
   console.log("NFTMarketplace Contract address:", token.address);
 
   const directory_name = "frontend/src/contracts/erc721";
@@ -46,7 +46,6 @@ async function deploy_erc1155_contract() {
 }
 
 function saveFrontendFiles(token, frontendContractsDir, contractName) {
-
   if (!fs.existsSync(frontendContractsDir)) {
     fs.mkdirSync(frontendContractsDir);
   }
@@ -69,4 +68,4 @@ main()
   .catch((error) => {
     console.error(error);
     process.exit(1);
-});
+  });

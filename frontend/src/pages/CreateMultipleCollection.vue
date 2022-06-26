@@ -189,8 +189,8 @@ console.log('contract', NFTMarketplace_TokenArtifact);
             if(await this.currentChain() == "ethereum") {
                 formData.append("owner", this.auth.user.address);
                 formData.append("chain", this.auth.user.chain);
+                formData.append("type", "1155");
                 const response = await CollectionService.createCollection(formData);
-
 
                 if(response.errors) {
                     console.log(response.errors);
@@ -204,7 +204,7 @@ console.log('contract', NFTMarketplace_TokenArtifact);
                     let contract = new web3.eth.Contract(NFTMarketplace_TokenArtifact.abi, NFTMarketplace_ContractAddress.Token);
 
                     contract.methods
-                        .createToken(this.contractData.name, this.contractData.symbol)
+                        .create_ERC1155_collection(this.contractData.name, this.contractData.symbol)
                         .send({from: this.auth.user.address})
                         .once("error", (err) => {
                             console.log(err,"Error");

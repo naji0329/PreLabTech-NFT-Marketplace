@@ -16,7 +16,7 @@ var fs = require('fs');
 var path = require('path')
 
 // @route    POST api/collection/createCollection
-// @desc     Create Collection
+// @desc     Create Single Collection
 // @access   Public
 router.post(
   '/createCollection',
@@ -72,6 +72,7 @@ router.post(
           shortUrl: fields.shortUrl,
           owner: fields.owner,
           chain: fields.chain,
+          type: fields.type,
           logoImage: logoImageName,
           coverImage: coverImageName,
         });

@@ -21,6 +21,9 @@ const UserSchema = new mongoose.Schema({
   chain: {
     type: String,
   },
+  type: {
+    type: String,
+  },
   contract_address: {
     type: String
   },
