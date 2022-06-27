@@ -178,8 +178,8 @@ import SectionData from "@/store/store.js";
 import CollectionService from "@/services/collection.service.js";
 
 import {
-  NFTMarketplace_ContractAddress,
-  NFTMarketplace_TokenArtifact,
+  ERC721Factory_address,
+  ERC721Factory_json,
 } from "@/constants/constant.js";
 
 export default {
@@ -311,23 +311,20 @@ export default {
           // Create web3.
           let web3 = new Web3(window.ethereum);
           let contract = new web3.eth.Contract(
-            NFTMarketplace_TokenArtifact.abi,
-            NFTMarketplace_ContractAddress.Token
+            ERC721Factory_json.abi,
+            ERC721Factory_address.Token
           );
 
-          console.log("nft marketplace method", contract.methods);
-
           contract.methods
-            .create_ERC721_collection(
-              this.contractData.name,
-              this.contractData.symbol
-            )
+            .createToken(this.contractData.name, this.contractData.symbol)
             .send({ from: this.auth.user.address })
             .once("error", (err) => {
               console.log(err, "Error");
               this.isLoading = false;
             })
             .then(async (receipt) => {
+              console.log("recept", receipt);
+
               const response1 = await CollectionService.verifyCollection(
                 response.newCollection._id,
                 receipt.events[0].address

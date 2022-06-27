@@ -9,6 +9,8 @@
 
 /backend/node_modules
 
+/frontend/public/files
+
 ./hardhat.config.js
 
 /node_modules

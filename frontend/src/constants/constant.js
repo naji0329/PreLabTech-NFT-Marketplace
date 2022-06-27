@@ -1,9 +1,12 @@
-import NFTMarketplace_ContractAddress from '@/contracts/marketplace/contract-address.json';
-import NFTMarketplace_TokenArtifact from '@/contracts/marketplace/NFT.json';
+import ERC721Factory_address from "@/contracts/ERC721Factory/contract-address.json";
+import ERC721Factory_json from "@/contracts/ERC721Factory/NFT.json";
 
-// import ERC721NFT from '@/contracts/NFT.json';
+import ERC1155Factory_address from "@/contracts/ERC1155Factory/contract-address.json";
+import ERC1155Factory_json from "@/contracts/ERC1155Factory/NFT.json";
 
 export {
-    NFTMarketplace_ContractAddress,
-    NFTMarketplace_TokenArtifact
-}
+  ERC721Factory_address,
+  ERC721Factory_json,
+  ERC1155Factory_address,
+  ERC1155Factory_json,
+};
