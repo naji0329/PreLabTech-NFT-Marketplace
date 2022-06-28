@@ -6,4 +6,14 @@ export default {
       return response.data;
     });
   },
+  getNFTData(_collectionId) {
+    return axios.get("/nft/getNFTs/"+_collectionId).then((response) => {
+      return response.data;
+    });
+  },
+  verifyNFT(_id) {
+    return axios.post("/nft/verifyNFT", { _id }).then((response) => {
+      return response.data;
+    });
+  },
 };

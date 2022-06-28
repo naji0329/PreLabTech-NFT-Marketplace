@@ -21,9 +21,4 @@ export default {
       return response.data;
     });
   },
-  getNFTData(_id) {
-    return axios.get("/collection/getNFTData/"+_id).then((response) => {
-      return response.data;
-    });
-  }
 };

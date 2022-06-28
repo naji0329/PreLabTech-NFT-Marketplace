@@ -112,7 +112,17 @@
                                     <p class="form-text mt-1">Suggested: 0, 10%, 20%, 30%. Maximum is 70%</p>
                                 </div> -->
                             </div><!-- end form-item -->
-                            <button class="btn btn-primary" type="button" v-on:click="createNFT()">Create Item</button>
+                            <button
+                                class="btn btn-primary"
+                                type="button"
+                                v-on:click="createNFT"
+                                v-if="!isLoading"
+                            >
+                                Create Item
+                            </button>
+                            <button class="btn btn-primary" type="button" disabled v-else>
+                                Loading...
+                            </button>
                         </form>
                     </div><!-- endn col -->
                 </div><!-- row-->
@@ -126,13 +136,15 @@
 <script>
 
 import { mapState, mapGetters } from 'vuex';
-// import Web3 from 'web3';
+import Web3 from 'web3';
 // Import component data. You can change the data in the store to reflect in all component
 import SectionData from '@/store/store.js'
 import NFTService from "@/services/nft.service.js";
 import CollectionService from "@/services/collection.service.js";
 
-// import erc721abi from '@/contracts/abi/erc721.json';
+import {
+  ERC721NFT_json,
+} from "@/constants/constant.js";
 
 export default {
     name: 'CreateSingle',
@@ -148,7 +160,8 @@ export default {
             },
             errors: {
                 collection: null
-            }
+            },
+            isLoading: false,
         }
     },
     computed: {
@@ -209,17 +222,23 @@ export default {
             this.NFTData.file = this.$refs.file.files[0];
         },
         async createNFT() {
+
             this.errors = {};
             if(this.NFTData.file == null) { this.errors.file = "Please select file"; return false; }
             if(this.NFTData.collection == null) { this.errors.collection = "Please select collection."; return false; }
             if(!this.NFTData.name) { this.errors.name = "Please select file"; return false; }
             if(!this.NFTData.description) { this.errors.description = "Please select file"; return false; }
             
+            this.isLoading = true;
+
             const formData = new FormData();
             formData.append("file", this.NFTData.file);
             formData.append("name", this.NFTData.name); 
             formData.append("description", this.NFTData.description);
-            formData.append('collection', this.collection)
+            formData.append('collection_id', this.NFTData.collection._id);
+            formData.append('collection_name', this.NFTData.collection.name);
+            formData.append('collection_symbol', this.NFTData.collection.symbol);
+            formData.append('contract_address', this.NFTData.collection.contract_address);
                         
             if(await this.currentChain() == "ethereum") {
                 formData.append("creater", this.auth.user.address);
@@ -231,24 +250,37 @@ export default {
                 if(response.errors) {
                     console.log(response.errors);
                     this.errors = response.errors;
+                    this.isLoading = false;
                     return ;
                 }
                 else {
                     // Create web3.
-                    console.log("asdfasd")
-                    // let web3 = new Web3(window.ethereum);
-                    // let contract = new web3.eth.Contract(erc721abi, this.NFTData.collection.contract_address);
+                    let web3 = new Web3(window.ethereum);
+                    let contract = new web3.eth.Contract(ERC721NFT_json.abi, this.NFTData.collection.contract_address);
                                         
-                    // contract.methods
-                    //     .mint(this.auth.user.address, ""+response._newNFT.metadata_url)
-                    //     .send({from: this.auth.user.address})
-                    //     .once("error", (err) => {
-                    //         console.log(err,"Error");
-                    //     })
-                    //     .then(async (receipt) => {
-                    //         console.log(receipt)
-                    //     }); 
+                    contract.methods
+                        .mint(this.auth.user.address, ""+response._newNFT.metadata_url)
+                        .send({from: this.auth.user.address})
+                        .once("error", (err) => {
+                            console.log(err,"Error");
+                            this.isLoading = false;
+                        })
+                        .then(async (receipt) => {
+                            console.log(receipt)
+
+                            const response1 = await NFTService.verifyNFT(
+                                response._newNFT._id
+                            );
+                            console.log(response1);
+
+                            this.isLoading = false;
+                            alert("NFT created successfully!");
+                            this.$router.push("/collection/"+this.NFTData.collection.shortUrl);
+                        }); 
                 }
+            }
+            else {
+                this.isLoading = false;
             }
 
         }

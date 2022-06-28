@@ -20,5 +20,6 @@ contract ERC721NFT is ERC721URIStorage, Ownable {
 
         // Set Token URI
         _setTokenURI(supply, _tokenURI);
+        supply ++;
     }
 }

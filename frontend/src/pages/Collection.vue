@@ -22,23 +22,23 @@
       <div class="container">
 
           <div class="row g-gs">
-            <div class="col-xl-3 col-lg-4 col-sm-6" v-for="product in products" :key="product.id">
+            <div class="col-xl-3 col-lg-4 col-sm-6" v-for="nft in NFTs" :key="nft._id">
                 <div class="card card-product mb-0">
                   <div class="card-image">
-                      <img :src="product.img" class="card-img-top" alt="art image">
+                      <img  v-bind:src="'/files/nfts/file/'+nft.file" class="card-img-top" alt="art image">
                   </div>
                   <div class="card-body p-3">
                     <div class="d-flex justify-content-between">
                       <div>
-                        <h5 class="card-title text-truncate mb-0">Meebits</h5>
-                        <p>Meebits #{{product.id}}</p>
+                        <h5 class="card-title text-truncate mb-0">{{nft.name}}</h5>
+                        <!-- <p>Meebits #{{product.id}}</p> -->
                       </div>
-                      <div class="text-right" style="text-align: right">
+                      <!-- <div class="text-right" style="text-align: right">
                         <h5 class="card-price-title">Price</h5>
                         <p class="card-price-number">{{ product.price }} 
                           <img src="@/images/tokens/eth.png" width="10" height="10" alt="eth icon" >
                         </p>
-                      </div>
+                      </div> -->
                     </div>
                       <!-- <div class="card-author mb-1 d-flex align-items-center">
                           <span class="me-1 card-author-by">By</span>
@@ -58,7 +58,7 @@
                       </div> -->
                       <!-- <router-link to="product" class="btn btn-sm btn-primary">View NFT</router-link> -->
                   </div><!-- end card-body -->
-                  <router-link
+                  <!-- <router-link
                     class="details"
                     :to="{
                         name: 'ProductDetail',
@@ -76,7 +76,7 @@
                         }
                     }"
                 >
-                </router-link>
+                </router-link> -->
               </div><!-- end card -->
             </div>
           </div><!-- end row -->
@@ -94,6 +94,7 @@ import SectionData from '@/store/store.js'
 
 import { mapState, mapGetters } from 'vuex';
 import CollectionService from "@/services/collection.service.js";
+import NFTService from "@/services/nft.service.js";
 
 export default {
   name: 'Explore',
@@ -105,7 +106,7 @@ export default {
       collectionData: {
         name : ""
       },
-      NFTData: null
+      NFTs: null
     }
   },
   computed: {
@@ -118,7 +119,9 @@ export default {
     const response = await CollectionService.getCollectionData(shortUrl, this.auth.user.chain);
     this.collectionData = response;
 
-    const response1 = await CollectionService.getNFTData(this.collectionData._id);
+    const response1 = await NFTService.getNFTData(this.collectionData._id);
+    this.NFTs = response1;
+
     console.log('response1',response1);
   },
   methods: {
