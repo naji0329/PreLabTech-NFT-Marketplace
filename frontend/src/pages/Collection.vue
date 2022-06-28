@@ -48,7 +48,7 @@
       <!-- end hero-wrap -->
     </header>
 
-    <section class="explore-section pt-4">
+    <section class="explore-section pt-4 mt-4">
       <div class="container">
         <div class="row g-gs">
           <div
