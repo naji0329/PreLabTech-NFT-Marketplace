@@ -51,7 +51,7 @@
               class="rounded-circle"
             />
           </div>
-          <h4 class="card-title mt-4 mb-2 pt-1">{{ item.title }}</h4>
+          <h4 class="card-title mt-4 mb-2 pt-1">{{ item.name }}</h4>
           <p class="fw-semibold text-secondary">{{ item.description }}</p>
         </div>
       </router-link>

@@ -5,18 +5,43 @@
       <!-- Header main -->
       <HeaderMain></HeaderMain>
 
-      <div class="hero-wrap sub-header">
-        <div class="container">
-          <div class="hero-content text-center py-0">
-            <h1 :class="classname">{{ collectionData.name }}</h1>
-            <div
-              class="d-flex align-items-center justify-content-center gap-2 mt-3"
-            >
-              <img src="@/images/tokens/eth.png" alt="eth" width="14" />
-              <p>{{ address(collectionData.contract_address) }}</p>
+      <div class="hero-wrap">
+        <div style="height: 300px; overflow: hidden; width: 100%">
+          <img
+            v-bind:src="'/files/collections/cover/' + collectionData.coverImage"
+            style="width: 100%"
+          />
+        </div>
+        <div class="sub-header" style="margin: 0; padding: 0">
+          <div class="container">
+            <div>
+              <img
+                v-bind:src="
+                  '/files/collections/logo/' + collectionData.logoImage
+                "
+                style="
+                  width: 200px;
+                  height: 200px;
+                  border-radius: 20px;
+                  border: 4px solid white;
+                  margin-top: -150px;
+                "
+              />
             </div>
+            <div class="hero-content py-0">
+              <div class="d-flex gap-4 align-items-center">
+                <h1 :class="classname">{{ collectionData.name }}</h1>
+                <div
+                  class="d-flex align-items-center justify-content-center gap-2 mt-3"
+                >
+                  <img src="@/images/tokens/eth.png" alt="eth" width="14" />
+                  <p>{{ address(collectionData.contract_address) }}</p>
+                </div>
+              </div>
+              <p :class="classname">{{ collectionData.description }}</p>
+            </div>
+            <!-- hero-content -->
           </div>
-          <!-- hero-content -->
         </div>
         <!-- .container-->
       </div>
