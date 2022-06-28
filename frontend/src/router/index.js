@@ -4,189 +4,195 @@ const routes = [
   {
     path: "/",
     name: "Home",
-    component: () => import('../pages/Home-v2.vue'),
+    component: () => import("../pages/Home-v2.vue"),
   },
   {
-    path:'/product-details-v1-:id',
-    name:'ProductDetail',
-    component: () => import('../pages/ProductDetail.vue'),
-    props: true
+    path: "/product-details-v1-:id",
+    name: "ProductDetail",
+    component: () => import("../pages/ProductDetail.vue"),
+    props: true,
   },
   {
-    path:'/product-details-v2-:id',
-    name:'ProductDetail_v2',
-    component: () => import('../pages/ProductDetail-v2.vue'),
-    props: true
+    path: "/nft/:id",
+    name: "ProductDetail",
+    component: () => import("../pages/ProductDetail.vue"),
+    props: true,
   },
   {
-    path: '/item-details',
-    name: 'itemDetails',
-    component: () => import('../pages/ItemDetails.vue')
+    path: "/product-details-v2-:id",
+    name: "ProductDetail_v2",
+    component: () => import("../pages/ProductDetail-v2.vue"),
+    props: true,
   },
   {
-    path: '/item-details-v2',
-    name: 'itemDetailsV2',
-    component: () => import('../pages/ItemDetails-v2.vue')
+    path: "/item-details",
+    name: "itemDetails",
+    component: () => import("../pages/ItemDetails.vue"),
   },
   {
-    path: '/explore',
-    name: 'explore',
-    component: () => import('../pages/Explore.vue')
+    path: "/item-details-v2",
+    name: "itemDetailsV2",
+    component: () => import("../pages/ItemDetails-v2.vue"),
   },
   {
-    path: '/collection',
-    name: 'Collection',
-    component: () => import('../pages/Collection.vue')
+    path: "/explore",
+    name: "explore",
+    component: () => import("../pages/Explore.vue"),
   },
   {
-    path: '/collection/:shortUrl',
-    name: 'Collection-Data',
-    component: () => import('../pages/Collection.vue')
+    path: "/collection",
+    name: "Collection",
+    component: () => import("../pages/Collection.vue"),
   },
   {
-    path: '/author',
-    name: 'author',
-    component: () => import('../pages/Author.vue')
+    path: "/collection/:shortUrl",
+    name: "Collection-Data",
+    component: () => import("../pages/Collection.vue"),
   },
   {
-    path: '/about-us',
-    name: 'about-us',
-    component: () => import('../pages/AboutUs.vue')
+    path: "/author",
+    name: "author",
+    component: () => import("../pages/Author.vue"),
   },
   {
-    path: '/activity',
-    name: 'activity',
-    component: () => import('../pages/Activity.vue')
+    path: "/about-us",
+    name: "about-us",
+    component: () => import("../pages/AboutUs.vue"),
   },
   {
-    path: '/ranking',
-    name: 'ranking',
-    component: () => import('../pages/Ranking.vue')
+    path: "/activity",
+    name: "activity",
+    component: () => import("../pages/Activity.vue"),
   },
   {
-    path: '/wallet',
-    name: 'wallet',
-    component: () => import('../pages/Wallet.vue')
+    path: "/ranking",
+    name: "ranking",
+    component: () => import("../pages/Ranking.vue"),
   },
   {
-    path: '/wallet-v2',
-    name: 'wallet-v2',
-    component: () => import('../pages/WalletTwo.vue')
+    path: "/wallet",
+    name: "wallet",
+    component: () => import("../pages/Wallet.vue"),
   },
   {
-    path: '/blog',
-    name: 'blog',
-    component: () => import('../pages/Blog.vue')
+    path: "/wallet-v2",
+    name: "wallet-v2",
+    component: () => import("../pages/WalletTwo.vue"),
   },
   {
-    path: '/blog-detail-:id',
-    name:'NewsDetail',
-    component: () => import('../pages/NewsDetail.vue'),
+    path: "/blog",
+    name: "blog",
+    component: () => import("../pages/Blog.vue"),
   },
   {
-    path: '/blog-detail',
-    name: 'blog-details',
-    component: () => import('../pages/BlogDetail.vue')
+    path: "/blog-detail-:id",
+    name: "NewsDetail",
+    component: () => import("../pages/NewsDetail.vue"),
   },
   {
-    path: '/login',
-    name: 'login',
-    component: () => import('../pages/Login.vue')
+    path: "/blog-detail",
+    name: "blog-details",
+    component: () => import("../pages/BlogDetail.vue"),
   },
   {
-    path: '/login-v2',
-    name: 'login v2',
-    component: () => import('../pages/Login-v2.vue')
+    path: "/login",
+    name: "login",
+    component: () => import("../pages/Login.vue"),
   },
   {
-    path: '/register',
-    name: 'Register',
-    component: () => import('../pages/Register.vue')
+    path: "/login-v2",
+    name: "login v2",
+    component: () => import("../pages/Login-v2.vue"),
   },
   {
-    path: '/offers',
-    name: 'Offer',
-    component: () => import('../pages/Offers.vue')
+    path: "/register",
+    name: "Register",
+    component: () => import("../pages/Register.vue"),
   },
   {
-    path: '/activity-v2',
-    name: 'activity-v2',
-    component: () => import('../pages/Activity-v2.vue')
+    path: "/offers",
+    name: "Offer",
+    component: () => import("../pages/Offers.vue"),
   },
   {
-    path: '/purchases-sales',
-    name: 'purchases-sales',
-    component: () => import('../pages/PurchasesSales.vue')
+    path: "/activity-v2",
+    name: "activity-v2",
+    component: () => import("../pages/Activity-v2.vue"),
   },
   {
-    path: '/transactions',
-    name: 'transactions',
-    component: () => import('../pages/Transactions.vue')
+    path: "/purchases-sales",
+    name: "purchases-sales",
+    component: () => import("../pages/PurchasesSales.vue"),
   },
   {
-    path: '/display',
-    name: 'display',
-    component: () => import('../pages/Display.vue')
+    path: "/transactions",
+    name: "transactions",
+    component: () => import("../pages/Transactions.vue"),
   },
   {
-    path: '/redeem',
-    name: 'redeem',
-    component: () => import('../pages/Redeem.vue')
+    path: "/display",
+    name: "display",
+    component: () => import("../pages/Display.vue"),
   },
   {
-    path: '/deposit-enfties',
-    name: 'deposit-enfties',
-    component: () => import('../pages/DepositEnfties.vue')
+    path: "/redeem",
+    name: "redeem",
+    component: () => import("../pages/Redeem.vue"),
   },
   {
-    path: '/profile',
-    name: 'profile',
-    component: () => import('../pages/Profile.vue')
+    path: "/deposit-enfties",
+    name: "deposit-enfties",
+    component: () => import("../pages/DepositEnfties.vue"),
   },
   {
-    path: '/my-collections',
-    name: 'my-collections',
-    component: () => import('../pages/MyCollection.vue')
+    path: "/profile",
+    name: "profile",
+    component: () => import("../pages/Profile.vue"),
   },
   {
-    path: '/account',
-    name: 'account',
-    component: () => import('../pages/Account.vue')
+    path: "/my-collections",
+    name: "my-collections",
+    component: () => import("../pages/MyCollection.vue"),
   },
   {
-    path: '/payment-methods',
-    name: 'payment-methods',
-    component: () => import('../pages/PaymentMethods.vue')
+    path: "/account",
+    name: "account",
+    component: () => import("../pages/Account.vue"),
   },
   {
-    path: '/seller-settings',
-    name: 'seller-settings',
-    component: () => import('../pages/SellerSettings.vue')
+    path: "/payment-methods",
+    name: "payment-methods",
+    component: () => import("../pages/PaymentMethods.vue"),
   },
   {
-    path: '/notifications',
-    name: 'notifications',
-    component: () => import('../pages/Notifications.vue')
+    path: "/seller-settings",
+    name: "seller-settings",
+    component: () => import("../pages/SellerSettings.vue"),
   },
   {
-    path: '/security',
-    name: 'security',
-    component: () => import('../pages/Security.vue')
+    path: "/notifications",
+    name: "notifications",
+    component: () => import("../pages/Notifications.vue"),
   },
   {
-    path: '/create',
-    name: 'create',
-    component: () => import('../pages/Create.vue')
+    path: "/security",
+    name: "security",
+    component: () => import("../pages/Security.vue"),
   },
   {
-    path: '/create-single',
-    name: 'create-single',
-    component: () => import('../pages/CreateSingle.vue')
+    path: "/create",
+    name: "create",
+    component: () => import("../pages/Create.vue"),
   },
   {
-    path: '/create-multiple',
-    name: 'create-multiple',
-    component: () => import('../pages/CreateMultiple.vue')
+    path: "/create-single",
+    name: "create-single",
+    component: () => import("../pages/CreateSingle.vue"),
+  },
+  {
+    path: "/create-multiple",
+    name: "create-multiple",
+    component: () => import("../pages/CreateMultiple.vue"),
   },
   // {
   //   path: '/create-collection',
@@ -194,49 +200,49 @@ const routes = [
   //   component: () => import('../pages/CreateCollection.vue')
   // },
   {
-    path: '/create-single-collection',
-    name: 'create-single-collection',
-    component: () => import('../pages/CreateSingleCollection.vue')
+    path: "/create-single-collection",
+    name: "create-single-collection",
+    component: () => import("../pages/CreateSingleCollection.vue"),
   },
   {
-    path: '/create-multiple-collection',
-    name: 'create-multiple-collection',
-    component: () => import('../pages/CreateMultipleCollection.vue')
+    path: "/create-multiple-collection",
+    name: "create-multiple-collection",
+    component: () => import("../pages/CreateMultipleCollection.vue"),
   },
   {
-    path: '/contact',
-    name: 'contact',
-    component: () => import('../pages/Contact.vue')
-  }
+    path: "/contact",
+    name: "contact",
+    component: () => import("../pages/Contact.vue"),
+  },
 ];
 
 const router = createRouter({
   history: createWebHistory(),
   routes,
-  scrollBehavior (to, from, savedPosition) {
+  scrollBehavior(to, from, savedPosition) {
     if (savedPosition) {
-      return savedPosition
+      return savedPosition;
     } else {
       return {
         left: 0,
-        top: 0
-      }
+        top: 0,
+      };
     }
-  }
+  },
 });
 
 router.beforeEach((to, from, next) => {
-  if (to.matched.some(record => record.meta.requiresAuth)) {
+  if (to.matched.some((record) => record.meta.requiresAuth)) {
     // this route requires auth, check if logged in
     // if not, redirect to login page.
     if (!this.$store.getters.auth.isLoggedIn) {
-      next({ name: 'Login' })
+      next({ name: "Login" });
     } else {
-      next() // go to wherever I'm going
+      next(); // go to wherever I'm going
     }
   } else {
-    next() // does not require auth, make sure to always call next()!
+    next(); // does not require auth, make sure to always call next()!
   }
-})
+});
 
 export default router;

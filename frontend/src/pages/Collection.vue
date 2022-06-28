@@ -31,36 +31,44 @@
             v-for="nft in NFTs"
             :key="nft._id"
           >
-            <div class="card card-product mb-0">
-              <div class="card-image">
-                <img
-                  v-bind:src="'/files/nfts/file/' + nft.file"
-                  class="card-img-top"
-                  alt="art image"
-                />
-              </div>
-              <div class="card-body p-3">
-                <div class="d-flex justify-content-between">
-                  <div>
-                    <h5 class="card-title text-truncate mb-0">
-                      {{ nft.name }}
-                    </h5>
-                    <!-- <p>Meebits #{{product.id}}</p> -->
-                  </div>
-                  <!-- <div class="text-right" style="text-align: right">
-                        <h5 class="card-price-title">Price</h5>
-                        <p class="card-price-number">{{ product.price }} 
-                          <img src="@/images/tokens/eth.png" width="10" height="10" alt="eth icon" >
-                        </p>
-                      </div> -->
+            <router-link class="details" :to="'/nft/' + nft._id">
+              <div class="card card-product mb-0">
+                <div class="card-image">
+                  <img
+                    v-bind:src="'/files/nfts/file/' + nft.file"
+                    class="card-img-top"
+                    alt="art image"
+                  />
                 </div>
-                <!-- <div class="card-author mb-1 d-flex align-items-center">
+                <div class="card-body p-3">
+                  <div class="d-flex justify-content-between">
+                    <div>
+                      <h5 class="card-title text-truncate mb-0">
+                        {{ nft.name }}
+                      </h5>
+                      <!-- <p>Meebits #{{product.id}}</p> -->
+                    </div>
+                    <!-- <div class="text-right" style="text-align: right">
+                    <h5 class="card-price-title">Price</h5>
+                    <p class="card-price-number">
+                      {{ product.price }}
+                      0.25
+                      <img
+                        src="@/images/tokens/eth.png"
+                        width="10"
+                        height="10"
+                        alt="eth icon"
+                      />
+                    </p>
+                  </div> -->
+                  </div>
+                  <!-- <div class="card-author mb-1 d-flex align-items-center">
                           <span class="me-1 card-author-by">By</span>
                           <div class="custom-tooltip-wrap">
                               <router-link :to="product.authorLink" class="custom-tooltip author-link">{{ product.author }}</router-link>
                           </div>
                       </div> -->
-                <!-- <div class="card-price-wrap d-flex align-items-center justify-content-sm-between">
+                  <!-- <div class="card-price-wrap d-flex align-items-center justify-content-sm-between">
                           <div class="me-5 me-sm-2">
                               <span class="card-price-title">Price</span>
                               <span class="card-price-number">{{ product.price }} ETH</span>
@@ -70,29 +78,11 @@
                               <span class="card-price-number">{{ product.priceTwo }} ETH</span>
                           </div>
                       </div> -->
-                <!-- <router-link to="product" class="btn btn-sm btn-primary">View NFT</router-link> -->
+                  <!-- <router-link to="product" class="btn btn-sm btn-primary">View NFT</router-link> -->
+                </div>
+                <!-- end card-body -->
               </div>
-              <!-- end card-body -->
-              <!-- <router-link
-                    class="details"
-                    :to="{
-                        name: 'ProductDetail',
-                        params: {
-                        id: product.id,
-                        title: product.title,
-                        metaText: product.metaText,
-                        price: product.price,
-                        priceTwo: product.priceTwo,
-                        imgLg: product.imgLg,
-                        metaText: product.metaText,
-                        metaTextTwo: product.metaTextTwo,
-                        metaTextThree: product.metaTextThree,
-                        content: product.content,
-                        }
-                    }"
-                >
-                </router-link> -->
-            </div>
+            </router-link>
             <!-- end card -->
           </div>
         </div>
