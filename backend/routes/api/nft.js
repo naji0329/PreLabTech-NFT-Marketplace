@@ -20,8 +20,6 @@ router.post('/createNFT', async (req, res) => {
 
     const form = new formidable.IncomingForm();
     form.parse(req, async function (err, fields, files) {
-      console.log(fields);
-
       let _nft = new NFT({
         name: fields.name,
         description: fields.description,
@@ -29,6 +27,7 @@ router.post('/createNFT', async (req, res) => {
         ipfs_path: '',
         chain: fields.chain,
         creater: fields.creater,
+        owner: fields.creater,
         collection_id: fields.collection_id,
         collection_name: fields.collection_name,
         collection_symbol: fields.collection_symbol,
@@ -90,6 +89,7 @@ router.post('/createNFT', async (req, res) => {
 
                       _nft.metadata_url = file_metadata[0].hash;
 
+                      console.log('create new NFT', _nft);
                       const _newNFT = await _nft.save();
                       return res.status(200).json({ _newNFT });
                     }
