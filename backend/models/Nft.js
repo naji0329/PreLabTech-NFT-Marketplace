@@ -6,7 +6,7 @@ const Schema = new mongoose.Schema({
     required: true
   },
   description: {
-    type: String,
+    type: String
   },
   file: {
     type: String
@@ -23,14 +23,17 @@ const Schema = new mongoose.Schema({
   creater: {
     type: String
   },
+  owner: {
+    type: String
+  },
   collection_id: {
-    type: String,
+    type: String
   },
   collection_name: {
-    type: String,
+    type: String
   },
   collection_symbol: {
-    type: String,
+    type: String
   },
   contract_address: {
     type: String

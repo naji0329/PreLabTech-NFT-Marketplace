@@ -14,8 +14,8 @@ const routes = [
   },
   {
     path: "/nft/:id",
-    name: "ProductDetail",
-    component: () => import("../pages/ProductDetail.vue"),
+    name: "NFTDetail",
+    component: () => import("../pages/NFTDetail.vue"),
     props: true,
   },
   {

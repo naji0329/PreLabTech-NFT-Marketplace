@@ -6,8 +6,22 @@ export default {
       return response.data;
     });
   },
-  getNFTData(_collectionId) {
-    return axios.get("/nft/getNFTs/"+_collectionId).then((response) => {
+  getNFTs(_collectionId) {
+    return axios
+      .get("/nft/getNFTs?collection_id=" + _collectionId)
+      .then((response) => {
+        return response.data;
+      });
+  },
+  getNFTsbyUserId(address, chain) {
+    return axios
+      .get("/nft/getNFTs?address=" + address + "&chain=" + chain)
+      .then((response) => {
+        return response.data;
+      });
+  },
+  getNFTData(_nftId) {
+    return axios.get("/nft/getNFTData/" + _nftId).then((response) => {
       return response.data;
     });
   },
