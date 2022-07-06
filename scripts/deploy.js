@@ -8,8 +8,9 @@ async function main() {
   console.log("Account balance:", (await deployer.getBalance()).toString());
 
   await deploy_erc721_factory();
-  await deploy_erc1155_factory();
-  // await deploy_erc721_contract();
+
+  // await deploy_erc1155_factory();
+  await deploy_erc721_contract();
   // await deploy_erc1155_contract();
 }
 

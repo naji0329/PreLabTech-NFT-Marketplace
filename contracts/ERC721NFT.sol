@@ -14,12 +14,11 @@ contract ERC721NFT is ERC721URIStorage, Ownable {
     {}
 
     // public
-    function mint(address _to, string memory _tokenURI) public payable {
+    function mint(address _to, uint256 _tokenId, string memory _tokenURI) public payable {
         // Mint NFT
-        _mint(_to, supply);
-
+        _mint(_to, _tokenId);
         // Set Token URI
-        _setTokenURI(supply, _tokenURI);
+        _setTokenURI(_tokenId, _tokenURI);
         supply ++;
     }
 }

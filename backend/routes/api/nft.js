@@ -127,7 +127,7 @@ router.get('/getNFTs', async (req, res) => {
 
     console.log('search', search);
 
-    const NFTs = await NFT.find({ collection_id: req.params.collectionId });
+    const NFTs = await NFT.find(search);
     res.json(NFTs);
   } catch (error) {
     console.error(error.message);

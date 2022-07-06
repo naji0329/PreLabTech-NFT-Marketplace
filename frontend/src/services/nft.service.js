@@ -6,7 +6,7 @@ export default {
       return response.data;
     });
   },
-  getNFTs(_collectionId) {
+  getNFTsByCollectionId(_collectionId) {
     return axios
       .get("/nft/getNFTs?collection_id=" + _collectionId)
       .then((response) => {
@@ -27,6 +27,12 @@ export default {
   },
   verifyNFT(_id) {
     return axios.post("/nft/verifyNFT", { _id }).then((response) => {
+      return response.data;
+    });
+  },
+
+  listNFT(nft, user) {
+    return axios.post("/nft/listNFT", { nft, user }).then((response) => {
       return response.data;
     });
   },

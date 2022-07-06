@@ -56,31 +56,37 @@
                 aria-labelledby="my-items-tab"
               >
                 <div class="row g-gs">
-                  <div
-                    class="col-md-4"
-                    v-for="item in SectionData.productData.onSaleList"
-                    :key="item.id"
-                  >
+                  <div class="col-md-4" v-for="item in NFTs" :key="item.id">
                     <div class="card card-full">
                       <div class="card-image">
                         <img
-                          :src="item.img"
+                          v-bind:src="'/files/nfts/file/' + item.file"
                           class="card-img-top"
                           alt="art image"
                         />
                       </div>
                       <div class="card-body p-4">
                         <h5 class="card-title text-truncate mb-0">
-                          {{ item.title }}
+                          {{ item.name }}
                         </h5>
                         <div class="card-author mb-1 d-flex align-items-center">
-                          <span class="me-1 card-author-by">By</span>
+                          <span class="me-1 card-author-by">Created By</span>
                           <div class="custom-tooltip-wrap">
-                            <router-link
+                            <!-- <router-link
                               :to="item.authorLink"
                               class="custom-tooltip author-link"
                               >{{ item.author }}</router-link
-                            >
+                            > -->
+                            <p>
+                              {{
+                                item.creater.substring(0, 5) +
+                                "..." +
+                                item.creater.substring(
+                                  item.creater.length - 4,
+                                  item.creater.length
+                                )
+                              }}
+                            </p>
                           </div>
                           <!-- end custom-tooltip-wrap -->
                         </div>
@@ -90,18 +96,20 @@
                             class="btn btn-sm btn-primary text-light"
                             data-bs-toggle="modal"
                             data-bs-target="#listModal"
+                            v-on:click="NFT = item"
                           >
                             List
                           </p>
                           <router-link
-                            to="item.path"
+                            :to="'/nft/' + item._id"
                             class="btn btn-sm btn-primary"
-                            >VIew</router-link
                           >
+                            VIew
+                          </router-link>
                         </div>
                       </div>
                       <!-- end card-body -->
-                      <router-link
+                      <!-- <router-link
                         class="details"
                         :to="{
                           name: 'ProductDetail',
@@ -116,7 +124,7 @@
                           },
                         }"
                       >
-                      </router-link>
+                      </router-link> -->
                     </div>
                     <!-- end card -->
                   </div>
@@ -493,14 +501,16 @@
           <!-- end modal-header -->
           <div class="modal-body">
             <p class="mb-3">
-              You are about to list your NFT of <b>Meebits</b>.
+              You are about to list your NFT of <b>{{ NFT ? NFT.name : "" }}</b
+              >.
             </p>
             <div class="mb-3">
               <label class="form-label">List Price</label>
               <input
-                type="text"
+                type="number"
                 class="form-control form-control-s1"
                 placeholder="Enter list price"
+                v-model="NFT.price"
               />
             </div>
             <!-- <div class="mb-3">
@@ -513,11 +523,7 @@
                         <li><span>Service fee</span> <span>3.5%</span></li>
                         <li><span>You will pay</span> <span>0.013325 ETH</span></li>
                     </ul> -->
-            <a
-              :href="SectionData.placeBidModal.btnLink"
-              class="btn btn-primary d-block"
-              >List</a
-            >
+            <a class="btn btn-primary d-block" v-on:click="list">List</a>
           </div>
           <!-- end modal-body -->
         </div>
@@ -730,10 +736,12 @@
 
 <script>
 // Import component data. You can change the data in the store to reflect in all component
+import { mapState, mapGetters } from "vuex";
+
 import SectionData from "@/store/store.js";
 import NFTService from "../../services/nft.service";
-
-import { mapState, mapGetters } from "vuex";
+import buildERC721NFTContract from "@/utils/buildNFTContract";
+import { ERC721Factory_address } from "@/constants/constant";
 
 export default {
   name: "ProfileSection",
@@ -840,12 +848,31 @@ export default {
       ],
       currentPage: 6,
       NFTs: null,
+      NFT: [],
     };
   },
   methods: {
     loadMore() {
       if (this.currentPage > this.items.currentPage) return;
       this.currentPage = this.currentPage + 3;
+    },
+    list: async function () {
+      console.log("nft", this.NFT);
+      console.log("user", this.auth.user);
+
+      // NFT Smart Contract
+      const NFT_Contract = buildERC721NFTContract(this.NFT.contract_address);
+
+      // Call Approve Function
+      await NFT_Contract.methods
+        .approve(ERC721Factory_address.token, 1)
+        .send({ from: this.auth.user.address });
+
+      console.log("asdf", NFT_Contract);
+
+      // Save data to database.
+      // NFTService.list(this.NFT, this.auth.user);
+      alert(this.NFT.price);
     },
   },
   computed: {
@@ -866,8 +893,6 @@ export default {
       this.auth.user.chain
     );
     this.NFTs = _data;
-
-    console.log("asdfa", _data);
   },
 };
 </script>

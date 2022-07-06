@@ -151,7 +151,9 @@ export default {
     const response = await CollectionService.getCollectionData(shortUrl);
     this.collectionData = response;
 
-    const response1 = await NFTService.getNFTs(this.collectionData._id);
+    const response1 = await NFTService.getNFTsByCollectionId(
+      this.collectionData._id
+    );
     this.NFTs = response1;
 
     console.log("response1", response1);
