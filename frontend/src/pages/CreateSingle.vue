@@ -317,6 +317,8 @@ export default {
         );
 
         const supply = await contract.methods.supply().call();
+
+        console.log(contract);
         alert(supply);
 
         formData.append("creater", this.auth.user.address);
