@@ -309,8 +309,19 @@ export default {
       );
 
       if ((await this.currentChain()) == "ethereum") {
+        // Create web3.
+        let web3 = new Web3(window.ethereum);
+        let contract = new web3.eth.Contract(
+          ERC721NFT_json.abi,
+          this.NFTData.collection.contract_address
+        );
+
+        const supply = await contract.methods.supply().call();
+        alert(supply);
+
         formData.append("creater", this.auth.user.address);
         formData.append("chain", this.auth.user.chain);
+        formData.append("tokenId", supply);
 
         const response = await NFTService.createNFT(formData);
 
@@ -320,16 +331,6 @@ export default {
           this.isLoading = false;
           return;
         } else {
-          // Create web3.
-          let web3 = new Web3(window.ethereum);
-          let contract = new web3.eth.Contract(
-            ERC721NFT_json.abi,
-            this.NFTData.collection.contract_address
-          );
-
-          const supply = await contract.methods.supply().call();
-          alert(supply);
-
           // Call Mint Function
           contract.methods
             .mint(this.auth.user.address, "" + response._newNFT.metadata_url)
