@@ -14,5 +14,5 @@ export {
   ERC1155Factory_address,
   ERC1155Factory_json,
   ERC721NFT_json,
-  ERC1155NFT_json
+  ERC1155NFT_json,
 };

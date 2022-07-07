@@ -48,7 +48,7 @@
             </ul>
             <div class="gap-2x"></div>
             <!-- end gap-2x -->
-            <div class="tab-content" id="myTabContent">
+            <div class="tab-content" id="myTabContent" v-if="NFTs">
               <div
                 class="tab-pane fade show active"
                 id="my-items"
@@ -56,7 +56,13 @@
                 aria-labelledby="my-items-tab"
               >
                 <div class="row g-gs">
-                  <div class="col-md-4" v-for="item in NFTs" :key="item.id">
+                  <div
+                    class="col-md-4"
+                    v-for="(item, index) in NFTs.filter(
+                      (item) => item.status === '1'
+                    )"
+                    :key="item.id"
+                  >
                     <div class="card card-full">
                       <div class="card-image">
                         <img
@@ -67,7 +73,7 @@
                       </div>
                       <div class="card-body p-4">
                         <h5 class="card-title text-truncate mb-0">
-                          {{ item.name }}
+                          {{ item.name + " #" + item.tokenId }}
                         </h5>
                         <div class="card-author mb-1 d-flex align-items-center">
                           <span class="me-1 card-author-by">Created By</span>
@@ -96,7 +102,10 @@
                             class="btn btn-sm btn-primary text-light"
                             data-bs-toggle="modal"
                             data-bs-target="#listModal"
-                            v-on:click="NFT = item"
+                            v-on:click="
+                              NFT = item;
+                              NFT.index = index;
+                            "
                           >
                             List
                           </p>
@@ -142,29 +151,39 @@
                 <div class="row g-gs">
                   <div
                     class="col-md-4"
-                    v-for="item in SectionData.productData.ownedList"
+                    v-for="item in NFTs.filter((item) => item.status === '2')"
                     :key="item.id"
                   >
                     <div class="card card-full">
                       <div class="card-image">
                         <img
-                          :src="item.img"
+                          v-bind:src="'/files/nfts/file/' + item.file"
                           class="card-img-top"
                           alt="art image"
                         />
                       </div>
                       <div class="card-body p-4">
                         <h5 class="card-title text-truncate mb-0">
-                          {{ item.title }}
+                          {{ item.name + " #" + item.tokenId }}
                         </h5>
                         <div class="card-author mb-1 d-flex align-items-center">
-                          <span class="me-1 card-author-by">By</span>
+                          <span class="me-1 card-author-by">Created By</span>
                           <div class="custom-tooltip-wrap">
-                            <router-link
+                            <!-- <router-link
                               :to="item.authorLink"
                               class="custom-tooltip author-link"
                               >{{ item.author }}</router-link
-                            >
+                            > -->
+                            <p>
+                              {{
+                                item.creater.substring(0, 5) +
+                                "..." +
+                                item.creater.substring(
+                                  item.creater.length - 4,
+                                  item.creater.length
+                                )
+                              }}
+                            </p>
                           </div>
                           <!-- end custom-tooltip-wrap -->
                         </div>
@@ -174,39 +193,35 @@
                         >
                           <div class="me-2">
                             <span class="card-price-title">Listed Price</span>
-                            <span class="card-price-number">10 ETH</span>
+                            <span class="card-price-number"
+                              >{{ item.price }} ETH</span
+                            >
                           </div>
-                          <div>
+                          <!-- <div>
                             <span class="card-price-title">Offer Price</span>
                             <span class="card-price-number">15 ETH</span>
-                          </div>
+                          </div> -->
                         </div>
                         <!-- end card-price-wrap -->
                         <div class="d-flex justify-content-between mt-3">
+                          <p
+                            class="btn btn-sm btn-primary text-light"
+                            data-bs-toggle="modal"
+                            data-bs-target="#cancelListModal"
+                            v-on:click="
+                              NFT = item;
+                              NFT.index = index;
+                            "
+                          >
+                            Cancel list
+                          </p>
                           <router-link
-                            to="item.path"
+                            :to="'/nft/' + item._id"
                             class="btn btn-sm btn-primary"
                             >View</router-link
                           >
                         </div>
                       </div>
-                      <!-- end card-body -->
-                      <router-link
-                        class="details"
-                        :to="{
-                          name: 'ProductDetail',
-                          params: {
-                            id: item.id,
-                            title: item.title,
-                            imgLg: item.imgLg,
-                            metaText: item.metaText,
-                            metaTextTwo: item.metaTextTwo,
-                            metaTextThree: item.metaTextThree,
-                            content: item.content,
-                          },
-                        }"
-                      >
-                      </router-link>
                     </div>
                     <!-- end card -->
                   </div>
@@ -523,7 +538,13 @@
                         <li><span>Service fee</span> <span>3.5%</span></li>
                         <li><span>You will pay</span> <span>0.013325 ETH</span></li>
                     </ul> -->
-            <a class="btn btn-primary d-block" v-on:click="list">List</a>
+            <a
+              class="btn btn-primary d-block"
+              v-on:click="list"
+              data-bs-dismiss="modal"
+            >
+              List
+            </a>
           </div>
           <!-- end modal-body -->
         </div>
@@ -571,7 +592,8 @@
                 >Never mind</a
               >
               <a
-                :href="SectionData.placeBidModal.btnLink"
+                v-on:click="cancelListing"
+                data-bs-dismiss="modal"
                 class="btn btn-primary d-block"
                 >Cancel listing</a
               >
@@ -729,6 +751,19 @@
     </div>
     <!-- end modal-->
 
+    <div class="loading_modal" v-if="isLoading">
+      <div class="loading_content">
+        <div class="d-flex align-items-center gap-3">
+          <ring-loader
+            :loading="loading"
+            color="#ffffff"
+            size="45px"
+          ></ring-loader>
+          <p class="">{{ loadingTxt }}</p>
+        </div>
+      </div>
+    </div>
+
     <!-- Modal -->
   </section>
   <!-- end author-section -->
@@ -737,10 +772,17 @@
 <script>
 // Import component data. You can change the data in the store to reflect in all component
 import { mapState, mapGetters } from "vuex";
+import RingLoader from "vue-spinner/src/RingLoader.vue";
+import { createToast } from "mosha-vue-toastify";
+import Web3 from "web3";
+import "mosha-vue-toastify/dist/style.css";
 
 import SectionData from "@/store/store.js";
 import NFTService from "../../services/nft.service";
-import buildERC721NFTContract from "@/utils/buildNFTContract";
+import {
+  buildERC721NFTContract,
+  ERC721Factory,
+} from "@/utils/buildNFTContract";
 import { ERC721Factory_address } from "@/constants/constant";
 
 export default {
@@ -849,7 +891,12 @@ export default {
       currentPage: 6,
       NFTs: null,
       NFT: [],
+      isLoading: false,
+      loadingTxt: "",
     };
+  },
+  components: {
+    RingLoader,
   },
   methods: {
     loadMore() {
@@ -857,22 +904,124 @@ export default {
       this.currentPage = this.currentPage + 3;
     },
     list: async function () {
-      console.log("nft", this.NFT);
-      console.log("user", this.auth.user);
+      this.isLoading = true;
 
-      // NFT Smart Contract
-      const NFT_Contract = buildERC721NFTContract(this.NFT.contract_address);
+      console.log(
+        Web3,
+        ERC721Factory_address,
+        buildERC721NFTContract,
+        ERC721Factory
+      );
 
-      // Call Approve Function
-      await NFT_Contract.methods
-        .approve(ERC721Factory_address.token, 1)
-        .send({ from: this.auth.user.address });
+      try {
+        this.loadingTxt = "Loading...";
 
-      console.log("asdf", NFT_Contract);
+        // Check Get Listed Token
+        const isListed = await ERC721Factory.methods
+          .getListing(this.NFT.contract_address, this.NFT.tokenId)
+          .call();
+        console.log("listed? ", isListed);
+        if (isListed.price != 0) {
+          createToast("This NFT was already listed.");
+          this.loadingTxt = "";
+          this.isLoading = false;
+          return false;
+        }
 
-      // Save data to database.
-      // NFTService.list(this.NFT, this.auth.user);
-      alert(this.NFT.price);
+        console.log("nft", this.NFT);
+        console.log("user", this.auth.user);
+
+        // NFT Smart Contract
+        const NFT_Contract = buildERC721NFTContract(this.NFT.contract_address);
+        console.log("ERC711NFT Smart Contract", NFT_Contract);
+
+        // Call Approve Function
+        this.loadingTxt = "Approving...";
+        console.log(
+          "approve to ",
+          ERC721Factory_address.Token,
+          " nft :",
+          this.NFT.tokenId
+        );
+        await NFT_Contract.methods
+          .approve(ERC721Factory_address.Token, this.NFT.tokenId)
+          .send({ from: this.auth.user.address });
+
+        // Call List function of ERC721Factory function
+        this.loadingTxt = "Listing...";
+        console.log(
+          "list function on the ERC721Factory",
+          this.NFT.contract_address,
+          this.NFT.tokenId,
+          Web3.utils.toWei(this.NFT.price.toString(), "ether")
+        );
+        await ERC721Factory.methods
+          .listItem(
+            this.NFT.contract_address,
+            this.NFT.tokenId,
+            Web3.utils.toWei(this.NFT.price.toString(), "ether")
+          )
+          .send({
+            from: this.auth.user.address,
+          });
+
+        // Save data to database.
+        this.loadingTxt = "Saving Data ...";
+        const res = await NFTService.listItem(this.NFT, this.auth.user);
+        console.log("save data to db", res);
+        createToast("Successfully listed.");
+        this.getNFTs();
+        this.isLoading = false;
+      } catch (error) {
+        this.isLoading = false;
+        console.log("error", error);
+      }
+    },
+    cancelListing: async function () {
+      this.isLoading = true;
+      try {
+        this.loadingTxt = "Loading...";
+
+        // Check Get Listed Token
+        const isListed = await ERC721Factory.methods
+          .getListing(this.NFT.contract_address, this.NFT.tokenId)
+          .call();
+
+        if (isListed.price == 0) {
+          createToast("This NFT was not listed yet.");
+          this.loadingTxt = "";
+          this.isLoading = false;
+          return false;
+        }
+
+        // Call List function of ERC721Factory function
+        this.loadingTxt = "Cancel listing...";
+        await ERC721Factory.methods
+          .cancelListing(this.NFT.contract_address, this.NFT.tokenId)
+          .send({
+            from: this.auth.user.address,
+          });
+
+        // Save data to database.
+        this.loadingTxt = "Saving Data ...";
+        const res = await NFTService.cancelListing(this.NFT, this.auth.user);
+        console.log(res);
+
+        createToast("Successfully cancelled.");
+        this.getNFTs();
+        this.isLoading = false;
+      } catch (error) {
+        this.isLoading = false;
+        createToast(error);
+        console.log("error", error);
+      }
+    },
+    getNFTs: async function () {
+      const _data = await NFTService.getNFTsbyUserId(
+        this.auth.user.address,
+        this.auth.user.chain
+      );
+      this.NFTs = _data;
     },
   },
   computed: {
@@ -888,11 +1037,7 @@ export default {
     }
     console.log("this.auth", this.auth.user);
 
-    const _data = await NFTService.getNFTsbyUserId(
-      this.auth.user.address,
-      this.auth.user.chain
-    );
-    this.NFTs = _data;
+    this.getNFTs();
   },
 };
 </script>

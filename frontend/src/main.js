@@ -25,6 +25,8 @@ app.use(VueClipboard, {
 import "./assets/scss/bundles.scss";
 import "./assets/scss/style.scss";
 
+import "./assets/scss/my.scss";
+
 app.component("pagination", Pagination);
 
 // Global page components imported

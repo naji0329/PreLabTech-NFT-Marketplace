@@ -318,9 +318,6 @@ export default {
 
         const supply = await contract.methods.supply().call();
 
-        console.log(contract);
-        alert(supply);
-
         formData.append("creater", this.auth.user.address);
         formData.append("chain", this.auth.user.chain);
         formData.append("tokenId", supply);
@@ -335,7 +332,11 @@ export default {
         } else {
           // Call Mint Function
           contract.methods
-            .mint(this.auth.user.address, supply, "" + response._newNFT.metadata_url)
+            .mint(
+              this.auth.user.address,
+              supply,
+              "" + response._newNFT.metadata_url
+            )
             .send({ from: this.auth.user.address })
             .once("error", (err) => {
               console.log(err, "Error");

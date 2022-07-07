@@ -12,7 +12,7 @@
             <div class="item-detail-content">
               <div class="item-detail-img-container mb-4">
                 <img
-                  :src="'/files/nfts/file/' + NFTData.file"
+                  :src="'/files/nfts/file/' + NFT.file"
                   alt=""
                   class="w-100 rounded-3"
                 />
@@ -20,21 +20,26 @@
               <!-- end item-detail-img-container -->
               <div class="item-detail-tab">
                 <ul class="nav nav-tabs nav-tabs-s1" id="myTab" role="tablist">
-                  <li
-                    class="nav-item"
-                    role="presentation"
-                    v-for="list in SectionData.itemDetailData.itemDetailTabNav"
-                    :key="list.id"
-                  >
+                  <li class="nav-item" role="presentation" key="1">
                     <button
-                      class="nav-link"
-                      :class="list.isActive"
-                      :id="list.slug"
+                      class="nav-link active"
+                      id="owners-tab"
                       data-bs-toggle="tab"
-                      :data-bs-target="list.bsTarget"
+                      data-bs-target="#owners"
                       type="button"
                     >
-                      {{ list.title }}
+                      Owners
+                    </button>
+                  </li>
+                  <li class="nav-item" role="presentation" key="2">
+                    <button
+                      class="nav-link"
+                      id="history-tab"
+                      data-bs-toggle="tab"
+                      data-bs-target="#history"
+                      type="button"
+                    >
+                      History
                     </button>
                   </li>
                 </ul>
@@ -56,7 +61,7 @@
                           :to="item.path"
                           class="card-media-img flex-shrink-0 d-block"
                         >
-                          <img :src="item.avatar" alt="avatar" />
+                          <!-- <img :src="item.avatar" alt="avatar" /> -->
                         </router-link>
                         <div class="card-media-body text-truncate">
                           <p class="fw-semibold text-truncate">
@@ -89,7 +94,7 @@
                           :to="item.path"
                           class="card-media-img flex-shrink-0 d-block"
                         >
-                          <img :src="item.avatar" alt="avatar" />
+                          <!-- <img :src="item.avatar" alt="avatar" /> -->
                         </router-link>
                         <div class="card-media-body text-truncate">
                           <p class="fw-semibold text-black text-truncate">
@@ -146,132 +151,97 @@
           <!-- end col -->
           <div class="col-lg-6">
             <div class="item-detail-content mt-4 mt-lg-0">
-              <h1 class="item-detail-title mb-2">{{ NFTData.name }}</h1>
-              <div
-                class="item-detail-meta d-flex flex-wrap align-items-center mb-3"
-              >
-                <span class="item-detail-text-meta">{{
-                  NFTData.description
-                }}</span>
-                <span class="dot-separeted"></span>
-                <span class="item-detail-text-meta"
-                  >Owned by {{ NFTData.owner }}</span
-                >
-                <span class="dot-separeted"></span>
-                <span
-                  class="item-detail-text-meta"
-                  v-html="metaTextThree"
-                ></span>
-              </div>
-              <p class="item-detail-text mb-4">{{ content }}</p>
-              <div class="item-credits">
-                <div class="row g-4">
-                  <div
-                    class="col-xl-6"
-                    v-for="item in SectionData.itemDetailData.itemDetailList"
-                    :key="item.id"
-                  >
-                    <div class="card-media card-media-s1">
-                      <router-link
-                        :to="item.path"
-                        class="card-media-img flex-shrink-0 d-block"
-                      >
-                        <img :src="item.avatar" alt="avatar" />
-                      </router-link>
-                      <div class="card-media-body">
-                        <router-link :to="item.path" class="fw-semibold">{{
-                          item.title
-                        }}</router-link>
-                        <p class="fw-medium small">{{ item.subTitle }}</p>
-                      </div>
-                    </div>
-                    <!-- end card -->
-                  </div>
-                  <!-- end col-->
-                  <div
-                    class="col-xl-12"
-                    v-for="item in SectionData.itemDetailData.itemDetailListTwo"
-                    :key="item.id"
-                  >
-                    <div class="card-media card-media-s1">
-                      <router-link
-                        :to="item.path"
-                        class="card-media-img flex-shrink-0 d-block"
-                      >
-                        <img :src="item.avatar" alt="avatar" />
-                      </router-link>
-                      <div class="card-media-body">
-                        <p class="fw-semibold text-black">{{ item.title }}</p>
-                        <span class="fw-medium small">{{ item.subTitle }}</span>
-                      </div>
-                    </div>
-                    <!-- end card -->
-                  </div>
-                  <!-- end col-->
+              <div class="align-items-center">
+                <h1 class="item-detail-title mb-2">
+                  {{ NFT.name + " # " + NFT.tokenId }}
+                </h1>
+                <div>
+                  <span class="item-detail-text-meta"
+                    >Owned by
+                    <span class="text-primary" v-if="NFT.owner">
+                      {{
+                        NFT.owner.substring(0, 5) +
+                        "..." +
+                        NFT.owner.substring(
+                          NFT.owner.length - 4,
+                          NFT.owner.length
+                        )
+                      }}</span
+                    >
+                  </span>
                 </div>
-                <!-- end row -->
               </div>
-              <!-- end row -->
+              <div
+                class="item-detail-meta d-flex flex-wrap align-items-center mb-3 mt-3"
+              >
+                <span class="item-detail-text-meta">{{ NFT.description }}</span>
+              </div>
+              <div class="" v-if="NFT.status == 2">
+                <p>Current Price</p>
+
+                <p class="d-flex align-items-center gap-3 mt-2 fs-2 text-dark">
+                  <img
+                    src="@/images/tokens/eth.png"
+                    width="20"
+                    height="20"
+                    alt="eth icon"
+                  />
+                  {{ NFT.price }}
+                </p>
+              </div>
               <div class="item-detail-btns mt-4">
-                <ul class="btns-group d-flex">
-                  <li class="flex-grow-1">
-                    <a
-                      href="#"
-                      data-bs-toggle="modal"
-                      data-bs-target="#placeBidModal"
-                      class="btn btn-primary d-block"
-                      >{{ SectionData.itemDetailData.btnText }}</a
-                    >
-                  </li>
-                  <li class="flex-grow-1">
-                    <a
-                      href="#"
-                      data-bs-toggle="modal"
-                      data-bs-target="#buyModal"
-                      class="btn btn-primary d-block"
-                      >Buy</a
-                    >
-                  </li>
-                  <li class="flex-grow-1">
-                    <div class="dropdown">
+                <div
+                  v-if="
+                    isLoggedIn() &&
+                    NFT.owner != auth.user.address &&
+                    NFT.status == 2
+                  "
+                >
+                  <ul class="btns-group d-flex">
+                    <!-- <li class="">
                       <a
                         href="#"
-                        class="btn bg-dark-dim d-block"
-                        data-bs-toggle="dropdown"
-                        >{{ SectionData.itemDetailData.btnTextTwo }}</a
+                        data-bs-toggle="modal"
+                        data-bs-target="#placeBidModal"
+                        class="btn btn-primary d-block"
+                        >Place a Bid</a
                       >
-                      <div
-                        class="dropdown-menu card-generic p-2 keep-open w-100 mt-1"
+                    </li> -->
+                    <li class="">
+                      <a
+                        href="#"
+                        data-bs-toggle="modal"
+                        data-bs-target="#buyModal"
+                        class="btn btn-primary d-block"
+                        >Buy</a
                       >
-                        <router-link
-                          :to="icon.path"
-                          class="dropdown-item card-generic-item"
-                          v-for="(icon, i) in SectionData.socialShareList"
-                          :key="i"
-                          ><em class="ni me-2" :class="icon.btnClass"></em
-                          >{{ icon.title }}</router-link
-                        >
-                      </div>
-                    </div>
-                  </li>
-                </ul>
-                <!-- <p class="mt-4">When user is owner of this NFT</p>
-                                <ul class="btns-group d-flex">
-                                    <li class="flex-grow-1">
-                                        <a href="#" data-bs-toggle="modal" data-bs-target="#listModal" class="btn btn-primary d-block">Sell</a>
-                                    </li>
-                                    <li class="flex-grow-1">
-                                        <a href="#" data-bs-toggle="modal" data-bs-target="#cancelListModal" class="btn btn-primary d-block">Cancel listing</a>
-                                    </li>
-                                    <li class="flex-grow-1">
-                                        <div class="dropdown">
-                                            <a href="#" class="btn bg-dark-dim d-block" data-bs-toggle="dropdown">{{ SectionData.itemDetailData.btnTextTwo }}</a>
-                                            <div class="dropdown-menu card-generic p-2 keep-open w-100 mt-1">
-                                                <router-link :to="icon.path" class="dropdown-item card-generic-item" v-for="(icon, i) in SectionData.socialShareList" :key="i"><em class="ni me-2" :class="icon.btnClass"></em>{{ icon.title }}</router-link>
-                                            </div>
-                                        </div>
-                                    </li>
-                                </ul> -->
+                    </li>
+                  </ul>
+                </div>
+                <div v-if="isLoggedIn() && NFT.owner == auth.user.address">
+                  <ul class="btns-group d-flex">
+                    <li class="" v-if="NFT.status == 1">
+                      <a
+                        href="#"
+                        data-bs-toggle="modal"
+                        data-bs-target="#listModal"
+                        class="btn btn-primary d-block"
+                      >
+                        List
+                      </a>
+                    </li>
+                    <li class="" v-if="NFT.status == 2">
+                      <a
+                        href="#"
+                        data-bs-toggle="modal"
+                        data-bs-target="#cancelListModal"
+                        class="btn btn-primary d-block"
+                      >
+                        Cancel listing
+                      </a>
+                    </li>
+                  </ul>
+                </div>
               </div>
               <!-- end item-detail-btns -->
             </div>
@@ -292,7 +262,7 @@
         <div class="modal-dialog modal-dialog-centered">
           <div class="modal-content">
             <div class="modal-header">
-              <h4 class="modal-title">{{ SectionData.placeBidModal.title }}</h4>
+              <h4 class="modal-title">Place a Bid</h4>
               <button
                 type="button"
                 class="btn-close icon-btn"
@@ -304,7 +274,11 @@
             </div>
             <!-- end modal-header -->
             <div class="modal-body">
-              <p class="mb-3" v-html="SectionData.placeBidModal.content"></p>
+              <p class="mb-3">
+                You are about to place a bid for
+                <b>{{ NFT.name + " # " + NFT.tokenId }}</b
+                >.
+              </p>
               <div class="mb-3">
                 <label class="form-label">{{
                   SectionData.placeBidModal.labelText
@@ -313,32 +287,27 @@
                   type="text"
                   class="form-control form-control-s1"
                   placeholder="Enter bid"
-                />
-              </div>
-              <div class="mb-3">
-                <label
-                  class="form-label"
-                  v-html="SectionData.placeBidModal.labelTextTwo"
-                ></label>
-                <input
-                  type="text"
-                  class="form-control form-control-s1"
-                  value="1"
+                  v-model="bidPrice"
                 />
               </div>
               <ul class="total-bid-list mb-4">
-                <li
-                  v-for="(list, i) in SectionData.placeBidModal.totalBidList"
-                  :key="i"
-                >
-                  <span>{{ list.title }}</span> <span>{{ list.price }}</span>
+                <li>
+                  <span>Your bidding balance</span>
+                  <span>{{ bidPrice }} ETH</span>
+                </li>
+                <li><span>Service fee 3.5%</span> <span>0 ETH</span></li>
+                <li>
+                  <span>You will pay</span> <span>{{ bidPrice }} ETH</span>
                 </li>
               </ul>
               <a
                 :href="SectionData.placeBidModal.btnLink"
                 class="btn btn-primary d-block"
-                >{{ SectionData.placeBidModal.btnText }}</a
+                data-bs-dismiss="modal"
+                v-on:click="bidItem"
               >
+                Place a Bid
+              </a>
             </div>
             <!-- end modal-body -->
           </div>
@@ -364,7 +333,11 @@
             </div>
             <!-- end modal-header -->
             <div class="modal-body">
-              <p class="mb-3">You are about to buy a NFT of <b>Meebits</b>.</p>
+              <p class="mb-3">
+                You are about to buy a NFT of
+                <b>{{ NFT.name + " # " + NFT.tokenId }}</b
+                >.
+              </p>
               <!-- <div class="mb-3">
                                 <label class="form-label">{{ SectionData.placeBidModal.labelText }}</label>
                                 <input type="text" class="form-control form-control-s1" placeholder="Enter bid">
@@ -374,14 +347,16 @@
                                 <input type="text" class="form-control form-control-s1" value="1">
                             </div> -->
               <ul class="total-bid-list mb-4">
-                <li><span>Your balance</span> <span>10.67856 ETH</span></li>
-                <li><span>NFT price</span> <span>3.75 ETH</span></li>
-                <li><span>Service fee</span> <span>3.5%</span></li>
-                <li><span>You will pay</span> <span>0.013325 ETH</span></li>
+                <li>
+                  <span>NFT price</span> <span>{{ NFT.price }} ETH</span>
+                </li>
+                <li><span>Service fee</span> <span>0 %</span></li>
+                <li><span>You will pay</span> <span>1 ETH</span></li>
               </ul>
               <a
-                :href="SectionData.placeBidModal.btnLink"
+                v-on:click="buyItem"
                 class="btn btn-primary d-block"
+                data-bs-dismiss="modal"
                 >Buy</a
               >
             </div>
@@ -410,31 +385,26 @@
             <!-- end modal-header -->
             <div class="modal-body">
               <p class="mb-3">
-                You are about to list your NFT of <b>Meebits</b>.
+                You are about to list your NFT of
+                <b>{{ NFT ? NFT.name + " # " + NFT.tokenId : "" }}</b
+                >.
               </p>
               <div class="mb-3">
                 <label class="form-label">List Price</label>
                 <input
-                  type="text"
+                  type="number"
                   class="form-control form-control-s1"
                   placeholder="Enter list price"
+                  v-model="NFT.price"
                 />
               </div>
-              <!-- <div class="mb-3">
-                                <label class="form-label" v-html="SectionData.placeBidModal.labelTextTwo"></label>
-                                <input type="text" class="form-control form-control-s1" value="1">
-                            </div> -->
-              <!-- <ul class="total-bid-list mb-4">
-                                <li><span>Your balance</span> <span>10.67856 ETH</span></li>
-                                <li><span>NFT price</span> <span>3.75 ETH</span></li>
-                                <li><span>Service fee</span> <span>3.5%</span></li>
-                                <li><span>You will pay</span> <span>0.013325 ETH</span></li>
-                            </ul> -->
               <a
-                :href="SectionData.placeBidModal.btnLink"
+                v-on:click="list"
+                data-bs-dismiss="modal"
                 class="btn btn-primary d-block"
-                >List</a
               >
+                List
+              </a>
             </div>
             <!-- end modal-body -->
           </div>
@@ -482,8 +452,9 @@
                   >Never mind</a
                 >
                 <a
-                  :href="SectionData.placeBidModal.btnLink"
+                  v-on:click="cancelListing"
                   class="btn btn-primary d-block"
+                  data-bs-dismiss="modal"
                   >Cancel listing</a
                 >
               </div>
@@ -592,6 +563,19 @@
         </div>
         <!-- end modal-dialog -->
       </div>
+
+      <div class="loading_modal" v-if="isLoading">
+        <div class="loading_content">
+          <div class="d-flex align-items-center gap-3">
+            <ring-loader
+              :loading="loading"
+              color="#ffffff"
+              size="45px"
+            ></ring-loader>
+            <p class="">{{ loadingTxt }}</p>
+          </div>
+        </div>
+      </div>
       <!-- end modal-->
     </section>
     <!-- end item-detail-section -->
@@ -607,8 +591,19 @@
 //import ProductDetailSection from '@/components/section/Products'
 // Import component data. You can change the data in the store to reflect in all component
 import SectionData from "@/store/store.js";
+import { mapState, mapGetters } from "vuex";
 
 import NFTService from "../services/nft.service";
+import RingLoader from "vue-spinner/src/RingLoader.vue";
+import { createToast } from "mosha-vue-toastify";
+import Web3 from "web3";
+import "mosha-vue-toastify/dist/style.css";
+
+import {
+  buildERC721NFTContract,
+  ERC721Factory,
+} from "@/utils/buildNFTContract";
+import { ERC721Factory_address } from "@/constants/constant";
 
 export default {
   name: "NFTDetail",
@@ -622,8 +617,14 @@ export default {
       metaTextTwo: "",
       metaTextThree: "",
       content: "",
-      NFTData: "",
+      NFT: "",
+      isLoading: false,
+      loadingTxt: "",
+      bidPrice: "",
     };
+  },
+  components: {
+    RingLoader,
   },
   async mounted() {
     SectionData.productData.products.forEach((element) => {
@@ -636,12 +637,173 @@ export default {
         this.content = element.content;
       }
     });
+    this.getNFT();
   },
-  async beforeCreate() {
-    const _nft_id = this.$route.params.id;
-    const _data = await NFTService.getNFTData(_nft_id);
-    this.NFTData = _data;
-    console.log("nftdata", _data);
+  computed: {
+    ...mapState(["auth"]),
+    ...mapGetters({ isLoggedIn: ["auth/isLoggedIn"] }),
+  },
+  methods: {
+    list: async function () {
+      this.isLoading = true;
+
+      console.log(
+        Web3,
+        ERC721Factory_address,
+        buildERC721NFTContract,
+        ERC721Factory
+      );
+
+      try {
+        this.loadingTxt = "Loading...";
+
+        // Check Get Listed Token
+        const isListed = await ERC721Factory.methods
+          .getListing(this.NFT.contract_address, this.NFT.tokenId)
+          .call();
+        console.log("listed? ", isListed);
+        if (isListed.price != 0) {
+          createToast("This NFT was already listed.");
+          this.loadingTxt = "";
+          this.isLoading = false;
+          return false;
+        }
+
+        console.log("nft", this.NFT);
+        console.log("user", this.auth.user);
+
+        // NFT Smart Contract
+        const NFT_Contract = buildERC721NFTContract(this.NFT.contract_address);
+        console.log("ERC711NFT Smart Contract", NFT_Contract);
+
+        // Call Approve Function
+        this.loadingTxt = "Approving...";
+        console.log(
+          "approve to ",
+          ERC721Factory_address.Token,
+          " nft :",
+          this.NFT.tokenId
+        );
+        await NFT_Contract.methods
+          .approve(ERC721Factory_address.Token, this.NFT.tokenId)
+          .send({ from: this.auth.user.address });
+
+        // Call List function of ERC721Factory function
+        this.loadingTxt = "Listing...";
+        console.log(
+          "list function on the ERC721Factory",
+          this.NFT.contract_address,
+          this.NFT.tokenId,
+          Web3.utils.toWei(this.NFT.price.toString(), "ether")
+        );
+        await ERC721Factory.methods
+          .listItem(
+            this.NFT.contract_address,
+            this.NFT.tokenId,
+            Web3.utils.toWei(this.NFT.price.toString(), "ether")
+          )
+          .send({
+            from: this.auth.user.address,
+          });
+
+        // Save data to database.
+        this.loadingTxt = "Saving Data ...";
+        const res = await NFTService.listItem(this.NFT, this.auth.user);
+        console.log("save data to db", res);
+        createToast("Successfully listed.");
+        this.getNFT();
+        this.isLoading = false;
+      } catch (error) {
+        this.isLoading = false;
+        createToast(error);
+        console.log("error", error);
+      }
+    },
+    cancelListing: async function () {
+      this.isLoading = true;
+      try {
+        this.loadingTxt = "Loading...";
+
+        // Check Get Listed Token
+        const isListed = await ERC721Factory.methods
+          .getListing(this.NFT.contract_address, this.NFT.tokenId)
+          .call();
+
+        if (isListed.price == 0) {
+          createToast("This NFT was not listed yet.");
+          this.loadingTxt = "";
+          this.isLoading = false;
+          return false;
+        }
+
+        // Call List function of ERC721Factory function
+        this.loadingTxt = "Cancel listing...";
+        await ERC721Factory.methods
+          .cancelListing(this.NFT.contract_address, this.NFT.tokenId)
+          .send({
+            from: this.auth.user.address,
+          });
+
+        // Save data to database.
+        this.loadingTxt = "Saving Data ...";
+        const res = await NFTService.cancelListing(this.NFT, this.auth.user);
+        console.log(res);
+
+        createToast("Successfully cancelled.");
+        this.getNFT();
+        this.isLoading = false;
+      } catch (error) {
+        this.isLoading = false;
+        createToast(error);
+        console.log("error", error);
+      }
+    },
+    buyItem: async function () {
+      this.isLoading = true;
+      try {
+        this.loadingTxt = "Loading...";
+
+        // Check Get Listed Token
+        const isListed = await ERC721Factory.methods
+          .getListing(this.NFT.contract_address, this.NFT.tokenId)
+          .call();
+
+        if (isListed.price == 0) {
+          createToast("This NFT was not listed yet.");
+          this.loadingTxt = "";
+          this.isLoading = false;
+          return false;
+        }
+
+        // Call List function of ERC721Factory function
+        this.loadingTxt = "Buying...";
+        await ERC721Factory.methods
+          .buyItem(this.NFT.contract_address, this.NFT.tokenId)
+          .send({
+            from: this.auth.user.address,
+            value: Web3.utils.toWei(this.NFT.price, "ether"),
+          });
+
+        // Save data to database.
+        this.loadingTxt = "Saving Data ...";
+        const res = await NFTService.buyItem(this.NFT, this.auth.user);
+        console.log(res);
+
+        createToast("Successfully buyied.");
+        this.getNFT();
+        this.isLoading = false;
+      } catch (error) {
+        this.isLoading = false;
+        createToast(error);
+        console.log("error", error);
+      }
+    },
+    getNFT: async function () {
+      const _nft_id = this.$route.params.id;
+      const _data = await NFTService.getNFTData(_nft_id);
+      this.NFT = _data;
+      console.log("NFT", _data);
+    },
   },
 };
 </script>

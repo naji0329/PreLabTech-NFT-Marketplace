@@ -9,6 +9,7 @@ var fs = require('fs');
 var path = require('path');
 
 const ipfsAPI = require('ipfs-api');
+const { listeners } = require('process');
 const ipfs = ipfsAPI('ipfs.infura.io', '5001', { protocol: 'https' });
 
 // @route    POST api/collection/createCollection
@@ -27,7 +28,7 @@ router.post('/createNFT', async (req, res) => {
         ipfs_path: '',
         chain: fields.chain,
         creater: fields.creater,
-        creater: fields.creater,
+        owner: fields.creater,
         tokenId: fields.tokenId,
         collection_id: fields.collection_id,
         collection_name: fields.collection_name,
@@ -50,55 +51,55 @@ router.post('/createNFT', async (req, res) => {
           let uploadFile = fs.readFileSync(
             './../frontend/public/files/nfts/file/' + fileName
           );
-          let tempBuffer = new Buffer(uploadFile);
-          ipfs.files.add(tempBuffer, async function (err, file) {
-            if (err) {
-              console.log(err);
-            }
+          // let tempBuffer = new Buffer(uploadFile);
+          // ipfs.files.add(tempBuffer, async function (err, file) {
+          //   if (err) {
+          //     console.log(err);
+          //   }
 
-            _nft.ipfs_path = file[0].hash;
-            _nft.file = fileName;
+          // _nft.ipfs_path = file[0].hash;
+          _nft.file = fileName;
 
-            // Metadata Generate
-            const metadata = {
-              name: _nft.name,
-              description: _nft.description,
-              image: 'https://ipfs.io/ipfs/' + _nft.ipfs_path,
-              animation_url: '',
-              external_url: ''
-            };
-            const jsonString = JSON.stringify(metadata);
+          // Metadata Generate
+          const metadata = {
+            name: _nft.name,
+            description: _nft.description,
+            image: 'https://ipfs.io/ipfs/' + _nft.ipfs_path,
+            animation_url: '',
+            external_url: ''
+          };
+          const jsonString = JSON.stringify(metadata);
 
-            fs.writeFile(
-              `./../frontend/public/files/nfts/metadata/${cTimestamp}.json`,
-              jsonString,
-              (err) => {
-                if (err) {
-                  console.log('Error writing file', err);
-                } else {
-                  // Upload Metadata to IPFS
-                  let uploadFile = fs.readFileSync(
-                    `./../frontend/public/files/nfts/metadata/${cTimestamp}.json`
-                  );
-                  let tempMetadataBuffer = new Buffer(uploadFile);
-                  ipfs.files.add(
-                    tempMetadataBuffer,
-                    async function (err, file_metadata) {
-                      if (err) {
-                        console.log(err);
-                      }
+          fs.writeFile(
+            `./../frontend/public/files/nfts/metadata/${cTimestamp}.json`,
+            jsonString,
+            async (err) => {
+              if (err) {
+                console.log('Error writing file', err);
+              } else {
+                // Upload Metadata to IPFS
+                // let uploadFile = fs.readFileSync(
+                //   `./../frontend/public/files/nfts/metadata/${cTimestamp}.json`
+                // );
+                // let tempMetadataBuffer = new Buffer(uploadFile);
+                // ipfs.files.add(
+                //   tempMetadataBuffer,
+                //   async function (err, file_metadata) {
+                //     if (err) {
+                //       console.log(err);
+                //     }
 
-                      _nft.metadata_url = file_metadata[0].hash;
+                // _nft.metadata_url = file_metadata[0].hash;
 
-                      console.log('create new NFT', _nft);
-                      const _newNFT = await _nft.save();
-                      return res.status(200).json({ _newNFT });
-                    }
-                  );
-                }
+                console.log('create new NFT', _nft);
+                const _newNFT = await _nft.save();
+                return res.status(200).json({ _newNFT });
+                // }
+                // );
               }
-            );
-          });
+            }
+          );
+          // });
         });
       }
     });
@@ -164,6 +165,91 @@ router.post('/verifyNFT', async (req, res) => {
       );
 
       return res.json(nft);
+    }
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send('Server error');
+  }
+});
+
+router.post('/listItem', async (req, res) => {
+  try {
+    let { nft, user } = req.body;
+
+    let collectinFields = {
+      status: 2,
+      price: nft.price,
+      updated_at: new Date()
+    };
+
+    if (nft) {
+      // Using upsert option (creates new doc if no match is found):
+      nft = await NFT.findOneAndUpdate(
+        { _id: nft._id },
+        { $set: collectinFields },
+        { new: true, upsert: true, setDefaultsOnInsert: true }
+      );
+
+      return res.json(nft);
+    } else {
+      res.status(400).json({ msg: 'not found NFT' });
+    }
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send('Server error');
+  }
+});
+
+router.post('/cancelListing', async (req, res) => {
+  try {
+    let { nft, user } = req.body;
+
+    let collectinFields = {
+      status: 1,
+      price: 0,
+      updated_at: new Date()
+    };
+
+    if (nft) {
+      // Using upsert option (creates new doc if no match is found):
+      nft = await NFT.findOneAndUpdate(
+        { _id: nft._id },
+        { $set: collectinFields },
+        { new: true, upsert: true, setDefaultsOnInsert: true }
+      );
+
+      return res.json(nft);
+    } else {
+      res.status(400).json({ msg: 'not found NFT' });
+    }
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send('Server error');
+  }
+});
+
+router.post('/buyItem', async (req, res) => {
+  try {
+    let { nft, user } = req.body;
+
+    let collectinFields = {
+      status: 1,
+      price: 0,
+      updated_at: new Date(),
+      owner: user.address
+    };
+
+    if (nft) {
+      // Using upsert option (creates new doc if no match is found):
+      nft = await NFT.findOneAndUpdate(
+        { _id: nft._id },
+        { $set: collectinFields },
+        { new: true, upsert: true, setDefaultsOnInsert: true }
+      );
+
+      return res.json(nft);
+    } else {
+      res.status(400).json({ msg: 'not found NFT' });
     }
   } catch (error) {
     console.error(error.message);

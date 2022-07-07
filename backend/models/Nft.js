@@ -46,10 +46,19 @@ const Schema = new mongoose.Schema({
     type: String,
     default: 0
   },
+  price: {
+    type: String
+  },
   date: {
+    type: Date,
+    default: Date.now
+  },
+  updated_at: {
     type: Date,
     default: Date.now
   }
 });
+
+// Status ------ 0: Created  1: Verified  2:Listed
 
 module.exports = mongoose.model('nft', Schema);

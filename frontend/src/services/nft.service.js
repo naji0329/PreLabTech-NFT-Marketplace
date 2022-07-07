@@ -31,8 +31,18 @@ export default {
     });
   },
 
-  listNFT(nft, user) {
-    return axios.post("/nft/listNFT", { nft, user }).then((response) => {
+  listItem(nft, user) {
+    return axios.post("/nft/listItem", { nft, user }).then((response) => {
+      return response.data;
+    });
+  },
+  cancelListing(nft, user) {
+    return axios.post("/nft/cancelListing", { nft, user }).then((response) => {
+      return response.data;
+    });
+  },
+  buyItem(nft, user) {
+    return axios.post("/nft/buyItem", { nft, user }).then((response) => {
       return response.data;
     });
   },

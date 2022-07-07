@@ -48,7 +48,7 @@
       <!-- end hero-wrap -->
     </header>
 
-    <section class="explore-section pt-4 mt-4">
+    <section class="explore-section py-4 mt-4">
       <div class="container">
         <div class="row g-gs">
           <div
@@ -66,18 +66,17 @@
                   />
                 </div>
                 <div class="card-body p-3">
-                  <div class="d-flex justify-content-between">
-                    <div>
-                      <h5 class="card-title text-truncate mb-0">
-                        {{ nft.name }}
-                      </h5>
-                      <!-- <p>Meebits #{{product.id}}</p> -->
-                    </div>
-                    <!-- <div class="text-right" style="text-align: right">
-                    <h5 class="card-price-title">Price</h5>
-                    <p class="card-price-number">
-                      {{ product.price }}
-                      0.25
+                  <div
+                    class="d-flex justify-content-between align-items-center"
+                  >
+                    <h5 class="card-title text-truncate mb-0">
+                      {{ nft.name }} # {{ nft.tokenId }}
+                    </h5>
+                    <p
+                      class="card-price-number d-flex align-items-center gap-1"
+                      v-if="nft.status == 2"
+                    >
+                      {{ nft.price }}
                       <img
                         src="@/images/tokens/eth.png"
                         width="10"
@@ -85,7 +84,22 @@
                         alt="eth icon"
                       />
                     </p>
-                  </div> -->
+                  </div>
+                  <div class="card-author d-flex align-items-center">
+                    <span class="me-1 card-author-by">Ownered By</span>
+                    <div class="custom-tooltip-wrap">
+                      <p>
+                        {{
+                          nft.owner.substring(0, 5) +
+                          "..." +
+                          nft.owner.substring(
+                            nft.owner.length - 4,
+                            nft.owner.length
+                          )
+                        }}
+                      </p>
+                    </div>
+                    <!-- end custom-tooltip-wrap -->
                   </div>
                   <!-- <div class="card-author mb-1 d-flex align-items-center">
                           <span class="me-1 card-author-by">By</span>

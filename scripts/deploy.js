@@ -10,7 +10,7 @@ async function main() {
   await deploy_erc721_factory();
 
   // await deploy_erc1155_factory();
-  await deploy_erc721_contract();
+  // await deploy_erc721_contract();
   // await deploy_erc1155_contract();
 }
 
