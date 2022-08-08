@@ -1,7 +1,7 @@
 const express = require('express');
 const connectDB = require('./config/db');
 const path = require('path');
-const cors = require("cors")
+const cors = require('cors');
 const app = express();
 
 // Connect Database
@@ -10,14 +10,14 @@ connectDB();
 const corsOptions = {
   origin: function (origin, callback) {
     // if (!origin || whitelist.indexOf(origin) !== -1) {
-    callback(null, true)
+    callback(null, true);
     // } else {
     //   callback(new Error("Not allowed by CORS"))
     // }
   },
-  credentials: true,
-}
-app.use(cors(corsOptions))
+  credentials: true
+};
+app.use(cors(corsOptions));
 
 // Init Middleware
 app.use(express.json());
@@ -27,7 +27,6 @@ app.use('/api/users', require('./routes/api/users'));
 app.use('/api/auth', require('./routes/api/auth'));
 app.use('/api/collection', require('./routes/api/collection'));
 app.use('/api/nft', require('./routes/api/nft'));
-
 
 app.use('/api/profile', require('./routes/api/profile'));
 app.use('/api/posts', require('./routes/api/posts'));

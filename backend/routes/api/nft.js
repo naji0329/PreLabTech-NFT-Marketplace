@@ -19,7 +19,7 @@ router.post('/createNFT', async (req, res) => {
   try {
     // To Do
 
-    const form = new formidable.IncomingForm();
+
     form.parse(req, async function (err, fields, files) {
       let _nft = new NFT({
         name: fields.name,

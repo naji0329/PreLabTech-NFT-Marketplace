@@ -19,6 +19,7 @@ export default {
     return axios
       .post("/collection/getCollections", { address, chain })
       .then((response) => {
+        console.log(response.data);
         return response.data;
       });
   },
