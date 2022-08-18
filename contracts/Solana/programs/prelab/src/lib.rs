@@ -1,5 +1,6 @@
 pub mod utils;
 use borsh::{BorshDeserialize,BorshSerialize};
+use anchor_spl::token::Token;
 use {
     crate::utils::*,
     anchor_lang::{
@@ -8,18 +9,18 @@ use {
         AnchorSerialize,
         Key,
         solana_program::{
-            program::{invoke_signed},
             program_pack::Pack,
+            program::{invoke_signed},
         }      
     },
+    spl_token::state,
     metaplex_token_metadata::{
         instruction::{
             create_metadata_accounts,
             create_master_edition,
             update_metadata_accounts,
         },
-    },
-    spl_token::state,
+    }
 };
 declare_id!("C47gbJh2S4ESsLYDgxod6k83uawxEhYsNbLfNi1vuqvV");
 
@@ -57,7 +58,7 @@ pub mod solana_anchor {
         ) -> Result<()> {
         let collection = &mut ctx.accounts.collection;
         let seeds = &[collection.rand.as_ref(), &[collection.bump]];
-        let mint : state::Mint = state::Mint::unpack_from_slice(&ctx.accounts.mint.data.borrow())?;
+        let mint : state::Mint = state::Mint::unpack(&ctx.accounts.mint.data.borrow())?;
         if mint.decimals != 0 {
             return err!(CollectionError::InvalidMintAccount);
         }
@@ -109,13 +110,13 @@ pub mod solana_anchor {
                 _data.is_mutable,
             ),
             &[
-                ctx.accounts.metadata.clone(),
-                ctx.accounts.mint.clone(),
-                ctx.accounts.owner.clone(),
-                ctx.accounts.owner.clone(),
-                ctx.accounts.owner.clone(),
-                ctx.accounts.token_metadata_program.clone(),
-                ctx.accounts.token_program.clone(),
+                ctx.accounts.metadata.to_account_info().clone(),
+                ctx.accounts.mint.to_account_info().clone(),
+                ctx.accounts.owner.to_account_info().clone(),
+                ctx.accounts.owner.to_account_info().clone(),
+                ctx.accounts.owner.to_account_info().clone(),
+                ctx.accounts.token_metadata_program.to_account_info().clone(),
+                ctx.accounts.token_program.to_account_info().clone(),
                 ctx.accounts.system_program.to_account_info().clone(),
                 ctx.accounts.rent.to_account_info().clone(),
             ],
@@ -134,13 +135,13 @@ pub mod solana_anchor {
                 None,
             ),
             &[
-                ctx.accounts.master_edition.clone(),
-                ctx.accounts.mint.clone(),
-                ctx.accounts.owner.clone(),
-                ctx.accounts.owner.clone(),
-                ctx.accounts.owner.clone(),
-                ctx.accounts.metadata.clone(),
-                ctx.accounts.token_program.clone(),
+                ctx.accounts.master_edition.to_account_info().clone(),
+                ctx.accounts.mint.to_account_info().clone(),
+                ctx.accounts.owner.to_account_info().clone(),
+                ctx.accounts.owner.to_account_info().clone(),
+                ctx.accounts.owner.to_account_info().clone(),
+                ctx.accounts.metadata.to_account_info().clone(),
+                ctx.accounts.token_program.to_account_info().clone(),
                 ctx.accounts.system_program.to_account_info().clone(),
                 ctx.accounts.rent.to_account_info().clone(),
             ],
@@ -157,9 +158,9 @@ pub mod solana_anchor {
                 Some(true),
             ),
             &[
-                ctx.accounts.token_metadata_program.clone(),
-                ctx.accounts.metadata.clone(),
-                ctx.accounts.owner.clone(),                
+                ctx.accounts.token_metadata_program.to_account_info().clone(),
+                ctx.accounts.metadata.to_account_info().clone(),
+                ctx.accounts.owner.to_account_info().clone(),                
             ],
             &[seeds]
         )?;
@@ -170,29 +171,33 @@ pub mod solana_anchor {
 
 #[derive(Accounts)]
 pub struct MintNft<'info> {
-    #[account(mut,signer)]
-    owner : AccountInfo<'info>,
+    #[account(mut)]
+    owner : Signer<'info>,
 
     #[account(mut)]
     collection : Account<'info, Collection>,
 
+    /// CHECK: account constraints checked in account trait
     #[account(mut,owner=spl_token::id())]
-    mint : AccountInfo<'info>,
+    mint : UncheckedAccount<'info>,
 
+    /// CHECK: account constraints checked in account trait
     #[account(mut,owner=spl_token::id())]
-    token_account : AccountInfo<'info>,
+    token_account : UncheckedAccount<'info>,
 
+    /// CHECK: account constraints checked in account trait
     #[account(mut)]
-    metadata : AccountInfo<'info>,
+    metadata : UncheckedAccount<'info>,
 
+    /// CHECK: account constraints checked in account trait
     #[account(mut)]
-    master_edition : AccountInfo<'info>,
+    master_edition : UncheckedAccount<'info>,
 
+    /// CHECK: account constraints checked in account trait
     #[account(address=metaplex_token_metadata::id())]
-    token_metadata_program : AccountInfo<'info>,
+    token_metadata_program : UncheckedAccount<'info>,
 
-    #[account(address=spl_token::id())]
-    token_program : AccountInfo<'info>,
+    token_program : Program<'info, Token>,
 
     system_program : Program<'info,System>,
 
@@ -204,11 +209,11 @@ pub struct SetAuthority<'info>{
     #[account(mut, has_one=owner)]
     collection : Account<'info, Collection>,
 
-    #[account(mut,signer)]
-    owner : AccountInfo<'info>,
-
     #[account(mut)]
-    new_owner : AccountInfo<'info>,
+    owner : Signer<'info>,
+    /// CHECK: account constraints checked in account trait
+    #[account(mut)]
+    new_owner : UncheckedAccount<'info>,
 }
 
 #[derive(Accounts)]
@@ -216,11 +221,12 @@ pub struct SetAuthority<'info>{
 pub struct InitCollection<'info>{
     #[account(init, payer=owner, space=8+COLLECTION_SIZE)]
     collection : Account<'info, Collection>,
-    #[account(mut,signer)]
-    owner : AccountInfo<'info>,
-    
+
+    #[account(mut)]
+    owner : Signer<'info>,
+    /// CHECK: account constraints checked in account trait 
     #[account()]
-    rand: AccountInfo<'info>,
+    rand: UncheckedAccount<'info>,
 
     system_program : Program<'info,System>,
 }

@@ -1,18 +1,22 @@
 use {
   crate::CollectionError,
   anchor_lang::{
-      prelude::{AccountInfo, Result,},
+      prelude::*,
       solana_program::{
           program::{invoke},
       },
   },
+  anchor_spl::token::Token
 };
 
 pub struct TokenMintToParams<'a> {
-  pub mint : AccountInfo<'a>,
-  pub account : AccountInfo<'a>,
-  pub owner : AccountInfo<'a>,
-  pub token_program : AccountInfo<'a>,
+  /// CHECK: account constraints checked in account trait
+  pub mint : UncheckedAccount<'a>,
+  /// CHECK: account constraints checked in account trait
+  pub account : UncheckedAccount<'a>,
+  pub owner : Signer<'a>,
+
+  pub token_program : Program<'a, Token>,
   pub amount : u64,
 }
 
@@ -34,7 +38,12 @@ pub fn spl_token_mint_to(params : TokenMintToParams<'_>) -> Result<()> {
           &[],
           amount,
       )?,
-      &[mint,account,owner,token_program],
+      &[
+        mint.to_account_info().clone(),
+        account.to_account_info().clone(),
+        owner.to_account_info().clone(),
+        token_program.to_account_info().clone()
+      ],
   );
   result.map_err(|_| CollectionError::TokenMintToFailed.into())
 }
