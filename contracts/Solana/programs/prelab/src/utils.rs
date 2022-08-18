@@ -1,7 +1,7 @@
 use {
-  crate::PoolError,
+  crate::CollectionError,
   anchor_lang::{
-      prelude::{AccountInfo, ProgramResult,},
+      prelude::{AccountInfo, Result,},
       solana_program::{
           program::{invoke},
       },
@@ -17,7 +17,7 @@ pub struct TokenMintToParams<'a> {
 }
 
 #[inline(always)]
-pub fn spl_token_mint_to(params : TokenMintToParams<'_>) -> ProgramResult {
+pub fn spl_token_mint_to(params : TokenMintToParams<'_>) -> Result<()> {
   let TokenMintToParams {
       mint,
       account,
@@ -36,5 +36,5 @@ pub fn spl_token_mint_to(params : TokenMintToParams<'_>) -> ProgramResult {
       )?,
       &[mint,account,owner,token_program],
   );
-  result.map_err(|_| PoolError::TokenMintToFailed.into())
+  result.map_err(|_| CollectionError::TokenMintToFailed.into())
 }

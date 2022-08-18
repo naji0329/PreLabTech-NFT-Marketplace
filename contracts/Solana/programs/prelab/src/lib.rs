@@ -21,9 +21,9 @@ use {
     },
     spl_token::state,
 };
-declare_id!("Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS");
+declare_id!("C47gbJh2S4ESsLYDgxod6k83uawxEhYsNbLfNi1vuqvV");
 
-pub const collection_SIZE : usize = 32 + 8 + 8 + 1;
+pub const COLLECTION_SIZE : usize = 32 + 8 + 8 + 1;
 
 #[program]
 pub mod solana_anchor {
@@ -33,9 +33,10 @@ pub mod solana_anchor {
         ctx : Context<InitCollection>,
         _max_supply: u64,
         _bump : u8,
-        ) -> ProgramResult {
+        ) -> Result<()> {
         let collection = &mut ctx.accounts.collection;
         collection.owner = *ctx.accounts.owner.key;
+        collection.rand = *ctx.accounts.rand.key;
         collection.max_supply = _max_supply;
         collection.current_supply = 0;
         collection.bump = _bump;
@@ -44,7 +45,7 @@ pub mod solana_anchor {
     
     pub fn set_authority(
         ctx : Context<SetAuthority>,
-        ) -> ProgramResult {
+        ) -> Result<()> {
         let collection = &mut ctx.accounts.collection;
         collection.owner = *ctx.accounts.new_owner.key;
         Ok(())
@@ -53,18 +54,18 @@ pub mod solana_anchor {
     pub fn mint_nft(
         ctx : Context<MintNft>,
         _data : Metadata,
-        ) -> ProgramResult {
+        ) -> Result<()> {
         let collection = &mut ctx.accounts.collection;
         let seeds = &[collection.rand.as_ref(), &[collection.bump]];
         let mint : state::Mint = state::Mint::unpack_from_slice(&ctx.accounts.mint.data.borrow())?;
         if mint.decimals != 0 {
-            return Err(CollectionError::InvalidMintAccount.into());
+            return err!(CollectionError::InvalidMintAccount);
         }
         if mint.supply != 0 {
-            return Err(CollectionError::InvalidMintAccount.into());
+            return err!(CollectionError::InvalidMintAccount);
         }
         if collection.max_supply > collection.current_supply + 1 {
-            return Err(CollectionError::ExceedAmount.into())
+            return err!(CollectionError::ExceedAmount)
         }
         spl_token_mint_to(
             TokenMintToParams{
@@ -173,7 +174,7 @@ pub struct MintNft<'info> {
     owner : AccountInfo<'info>,
 
     #[account(mut)]
-    collection : ProgramAccount<'info, Collection>,
+    collection : Account<'info, Collection>,
 
     #[account(mut,owner=spl_token::id())]
     mint : AccountInfo<'info>,
@@ -201,7 +202,7 @@ pub struct MintNft<'info> {
 #[derive(Accounts)]
 pub struct SetAuthority<'info>{
     #[account(mut, has_one=owner)]
-    collection : ProgramAccount<'info, Collection>,
+    collection : Account<'info, Collection>,
 
     #[account(mut,signer)]
     owner : AccountInfo<'info>,
@@ -213,10 +214,14 @@ pub struct SetAuthority<'info>{
 #[derive(Accounts)]
 #[instruction(_bump : u8)]
 pub struct InitCollection<'info>{
-    #[account(init, payer=owner, space=8+collection_SIZE)]
-    collection : ProgramAccount<'info, Collection>,
+    #[account(init, payer=owner, space=8+COLLECTION_SIZE)]
+    collection : Account<'info, Collection>,
     #[account(mut,signer)]
     owner : AccountInfo<'info>,
+    
+    #[account()]
+    rand: AccountInfo<'info>,
+
     system_program : Program<'info,System>,
 }
 
@@ -225,6 +230,7 @@ pub struct Collection{
     pub owner : Pubkey,
     pub max_supply : u64,
     pub current_supply: u64,
+    pub rand: Pubkey,
     pub bump : u8,
 }
 
@@ -245,7 +251,7 @@ pub struct Metadata{
     pub is_mutable : bool,
 }
 
-#[error]
+#[error_code]
 pub enum CollectionError {
     #[msg("Token mint to failed")]
     TokenMintToFailed,
