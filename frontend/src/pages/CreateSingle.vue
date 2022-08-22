@@ -191,7 +191,86 @@ import SectionData from "@/store/store.js";
 import NFTService from "@/services/nft.service.js";
 import CollectionService from "@/services/collection.service.js";
 
-import { ERC721NFT_json } from "@/constants/constant.js";
+import { 
+  ERC721NFT_json, 
+  SolanaNFT_json, 
+  programId,
+  TOKEN_METADATA_PROGRAM_ID
+} from "@/constants/constant.js";
+
+import { useConnection, useWallet } from "@solana/wallet-adapter-react";
+import * as anchor from "@project-serum/anchor";
+import { 
+  // MintLayout, Token, 
+  TOKEN_PROGRAM_ID, ASSOCIATED_TOKEN_PROGRAM_ID 
+} from "@solana/spl-token";
+// import { programs } from '@metaplex/js'
+import {
+  // Connection,
+  Keypair,
+  PublicKey,
+  Transaction,
+  ConfirmOptions,
+  // SYSVAR_CLOCK_PUBKEY,
+  // clusterApiUrl,
+  // SystemProgram,
+  SYSVAR_RENT_PUBKEY,
+} from "@solana/web3.js";
+
+export async function getAssociateTokenAddress(mint, owner) {
+  let [address] = await PublicKey.findProgramAddress(
+    [owner.toBuffer(), TOKEN_PROGRAM_ID.toBuffer(), mint.toBuffer()],
+    ASSOCIATED_TOKEN_PROGRAM_ID,
+  );
+  return address;
+}
+
+
+async function sendTransaction(transaction, signers) {
+  const wallet = useWallet();
+  const connection = useConnection().connection
+    try{
+      transaction.feePayer = wallet.publicKey
+      transaction.recentBlockhash = (await connection.getRecentBlockhash('max')).blockhash;
+      transaction.setSigners(wallet.publicKey,...signers.map(s => s.publicKey));
+      if(signers.length !== 0)
+        transaction.partialSign(...signers)
+      const signedTransaction = await wallet.signTransaction(transaction);
+      let hash = await connection.sendRawTransaction(signedTransaction.serialize());
+      await connection.confirmTransaction(hash);
+      // Store.addNotification({
+      console.log({
+        title: "Success",
+        message: "Success",
+        type: "success",
+        insert: "top",
+        container: "top-right",
+        animationIn: ["animate__animated", "animate__fadeIn"],
+        animationOut: ["animate__animated", "animate__fadeOut"],
+        dismiss: {
+          duration: 1000,
+          onScreen: true
+        }
+      });
+    } catch(err) {
+      console.log(err)
+      // Store.addNotification({
+      console.log({
+        title: "ERROR",
+        message: "Error",
+        type: "warning",
+        insert: "top",
+        container: "top-right",
+        animationIn: ["animate__animated", "animate__fadeIn"],
+        animationOut: ["animate__animated", "animate__fadeOut"],
+        dismiss: {
+          duration: 1000,
+          onScreen: true
+        }
+      });
+    }
+  }
+
 
 export default {
   name: "CreateSingle",
@@ -281,10 +360,10 @@ export default {
         this.errors.file = "Please select file";
         return false;
       }
-      if (this.NFTData.collection == null) {
-        this.errors.collection = "Please select collection.";
-        return false;
-      }
+      // if (this.NFTData.collection == null) {
+      //   this.errors.collection = "Please select collection.";
+      //   return false;
+      // }
       if (!this.NFTData.name) {
         this.errors.name = "Please select file";
         return false;
@@ -357,6 +436,57 @@ export default {
               );
             });
         }
+      } else if ((await this.currentChain()) == "solana") {
+        // Create web3.
+        
+        {console.log("ererer")}
+        const wallet = useWallet();
+        const connection = useConnection().connection;
+        // const confirmOption : ConfirmOptions = { commitment : 'finalized', preflightCommitment : 'finalized', skipPreflight : false };
+        const confirmOption  = new ConfirmOptions({ commitment : 'finalized', preflightCommitment : 'finalized', skipPreflight : false });
+        let provider = new anchor.Provider(connection, wallet, confirmOption);
+        let program = new anchor.Program(SolanaNFT_json, programId, provider);
+        let ata = await getAssociateTokenAddress(mint.publicKey, wallet.publicKey);
+        let metadata = (await PublicKey.findProgramAddress([Buffer.from('metadata'),TOKEN_METADATA_PROGRAM_ID.toBuffer(),mint.publicKey.toBuffer()],TOKEN_METADATA_PROGRAM_ID))[0];
+        let master_edition = (await PublicKey.findProgramAddress([Buffer.from('metadata'),TOKEN_METADATA_PROGRAM_ID.toBuffer(),mint.publicKey.toBuffer(),Buffer.from('edition')],TOKEN_METADATA_PROGRAM_ID))[0];
+
+        const mint = Keypair.generate();
+  
+        let data = {
+          name: this.NFTData.name,
+          symbol: "My Creation",
+          uri: "https://bafybeidw3bvtcvodlqv3vj4x75pm63ak5nly72rjf42bnidomjy64hkony.ipfs.nftstorage.link/" + this.NFTData.file + "json",
+          sellerFeeBasisPoints: 350,
+          description: this.NFTData.description,
+          creators: [
+            {address: wallet.publicKey, verified: false, share: 100}
+          ],
+          isMutable: true,
+        }
+        
+
+        // const rand = Keypair.generate()
+        let transaction = new Transaction()
+        transaction.add(
+          program.instruction.mintNFT(
+            data,
+            {
+              accounts: {
+                owner: wallet.publicKey,
+                collection: this.NFTData.collection.shortUrl,
+                mint: mint.publicKey,
+                tokenAccount: ata,
+                metadata: metadata,
+                masterEdition: master_edition,
+                tokenMetadataProgram: TOKEN_METADATA_PROGRAM_ID,
+                tokenProgram: TOKEN_PROGRAM_ID,
+                systemProgram: anchor.web3.SystemProgram.programId,
+                rent: SYSVAR_RENT_PUBKEY
+              }
+            }
+          )
+        )
+        await sendTransaction(transaction, [mint])
       } else {
         this.isLoading = false;
       }
