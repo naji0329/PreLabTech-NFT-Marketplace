@@ -11,8 +11,10 @@ import ERC721NFT_json from "@/contracts/ERC721NFT/NFT.json";
 import ERC1155NFT_json from "@/contracts/ERC1155NFT/NFT.json";
 
 export const TOKEN_METADATA_PROGRAM_ID = new anchor.web3.PublicKey("metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s")
-import SolanaNFT_json from "@/contracts/SolanaNFT/SolanaNFT.json";
-const programId = new anchor.web3.PublicKey('C47gbJh2S4ESsLYDgxod6k83uawxEhYsNbLfNi1vuqvV');
+// import SolanaNFT_json from "@/contracts/SolanaNFT/SolanaNFT.json";
+// const programId = new anchor.web3.PublicKey('C47gbJh2S4ESsLYDgxod6k83uawxEhYsNbLfNi1vuqvV');
+import SolanaNFT_json from "@/contracts/SolanaNFT/TestSolanaNFT.json";
+const programId = new anchor.web3.PublicKey('H4wGZSiwhHKoHYytShskZ9qMuyJ1ojCKBsNX4L72sAMP');
 
 export {
   ERC721Factory_address,
