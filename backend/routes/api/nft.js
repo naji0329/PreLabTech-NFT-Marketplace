@@ -16,9 +16,10 @@ const ipfs = ipfsAPI('ipfs.infura.io', '5001', { protocol: 'https' });
 // @desc     Create Collection
 // @access   Public
 router.post('/createNFT', async (req, res) => {
+  console.log("/localhost: / nft / cret")
   try {
     // To Do
-
+    
 
     form.parse(req, async function (err, fields, files) {
       let _nft = new NFT({
@@ -35,6 +36,8 @@ router.post('/createNFT', async (req, res) => {
         collection_symbol: fields.collection_symbol,
         contract_address: fields.contract_address
       });
+
+      console.log("New-------------------------------", _nft)
 
       if (files.file) {
         const oldpath = files.file.filepath;
@@ -57,17 +60,32 @@ router.post('/createNFT', async (req, res) => {
           //     console.log(err);
           //   }
 
-          // _nft.ipfs_path = file[0].hash;
+          _nft.ipfs_path = file[0].hash;
           _nft.file = fileName;
 
+          let metadata;
           // Metadata Generate
-          const metadata = {
-            name: _nft.name,
-            description: _nft.description,
-            image: 'https://ipfs.io/ipfs/' + _nft.ipfs_path,
-            animation_url: '',
-            external_url: ''
-          };
+          if(_nft.chain == "ethereum") {
+            metadata = {
+              name: _nft.name,
+              description: _nft.description,
+              image: 'https://ipfs.io/ipfs/' + _nft.ipfs_path,
+              animation_url: '',
+              external_url: ''
+            };
+          } else {
+            metadata = {
+              name: _nft.name,
+              symbol: _nft.collection_symbol,
+              uri: 'https://ipfs.io/ipfs/' + _nft.ipfs_path,
+              sellerFeeBasisPoints: 350,
+              creators: [
+                {address: _nft.creater, verified: false, share: 100}
+              ],
+              isMutable: true,
+            }
+          }
+          console.log("Meta data", metadata);
           const jsonString = JSON.stringify(metadata);
 
           fs.writeFile(

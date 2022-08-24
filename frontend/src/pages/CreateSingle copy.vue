@@ -195,7 +195,7 @@ import CollectionService from "@/services/collection.service.js";
 
 import { 
   ERC721NFT_json, 
-  // SolanaNFT_json, 
+  SolanaNFT_json, 
   programId,
   TOKEN_METADATA_PROGRAM_ID
 } from "@/constants/constant.js";
@@ -408,6 +408,11 @@ export default {
       formData.append("collection_name", "AlphaWOlf");
       formData.append("collection_symbol", "WOLF");
 
+      console.log("File ------------------ ", this.NFTData.file);
+      console.log("Collection ------------------ ", this.NFTData.collection._id, this.NFTData.collection.name, this.NFTData.collection.symbol);
+      console.log("Name ------------------ ", this.NFTData.name);
+      console.log("Description ------------------ ", this.NFTData.description);
+
       if ((await this.currentChain()) == "ethereum") {
         // Create web3.
         
@@ -423,6 +428,7 @@ export default {
 
         const supply = await contract.methods.supply().call();
 
+        formData.append("creater", this.auth.user.address);
         formData.append("creater", this.auth.user.address);
         formData.append("chain", this.auth.user.chain);
         formData.append("tokenId", supply);
@@ -462,198 +468,225 @@ export default {
               );
             });
         }
-      } else if ((await this.currentChain()) == "solana") {
+      } else if ((await this.currentChain()) == "solana1") {
+        // Create web3.
+        
         const { solana } = window;
-        if(solana)
-        {
-          {console.log("Solana Start")}
-          const wallet = window.solana;
-          const GLOBAL_SIZE = 81
-          // const CLAIMER_SIZE = 72
-          
-          const preflightCommitment = '"finalized"'
-          const commitment = '"finalized"'
+        
+        {console.log("ererer")}
+        const wallet = window.solana;
+        const GLOBAL_SIZE = 81
+        const CLAIMER_SIZE = 72
+        
+        // const preflightCommitment = 'processed'
+        // const commitment = 'confirmed'
+        const preflightCommitment = '"finalized"'
+        const commitment = '"finalized"'
 
-          const connection = new Connection(clusterApiUrl('testnet'))
-          
-          const provider = new anchor.Provider(connection, wallet, { preflightCommitment, commitment })
-          // const program = new anchor.Program(SolanaNFT_json, this.auth.user.chain, provider)
+        // const connection = new Connection(clusterApiUrl('testnet'), commitment)
+        // const provider = computed(() => new anchor.Provider(connection, wallet, { preflightCommitment, commitment }))
+        // const program = computed(() => new anchor.Program(SolanaNFT_json, programId, provider))
 
-          let resp = await connection.getProgramAccounts(
-            programId,
-            {
-              dataSlice: {length: 0, offset: 0},
-              filters: [
-                {
-                  dataSize: GLOBAL_SIZE
-                }
-              ]
-            }
-          )
+        // const wallet = useAnchorWallet()
+        
+        // const connection = new Connection(clusterApiUrl('testnet'), "recent")
 
-          formData.append(
-            "contract_address",
-            programId
-            // this.NFTData.collection.contract_address
-          );
-          formData.append("creater", resp[0].pubkey);
-          formData.append("chain", this.auth.user.chain);
-          // formData.append("tokenId", supply);
-          formData.append("tokenId", 0);
+        const connection = new Connection(clusterApiUrl('testnet'))
+        
+        // const provider = computed(() => new Provider(connection, wallet, { preflightCommitment, commitment }))
+        const provider = new anchor.Provider(connection, wallet, { preflightCommitment, commitment })
+        const program = new anchor.Program(SolanaNFT_json, programId, provider)
 
-          console.log("Before Create NFT");
-
-          let response;
-          try {
-            response = NFTService.createNFT(formData).then(res => console.log(res)).catch(err => console.log(err));
-          } catch(err) {
-            console.log(err);
-          }
-
-          console.log("Right after Create NFT");
-
-          if (response.errors) {
-            console.log(response.errors);
-            this.errors = response.errors;
-            this.isLoading = false;
-            return;
-          } else {
-
-            const pass = 0;
-            
-            if(pass == 1) {
-            const res = await solana.connect();
-            this.phantomWallet = res.publicKey.toString();
+        // if (solana) {
+          const response = await solana.connect();
+            this.phantomWallet = response.publicKey.toString();
             this.loginWithPhantom(this.phantomWallet);
+            // console.log("Phantom wallet --------------------------", provider.wallet.publicKey.toBase58())
             console.log("Phantom wallet --------------------------", provider.wallet.publicKey)
-            const walletPublicKey = provider.wallet.publicKey;
-            
-            const owner = provider.wallet.publicKey;
-            const mint = Keypair.generate();
-            let ata = await getAssociateTokenAddress(mint.publicKey, owner);
-            let metadata = (await PublicKey.findProgramAddress([Buffer.from('metadata'),TOKEN_METADATA_PROGRAM_ID.toBuffer(),mint.publicKey.toBuffer()],TOKEN_METADATA_PROGRAM_ID))[0];
-            let master_edition = (await PublicKey.findProgramAddress([Buffer.from('metadata'),TOKEN_METADATA_PROGRAM_ID.toBuffer(),mint.publicKey.toBuffer(),Buffer.from('edition')],TOKEN_METADATA_PROGRAM_ID))[0];
+          // const walletPublicKey = this.phantomWallet;
+          const walletPublicKey = provider.wallet.publicKey;
+        // }
 
-      
-            let data = {
-              name: "Warrior",
-              symbol: "WR",
-              uri: "https://bafybeidw3bvtcvodlqv3vj4x75pm63ak5nly72rjf42bnidomjy64hkony.ipfs.nftstorage.link/9900.json",
-              sellerFeeBasisPoints: 350,
-              // description: this.NFTData.description,
-              creators: [
-                {address: walletPublicKey, verified: false, share: 100}
-              ],
-              isMutable: true,
-            }
-            // let global = await program.value.account.global.fetch(resp[0].pubkey)
-            // let global = await program.account.global.fetch(resp[0].pubkey)
-            // let claimer = await connection.getProgramAccounts(
-            //   programId, {
-            //     dataSlice: {length: 0, offset: 0},
-            //     filters: [
-            //       {
-            //         dataSize: CLAIMER_SIZE,
-            //       },
-            //       {
-            //         memcmp: {
-            //           offset: 8,
-            //           bytes: walletPublicKey
-            //         }
-            //       }
-            //     ]
-            //   }
-            // )
-            
-            console.log("Final Step000000000000000000000000000000")
-            const mintRent = await connection.getMinimumBalanceForRentExemption(MintLayout.span)
-            
-            let transaction = new Transaction()
-            transaction.add(
-              SystemProgram.createAccount({
-                fromPubkey: owner,
-                newAccountPubkey: mint.publicKey,
-                lamports: mintRent,
-                space: MintLayout.span,
-                programId: TOKEN_PROGRAM_ID
-              })
-            )
+        // const Programs = {
+        //   wallet,
+        //   connection,
+        //   provider,
+        //   program,
+        // }
+
+        // await program.instruction.mintNFT(
+        //   data,
+        //     {
+        //       accounts: {
+        //         owner: wallet,
+        //         collection: this.NFTData.collection.shortUrl,
+        //         mint: mint.publicKey,
+        //         tokenAccount: ata,
+        //         metadata: metadata,
+        //         masterEdition: master_edition,
+        //         tokenMetadataProgram: TOKEN_METADATA_PROGRAM_ID,
+        //         tokenProgram: TOKEN_PROGRAM_ID,
+        //         systemProgram: anchor.web3.SystemProgram.programId,
+        //         rent: SYSVAR_RENT_PUBKEY
+        //       }
+        //     }
+        // )
         
-            console.log("Final Step11111111111111111111111111", owner)
-            transaction.add(
-              Token.createInitMintInstruction(
-                TOKEN_PROGRAM_ID,
-                mint.publicKey,
-                0,
-                owner,
-                owner
-              )
-            )
-        
-            console.log("Final Step2222222222222222222222222222")
-            transaction.add(
-              Token.createAssociatedTokenAccountInstruction(
-                ASSOCIATED_TOKEN_PROGRAM_ID,
-                TOKEN_PROGRAM_ID,
-                mint.publicKey,
-                ata,
-                owner,
-                owner,
-              )
-            )
-            
-            console.log("Final Step3333333333333333333333333333")
-            // transaction.add(
-            //     program.instruction.battle(
-            //     data,
-            //     {
-            //       accounts: {
-            //         signer: owner,
-            //         global: resp[0].pubkey,
-            //         creator: resp[0].pubkey,
-            //         rand: global.rand,
-            //         claimer: claimer[0].pubkey,
-            //         metadata: metadata,
-            //         masterEdition: master_edition,
-            //         mint: mint.publicKey,
-            //         tokenAccount: ata,
-            //         tokenMetadataProgram: TOKEN_METADATA_PROGRAM_ID,
-            //         tokenProgram: TOKEN_PROGRAM_ID,
-            //         systemProgram: anchor.web3.SystemProgram.programId,
-            //         rent: SYSVAR_RENT_PUBKEY,
-            //       }
-            //     }    
-            //   )
-            // )
+        const owner = provider.wallet.publicKey;
+        const mint = Keypair.generate();
+        let ata = await getAssociateTokenAddress(mint.publicKey, owner);
+        let metadata = (await PublicKey.findProgramAddress([Buffer.from('metadata'),TOKEN_METADATA_PROGRAM_ID.toBuffer(),mint.publicKey.toBuffer()],TOKEN_METADATA_PROGRAM_ID))[0];
+        let master_edition = (await PublicKey.findProgramAddress([Buffer.from('metadata'),TOKEN_METADATA_PROGRAM_ID.toBuffer(),mint.publicKey.toBuffer(),Buffer.from('edition')],TOKEN_METADATA_PROGRAM_ID))[0];
 
-            // const rand = Keypair.generate()
-            transaction.add(
-              // program.instruction.mintNFT(
-                data,
-                {
-                  accounts: {
-                    owner: owner,
-                    collection: this.NFTData.collection.shortUrl,
-                    mint: mint.publicKey,
-                    tokenAccount: ata,
-                    metadata: metadata,
-                    masterEdition: master_edition,
-                    tokenMetadataProgram: TOKEN_METADATA_PROGRAM_ID,
-                    tokenProgram: TOKEN_PROGRAM_ID,
-                    systemProgram: anchor.web3.SystemProgram.programId,
-                    rent: SYSVAR_RENT_PUBKEY
-                  }
-                }
-              // )
-            )
-
-            console.log("Final Step!!!!!!!!!!!!!!!!!!!!!")
-            await sendTransaction(transaction, [mint]).then(() => console.log("Mint Success!!!!!!!!"))
-            }
-          }
-        } else {
-          this.isLoading = false;
+  
+        let data = {
+          name: "Warrior",
+          symbol: "WR",
+          uri: "https://bafybeidw3bvtcvodlqv3vj4x75pm63ak5nly72rjf42bnidomjy64hkony.ipfs.nftstorage.link/9900.json",
+          sellerFeeBasisPoints: 350,
+          // description: this.NFTData.description,
+          creators: [
+            {address: walletPublicKey, verified: false, share: 100}
+          ],
+          isMutable: true,
         }
+        let resp = await connection.getProgramAccounts(
+          programId,
+          {
+            dataSlice: {length: 0, offset: 0},
+            filters: [
+              {
+                dataSize: GLOBAL_SIZE
+              }
+            ]
+          }
+        )
+        // let global = await program.value.account.global.fetch(resp[0].pubkey)
+        let global = await program.account.global.fetch(resp[0].pubkey)
+        let claimer = await connection.getProgramAccounts(
+          programId, {
+            dataSlice: {length: 0, offset: 0},
+            filters: [
+              {
+                dataSize: CLAIMER_SIZE,
+              },
+              {
+                memcmp: {
+                  offset: 8,
+                  bytes: walletPublicKey
+                }
+              }
+            ]
+          }
+        )
+        
+        console.log("Final Step000000000000000000000000000000")
+        const mintRent = await connection.getMinimumBalanceForRentExemption(MintLayout.span)
+        
+        // let transaction = new Transaction()
+        // transaction.add(
+        //   SystemProgram.createAccount({
+        //     fromPubkey: walletPublicKey,
+        //     newAccountPubkey: mint.publicKey,
+        //     lamports: mintRent,
+        //     space: MintLayout.span,
+        //     programId: TOKEN_PROGRAM_ID
+        //   })
+        // )
+    
+        // transaction.add(
+        //   Token.createInitMintInstruction(
+        //     TOKEN_PROGRAM_ID,
+        //     mint.publicKey,
+        //     0,
+        //     provider.wallet.publicKey,
+        //     provider.wallet.publicKey
+        //   )
+        // )
+
+        let transaction = new Transaction()
+        transaction.add(
+          SystemProgram.createAccount({
+            fromPubkey: owner,
+            newAccountPubkey: mint.publicKey,
+            lamports: mintRent,
+            space: MintLayout.span,
+            programId: TOKEN_PROGRAM_ID
+          })
+        )
+    
+        console.log("Final Step11111111111111111111111111", owner)
+        transaction.add(
+          Token.createInitMintInstruction(
+            TOKEN_PROGRAM_ID,
+            mint.publicKey,
+            0,
+            owner,
+            owner
+          )
+        )
+    
+        console.log("Final Step2222222222222222222222222222")
+        transaction.add(
+          Token.createAssociatedTokenAccountInstruction(
+            ASSOCIATED_TOKEN_PROGRAM_ID,
+            TOKEN_PROGRAM_ID,
+            mint.publicKey,
+            ata,
+            owner,
+            owner,
+          )
+        )
+        
+        console.log("Final Step3333333333333333333333333333")
+        transaction.add(
+          // program.instruction.claimWarrior(
+            program.instruction.battle(
+            data,
+            {
+              accounts: {
+                signer: owner,
+                global: resp[0].pubkey,
+                creator: resp[0].pubkey,
+                rand: global.rand,
+                claimer: claimer[0].pubkey,
+                metadata: metadata,
+                masterEdition: master_edition,
+                mint: mint.publicKey,
+                tokenAccount: ata,
+                tokenMetadataProgram: TOKEN_METADATA_PROGRAM_ID,
+                tokenProgram: TOKEN_PROGRAM_ID,
+                systemProgram: anchor.web3.SystemProgram.programId,
+                rent: SYSVAR_RENT_PUBKEY,
+              }
+            }    
+          )
+        )
+
+        // const rand = Keypair.generate()
+        // transaction.add(
+        //   // program.instruction.mintNFT(
+        //     data,
+        //     {
+        //       accounts: {
+        //         owner: wallet,
+        //         collection: this.NFTData.collection.shortUrl,
+        //         mint: mint.publicKey,
+        //         tokenAccount: ata,
+        //         metadata: metadata,
+        //         masterEdition: master_edition,
+        //         tokenMetadataProgram: TOKEN_METADATA_PROGRAM_ID,
+        //         tokenProgram: TOKEN_PROGRAM_ID,
+        //         systemProgram: anchor.web3.SystemProgram.programId,
+        //         rent: SYSVAR_RENT_PUBKEY
+        //       }
+        //     }
+        //   // )
+        // )
+        console.log("Final Step!!!!!!!!!!!!!!!!!!!!!")
+        await sendTransaction(transaction, [mint]).then(() => console.log("Mint Success!!!!!!!!"))
+      } else {
+        this.isLoading = false;
       }
     },
   },
