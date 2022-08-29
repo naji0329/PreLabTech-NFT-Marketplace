@@ -10,17 +10,19 @@ var path = require('path');
 
 const ipfsAPI = require('ipfs-api');
 const { listeners } = require('process');
-const ipfs = ipfsAPI('ipfs.infura.io', '5001', { protocol: 'https' });
+// const ipfs = ipfsAPI('ipfs.infura.io', '5001', { protocol: 'https' });
+const ipfs = ipfsAPI('ipfs.infura.io', '5001');
 
 // @route    POST api/collection/createCollection
 // @desc     Create Collection
 // @access   Public
 router.post('/createNFT', async (req, res) => {
-  console.log("/localhost: / nft / cret")
+
+  // const form = formidable({ multiples: true });
+  const form = new formidable.IncomingForm();
+
   try {
     // To Do
-    
-
     form.parse(req, async function (err, fields, files) {
       let _nft = new NFT({
         name: fields.name,
@@ -37,87 +39,98 @@ router.post('/createNFT', async (req, res) => {
         contract_address: fields.contract_address
       });
 
-      console.log("New-------------------------------", _nft)
-
       if (files.file) {
         const oldpath = files.file.filepath;
         const cTimestamp = Date.now();
         const fileName = cTimestamp + path.extname(files.file.originalFilename);
-        const newpath = './../frontend/public/files/nfts/file/' + fileName;
-        const readStream = fs.createReadStream(oldpath);
+        const newpath = path.resolve('./../frontend/public/files/nfts/file/' + fileName);
+        const readStream = fs.createReadStream(oldpath, { encoding: 'utf8', highWaterMark: 16 * 1024 });
         const writeStream = fs.createWriteStream(newpath);
-        readStream.pipe(writeStream);
-        readStream.on('end', function () {
+        readStream.pipe(writeStream)
+
+        readStream.on('end', () => {
+        // readStream.on('end', function () {
+          console.log("Read process 11111");
           fs.unlinkSync(oldpath);
+          console.log("Read process 22222", path.resolve(newpath));
 
           // Upload File to IPFS
-          let uploadFile = fs.readFileSync(
-            './../frontend/public/files/nfts/file/' + fileName
-          );
+          // let uploadFile = fs.readFileSync(newpath);
           // let tempBuffer = new Buffer(uploadFile);
-          // ipfs.files.add(tempBuffer, async function (err, file) {
-          //   if (err) {
-          //     console.log(err);
-          //   }
-
-          _nft.ipfs_path = file[0].hash;
-          _nft.file = fileName;
-
-          let metadata;
-          // Metadata Generate
-          if(_nft.chain == "ethereum") {
-            metadata = {
-              name: _nft.name,
-              description: _nft.description,
-              image: 'https://ipfs.io/ipfs/' + _nft.ipfs_path,
-              animation_url: '',
-              external_url: ''
-            };
-          } else {
-            metadata = {
-              name: _nft.name,
-              symbol: _nft.collection_symbol,
-              uri: 'https://ipfs.io/ipfs/' + _nft.ipfs_path,
-              sellerFeeBasisPoints: 350,
-              creators: [
-                {address: _nft.creater, verified: false, share: 100}
-              ],
-              isMutable: true,
+          let uploadFile = fs.readFileSync(path.resolve(newpath));
+          let tempBuffer = Buffer(uploadFile);
+          ipfs.files.add(tempBuffer, async (err, file) => {
+            if (err) {
+              console.log("------------------------------ ERROR -----------------------------")
+              console.log(err);
             }
-          }
-          console.log("Meta data", metadata);
-          const jsonString = JSON.stringify(metadata);
 
-          fs.writeFile(
-            `./../frontend/public/files/nfts/metadata/${cTimestamp}.json`,
-            jsonString,
-            async (err) => {
-              if (err) {
-                console.log('Error writing file', err);
-              } else {
-                // Upload Metadata to IPFS
-                // let uploadFile = fs.readFileSync(
-                //   `./../frontend/public/files/nfts/metadata/${cTimestamp}.json`
-                // );
-                // let tempMetadataBuffer = new Buffer(uploadFile);
-                // ipfs.files.add(
-                //   tempMetadataBuffer,
-                //   async function (err, file_metadata) {
-                //     if (err) {
-                //       console.log(err);
-                //     }
+            console.log(file);
+            console.log("error field passed")
 
-                // _nft.metadata_url = file_metadata[0].hash;
+            _nft.ipfs_path = file[0].hash;
+            // _nft.ipfs_path = file.hash;
+            _nft.file = fileName;
 
-                console.log('create new NFT', _nft);
-                const _newNFT = await _nft.save();
-                return res.status(200).json({ _newNFT });
-                // }
-                // );
+            let metadata;
+            // Metadata Generate
+            if(_nft.chain == "ethereum") {
+              metadata = {
+                name: _nft.name,
+                description: _nft.description,
+                image: 'https://ipfs.io/ipfs/' + _nft.ipfs_path,
+                animation_url: '',
+                external_url: ''
+              };
+            } else if(_nft.chain == "solana") {
+              metadata = {
+                name: _nft.name,
+                symbol: _nft.collection_symbol,
+                uri: 'https://ipfs.io/ipfs/' + _nft.ipfs_path,
+                sellerFeeBasisPoints: 350,
+                creators: [
+                  {address: _nft.creater, verified: false, share: 100}
+                ],
+                isMutable: true,
               }
+              console.log("Metadata URI --------------------------------", metadata.uri)
+            } else {
+              return console.log("Change your chain to ETH or SOL");
             }
-          );
-          // });
+            console.log("Meta data", _nft.chain, metadata);
+            const jsonString = JSON.stringify(metadata);
+
+            fs.writeFile(
+              path.resolve('./../frontend/public/files/nfts/metadata/' + cTimestamp + '.json'),
+              jsonString,
+              async (err) => {
+                if (err) {
+                  console.log('Error writing file', err);
+                } else {
+                  // Upload Metadata to IPFS
+                  let uploadFile = fs.readFileSync(
+                    path.resolve('./../frontend/public/files/nfts/metadata/' + cTimestamp + '.json'),
+                  );
+                  // let tempMetadataBuffer = new Buffer(uploadFile);
+                  let tempMetadataBuffer = Buffer(uploadFile);
+                  ipfs.files.add(
+                    tempMetadataBuffer,
+                    async function (err, file_metadata) {
+                      if (err) {
+                        console.log(err);
+                      }
+
+                  _nft.metadata_url = file_metadata[0].hash;
+
+                  console.log('create new NFT', _nft);
+                  const _newNFT = await _nft.save();
+                  return res.status(200).json({ _newNFT, metadata });
+                  }
+                  );
+                }
+              }
+            );
+          });
         });
       }
     });

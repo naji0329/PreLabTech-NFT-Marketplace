@@ -18,6 +18,6 @@ default = []
 [dependencies]
 anchor-lang = "0.25.0"
 spl-token = { version = "3.2.0", features = ["no-entrypoint"] }
-metaplex-token-metadata = { version = "0.0.1", features = ["no-entrypoint"] }
+mpl-token-metadata = { version = "1.2.7", features = ["no-entrypoint"] }
 anchor-spl = "0.25.0"
 borsh = "0.9"

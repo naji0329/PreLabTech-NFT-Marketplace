@@ -14,10 +14,10 @@ use {
         }      
     },
     spl_token::state,
-    metaplex_token_metadata::{
+    mpl_token_metadata::{
         instruction::{
-            create_metadata_accounts,
-            create_master_edition,
+            create_metadata_accounts_v2,
+            create_master_edition_v3,
             update_metadata_accounts,
         },
     }
@@ -78,15 +78,15 @@ pub mod solana_anchor {
             }
         )?;
 
-        let mut creators : Vec<metaplex_token_metadata::state::Creator> = 
-            vec![metaplex_token_metadata::state::Creator{
+        let mut creators : Vec<mpl_token_metadata::state::Creator> = 
+            vec![mpl_token_metadata::state::Creator{
                 address: collection.key(),
                 verified : true,
                 share : 0,
             }];
         for c in _data.creators {
 
-            creators.push(metaplex_token_metadata::state::Creator{
+            creators.push(mpl_token_metadata::state::Creator{
                 address : c.address,
                 verified : false,
                 share : c.share,
@@ -94,7 +94,7 @@ pub mod solana_anchor {
         }
 
         invoke_signed(
-            &create_metadata_accounts(
+            &create_metadata_accounts_v2(
                 *ctx.accounts.token_metadata_program.key,
                 *ctx.accounts.metadata.key,
                 *ctx.accounts.mint.key,
@@ -108,6 +108,8 @@ pub mod solana_anchor {
                 _data.seller_fee_basis_points,
                 true,
                 _data.is_mutable,
+                None,
+                None,
             ),
             &[
                 ctx.accounts.metadata.to_account_info().clone(),
@@ -124,7 +126,7 @@ pub mod solana_anchor {
         )?;
 
         invoke_signed(
-            &create_master_edition(
+            &&create_master_edition_v3(
                 *ctx.accounts.token_metadata_program.key,
                 *ctx.accounts.master_edition.key,
                 *ctx.accounts.mint.key,
@@ -194,7 +196,7 @@ pub struct MintNft<'info> {
     master_edition : UncheckedAccount<'info>,
 
     /// CHECK: account constraints checked in account trait
-    #[account(address=metaplex_token_metadata::id())]
+    #[account(address=mpl_token_metadata::id())]
     token_metadata_program : UncheckedAccount<'info>,
 
     token_program : Program<'info, Token>,
