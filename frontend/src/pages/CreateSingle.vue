@@ -184,21 +184,110 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from "vuex";
+
+import { mapState, mapGetters, mapActions } from "vuex";
 import Web3 from "web3";
 // Import component data. You can change the data in the store to reflect in all component
 import SectionData from "@/store/store.js";
 import NFTService from "@/services/nft.service.js";
 import CollectionService from "@/services/collection.service.js";
 
-import { ERC721NFT_json } from "@/constants/constant.js";
+import { 
+  ERC721NFT_json,
+  SolanaNFT_json,
+  programId,
+  TOKEN_METADATA_PROGRAM_ID
+} from "@/constants/constant.js";
+
+
+import * as anchor from "@project-serum/anchor";
+
+import { 
+  MintLayout, Token, 
+  TOKEN_PROGRAM_ID, ASSOCIATED_TOKEN_PROGRAM_ID 
+} from "@solana/spl-token";
+
+import {
+  Keypair,
+  PublicKey,
+  Transaction,
+  Connection,
+  clusterApiUrl,
+  SystemProgram,
+  SYSVAR_RENT_PUBKEY,
+} from "@solana/web3.js";
+
+export async function getAssociateTokenAddress(mint, owner) {
+  let [address] = await PublicKey.findProgramAddress(
+    [owner.toBuffer(), TOKEN_PROGRAM_ID.toBuffer(), mint.toBuffer()],
+    ASSOCIATED_TOKEN_PROGRAM_ID,
+  );
+  return address;
+}
+
+
+async function sendTransaction(transaction, signers) {
+  // const wallet = useWallet();
+  // const connection = useConnection().connection
+  // const wallet = window.solana;
+  // const connection = window.solana.connect();
+  const wallet = window.solana;
+  const preflightCommitment = '"finalized"'
+  const commitment = '"finalized"'
+  const connection = new Connection(clusterApiUrl('devnet'))
+  const provider = new anchor.Provider(connection, wallet, { preflightCommitment, commitment })
+  const owner = provider.wallet;
+  
+  // const connection = useConnection().connection
+  try{
+    transaction.feePayer = owner.publicKey
+    transaction.recentBlockhash = (await connection.getRecentBlockhash('max')).blockhash;
+    transaction.setSigners(owner.publicKey,...signers.map(s => s.publicKey));
+    if(signers.length !== 0)
+      await transaction.partialSign(...signers)
+    const signedTransaction = await owner.signTransaction(transaction);
+    let hash = await connection.sendRawTransaction(await signedTransaction.serialize());
+    await connection.confirmTransaction(hash);
+    // Store.addNotification({
+    console.log({
+      title: "Success",
+      message: "Success",
+      type: "success",
+      insert: "top",
+      container: "top-right",
+      animationIn: ["animate__animated", "animate__fadeIn"],
+      animationOut: ["animate__animated", "animate__fadeOut"],
+      dismiss: {
+        duration: 1000,
+        onScreen: true
+      }
+    });
+  } catch(err) {
+    console.log(err)
+    // Store.addNotification({
+    console.log({
+      title: "ERROR",
+      message: "Error",
+      type: "warning",
+      insert: "top",
+      container: "top-right",
+      animationIn: ["animate__animated", "animate__fadeIn"],
+      animationOut: ["animate__animated", "animate__fadeOut"],
+      dismiss: {
+        duration: 1000,
+        onScreen: true
+      }
+    });
+  }
+}
+
 
 export default {
   name: "CreateSingle",
   data() {
     return {
       SectionData,
-      collections: [],
+      collections: ["Custom", "Second"],
       NFTData: {
         name: null,
         description: null,
@@ -270,8 +359,13 @@ export default {
       this.auth.user.chain
     );
     this.collections = _colletions;
+    this.collections = ["Select"];
   },
   methods: {
+    ...mapActions({
+      loginWithPhantom: "auth/loginWithPhantom",
+      getCollections: "collection/getCollections",
+    }),
     uploadFile() {
       this.NFTData.file = this.$refs.file.files[0];
     },
@@ -297,34 +391,47 @@ export default {
       this.isLoading = true;
 
       const formData = new FormData();
-      formData.append("file", this.NFTData.file);
-      formData.append("name", this.NFTData.name);
-      formData.append("description", this.NFTData.description);
-      formData.append("collection_id", this.NFTData.collection._id);
-      formData.append("collection_name", this.NFTData.collection.name);
-      formData.append("collection_symbol", this.NFTData.collection.symbol);
-      formData.append(
-        "contract_address",
-        this.NFTData.collection.contract_address
-      );
+      console.log("========================================================");
+      // console.log("File : ", this.NFTData.file);
+      // console.log("Name : ", this.NFTData.name);
+      // console.log("description : ", this.NFTData.description);
+      // console.log("ID : ", this.NFTData.collection._id);
+      // console.log("Collection : ", this.NFTData.collection.name);
+      // console.log("symbol : ", this.collection.symbol);
 
       if ((await this.currentChain()) == "ethereum") {
         // Create web3.
+        console.log("Create an NFT on ETH chain")
+
         let web3 = new Web3(window.ethereum);
         let contract = new web3.eth.Contract(
           ERC721NFT_json.abi,
           this.NFTData.collection.contract_address
         );
+        console.log("ETH Step 1")
 
         const supply = await contract.methods.supply().call();
 
+        formData.append("file", this.NFTData.file);
+        formData.append("name", this.NFTData.name);
+        formData.append("description", this.NFTData.description);
+        formData.append("collection_id", this.NFTData.collection._id);
+        // formData.append("collection_id", "10");
+        formData.append("collection_name", this.NFTData.collection.name);
+        formData.append("collection_symbol", this.NFTData.collection.symbol);
+        formData.append("collection_name", "AlphaWOlf");
+        formData.append("collection_symbol", "WOLF");
+        
         formData.append("creater", this.auth.user.address);
         formData.append("chain", this.auth.user.chain);
+        formData.append("tokenId", 10);
         formData.append("tokenId", supply);
 
+        console.log("before create")
         const response = await NFTService.createNFT(formData);
+        console.log("after create")
 
-        if (response.errors) {
+        if (!response.errors) {
           console.log(response.errors);
           this.errors = response.errors;
           this.isLoading = false;
@@ -335,6 +442,7 @@ export default {
             .mint(
               this.auth.user.address,
               supply,
+              10,
               "" + response._newNFT.metadata_url
             )
             .send({ from: this.auth.user.address })
@@ -355,12 +463,261 @@ export default {
               this.$router.push(
                 "/collection/" + this.NFTData.collection.shortUrl
               );
+            })
+            .catch(err => {
+              console.log(err);
+              this.isLoading = false;
             });
         }
-      } else {
-        this.isLoading = false;
+      } else if ((await this.currentChain()) == "solana") {
+        const { solana } = window;
+        const solanaRes = await solana.connect();
+        this.phantomWallet = solanaRes.publicKey.toString();
+        const wallet = window.solana;
+        // const loginRes = await this.loginWithPhantom(this.phantomWallet);
+        console.log(this.phantomWallet)
+        console.log("Solana Start")
+        
+        const GLOBAL_SIZE = 89
+        // const CLAIMER_SIZE = 72
+        
+        const preflightCommitment = '"finalized"'
+        const commitment = '"finalized"'
+        
+        const connection = new Connection(clusterApiUrl('devnet'))
+        
+        const provider = new anchor.Provider(connection, wallet, { preflightCommitment, commitment })
+        const program = new anchor.Program(SolanaNFT_json, programId, provider)
+        const owner = provider.wallet.publicKey;
+          this.phantomWallet = owner;
+
+          console.log("Procesds 1111111111")
+
+          
+          formData.append("file", this.NFTData.file);
+          formData.append("name", this.NFTData.name);
+          formData.append("description", this.NFTData.description);
+          formData.append("collection_id", this.NFTData.collection._id);
+          // formData.append("collection_id", "10");
+          formData.append("collection_name", this.NFTData.collection.name);
+          formData.append("collection_symbol", this.NFTData.collection.symbol);
+          formData.append("collection_name", "AlphaWOlf");
+          formData.append("collection_symbol", "WOLF");
+          
+          formData.append("creater", this.auth.user.address);
+          formData.append("chain", this.auth.user.chain);
+          
+          console.log("Procesds 22222222222222")
+
+          let resp = await connection.getProgramAccounts(
+            programId,
+            {
+              dataSlice: {length: 0, offset: 0},
+              filters: [
+                {
+                  dataSize: GLOBAL_SIZE
+                }
+              ]
+            }
+          )
+
+
+          // Initialize Collection
+
+          // if(resp.length == 0) {
+          //   // let collectionPair = Keypair.generate();
+          //   let randPair = Keypair.generate();
+          //   let initTransaction = new Transaction();
+          //   // let [ bump ] = PublicKey.findProgramAddress([randomPubkey.toBuffer(), owner.toBuffer()], programId)
+          //   let [ collection, bump ] = await PublicKey.findProgramAddress([randPair.publicKey.toBuffer()], programId)
+          //   console.log(collection.toBase58(), bump);
+          //   console.log("Procesds 333333333333333333")
+          //   const maxsupply = new anchor.BN(10000);
+          //   const _bump = new anchor.BN(bump);
+
+          //   initTransaction.add(
+          //     program.instruction.initCollection(
+          //       maxsupply,
+          //       _bump,
+          //       {
+          //         accounts: {
+          //           collection: collection,
+          //           owner: owner,
+          //           rand: randPair.publicKey,
+          //           systemProgram: anchor.web3.SystemProgram.programId
+          //         }
+          //       }
+          //     )
+          //   );
+
+          //   const initMint = Keypair.generate();
+          //   let signerss = []
+          //   signerss.push(initMint)
+
+          //   await sendTransaction(initTransaction, [])
+          //     .then(async () => {
+          //       console.log;
+          //       let collectionPubkey = await connection.getProgramAccounts(
+          //         programId,
+          //         {
+          //           dataSlice: {length: 0, offset: 0},
+          //           filters: [
+          //             {
+          //               dataSize: GLOBAL_SIZE
+          //             }
+          //           ]
+          //         }
+          //       )
+          //       console.log("Collection Address :::::::", collectionPubkey[0].pubkey.toBase58(), collectionPubkey[0].pubkey);
+          //     })
+          //     .catch(err => console.log(err, "EEEEERRRRRRRRRROOOOOORRRRRR"))
+          // }
+
+
+          console.log("Procesds 666666666666")
+
+          // let initTransaction = new Transaction()
+          // const initMint = Keypair.generate();
+          // const collection = await program.account.collection.fetch[resp[2].pubkey];
+          // const supply = collection;
+          const supply = (await program.account.collection.fetch(new PublicKey("4aDV62Jv3z2tD2BBL7wP15nU6YMyJgzDNgYMVtT33Huu"))).currentSupply.toNumber();
+          const mintRent = await connection.getMinimumBalanceForRentExemption(MintLayout.span)
+
+          console.log("Procesds 77777777777777777")
+          // initTransaction.add(
+          //   SystemProgram.createAccount({
+          //     newAccountPubkey: collection.publicKey,
+          //     owner: owner,
+          //     rand: resp[0].pubkey,
+          //     lamports: mintRent,
+          //     programId: TOKEN_PROGRAM_ID
+          //   })
+          // )
+          // sendTransaction(initTransaction, [initMint])
+          formData.append("tokenId", supply);
+          // formData.append("tokenId", 10);
+            
+          formData.append("contract_address", programId);
+          formData.append("creater", resp[0].pubkey);
+          formData.append("chain", this.auth.user.chain);
+          formData.append("owner", owner);
+
+
+          console.log("Before Create NFT");
+
+          await NFTService.createNFT(formData).then(async (res) => {
+          console.log(res);
+
+          console.log("Right after Create NFT");
+
+          // if (!response) {
+          //   console.log(response.errors);
+          //   this.errors = response.errors;
+          //   this.isLoading = false;
+          //   return;
+          // } else {
+              // const res = await window.solana.connect();
+              console.log("Phantom wallet --------------------------", owner)
+
+              const mint = Keypair.generate();
+              let ata = await getAssociateTokenAddress(mint.publicKey, owner);
+              // let metadata = (await PublicKey.findProgramAddress([Buffer.from('metadata'),TOKEN_METADATA_PROGRAM_ID.toBuffer(),mint.publicKey.toBuffer()],TOKEN_METADATA_PROGRAM_ID))[0]
+              // let master_edition = (await PublicKey.findProgramAddress([Buffer.from('metadata'),TOKEN_METADATA_PROGRAM_ID.toBuffer(),mint.publicKey.toBuffer(),Buffer.from('edition')],TOKEN_METADATA_PROGRAM_ID))[0]
+              let metadata = (await PublicKey.findProgramAddress([Buffer.from('metadata'),TOKEN_METADATA_PROGRAM_ID.toBuffer(),mint.publicKey.toBuffer()],TOKEN_METADATA_PROGRAM_ID))[0]
+              let master_edition = (await PublicKey.findProgramAddress([Buffer.from('metadata'),TOKEN_METADATA_PROGRAM_ID.toBuffer(),mint.publicKey.toBuffer(),Buffer.from('edition')],TOKEN_METADATA_PROGRAM_ID))[0]
+
+              let data = res.metadata;
+              data.creators[0].address = owner
+              let transaction = new Transaction()
+              transaction.add(
+                SystemProgram.createAccount({
+                  fromPubkey: owner,
+                  newAccountPubkey: mint.publicKey,
+                  lamports: mintRent,
+                  space: MintLayout.span,
+                  programId: TOKEN_PROGRAM_ID
+                })
+              )
+          
+              transaction.add(
+                Token.createInitMintInstruction(
+                  TOKEN_PROGRAM_ID,
+                  mint.publicKey,
+                  0,
+                  owner,
+                  owner
+                )
+              )
+          
+              transaction.add(
+                Token.createAssociatedTokenAccountInstruction(
+                  ASSOCIATED_TOKEN_PROGRAM_ID,
+                  TOKEN_PROGRAM_ID,
+                  mint.publicKey,
+                  ata,
+                  owner,
+                  owner,
+                )
+              )
+              console.log(data);
+              // data.creators[0].address = new PublicKey(data.creators[0].address);
+              console.log(data);
+              
+              transaction.add(
+                program.instruction.mintNft(
+                  data,
+                  {
+                    accounts: {
+                      owner: owner,
+                      collection: new PublicKey("4aDV62Jv3z2tD2BBL7wP15nU6YMyJgzDNgYMVtT33Huu"),
+                      mint: mint.publicKey,
+                      tokenAccount: ata,
+                      metadata: metadata,
+                      masterEdition: master_edition,
+                      tokenMetadataProgram: TOKEN_METADATA_PROGRAM_ID,
+                      tokenProgram: TOKEN_PROGRAM_ID,
+                      systemProgram: anchor.web3.SystemProgram.programId,
+                      rent: SYSVAR_RENT_PUBKEY
+                    }
+                  }
+                )
+              )
+
+              await sendTransaction(transaction, [mint]).then(() => 
+                {
+                  console.log("Mint Success!!!!!!!!")
+                  this.isLoading = false;
+                  alert("NFT created successfully!");
+                  this.$router.push(
+                    "/collection/" + this.NFTData.collection.shortUrl
+                  );
+                }
+              ).catch(err => {
+                console.log(err)
+                console.log("Mint Failed!!!!!!!!")
+                this.isLoading = false;
+                alert("NFT not created!");
+              });
+          })
+         
       }
     },
   },
 };
 </script>
+
+<!-- Collection address -->
+<!-- 4aDV62Jv3z2tD2BBL7wP15nU6YMyJgzDNgYMVtT33Huu   -->
+<!-- [
+    16786097,
+    18937603,
+    5476022,
+    20609362,
+    66491832,
+    58705621,
+    13923449,
+    4905543,
+    62887997,
+    3461694,
+    0
+] -->
