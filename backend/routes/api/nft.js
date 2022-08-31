@@ -50,9 +50,8 @@ router.post('/createNFT', async (req, res) => {
 
         readStream.on('end', () => {
         // readStream.on('end', function () {
-          console.log("Read process 11111");
           fs.unlinkSync(oldpath);
-          console.log("Read process 22222", path.resolve(newpath));
+          console.log("Read process ", path.resolve(newpath));
 
           // Upload File to IPFS
           // let uploadFile = fs.readFileSync(newpath);

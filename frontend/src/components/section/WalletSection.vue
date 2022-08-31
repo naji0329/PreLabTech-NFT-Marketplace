@@ -136,7 +136,7 @@ export default {
     },
     connectPhantomWallet: async function () {
       const { solana } = window;
-      if (solana) {
+      if (window.solana) {
         try {
           const response = await solana.connect();
           this.phantomWallet = response.publicKey.toString();
