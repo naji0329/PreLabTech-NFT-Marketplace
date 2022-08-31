@@ -419,8 +419,8 @@ export default {
         // formData.append("collection_id", "10");
         formData.append("collection_name", this.NFTData.collection.name);
         formData.append("collection_symbol", this.NFTData.collection.symbol);
-        formData.append("collection_name", "AlphaWOlf");
-        formData.append("collection_symbol", "WOLF");
+        // formData.append("collection_name", "AlphaWOlf");
+        // formData.append("collection_symbol", "WOLF");
         
         formData.append("creater", this.auth.user.address);
         formData.append("chain", this.auth.user.chain);
@@ -497,14 +497,12 @@ export default {
           // formData.append("collection_id", "10");
           formData.append("collection_name", this.NFTData.collection.name);
           formData.append("collection_symbol", this.NFTData.collection.symbol);
-          formData.append("collection_name", "AlphaWOlf");
-          formData.append("collection_symbol", "WOLF");
+          // formData.append("collection_name", "AlphaWOlf");
+          // formData.append("collection_symbol", "WOLF");
           
           formData.append("creater", this.auth.user.address);
           formData.append("chain", this.auth.user.chain);
           
-          console.log("Procesds 22222222222222")
-
           let resp = await connection.getProgramAccounts(
             programId,
             {
@@ -629,7 +627,6 @@ export default {
               )
               console.log(data);
               // data.creators[0].address = new PublicKey(data.creators[0].address);
-              console.log(data);
               
               transaction.add(
                 program.instruction.mintNft(
