@@ -359,7 +359,7 @@ export default {
       this.auth.user.chain
     );
     this.collections = _colletions;
-    this.collections = ["Select"];
+    // this.collections = ["Select"];
   },
   methods: {
     ...mapActions({
@@ -474,7 +474,6 @@ export default {
         const solanaRes = await solana.connect();
         this.phantomWallet = solanaRes.publicKey.toString();
         const wallet = window.solana;
-        // const loginRes = await this.loginWithPhantom(this.phantomWallet);
         console.log(this.phantomWallet)
         console.log("Solana Start")
         
@@ -491,9 +490,6 @@ export default {
         const owner = provider.wallet.publicKey;
           this.phantomWallet = owner;
 
-          console.log("Procesds 1111111111")
-
-          
           formData.append("file", this.NFTData.file);
           formData.append("name", this.NFTData.name);
           formData.append("description", this.NFTData.description);
@@ -573,29 +569,10 @@ export default {
           //     .catch(err => console.log(err, "EEEEERRRRRRRRRROOOOOORRRRRR"))
           // }
 
-
-          console.log("Procesds 666666666666")
-
-          // let initTransaction = new Transaction()
-          // const initMint = Keypair.generate();
-          // const collection = await program.account.collection.fetch[resp[2].pubkey];
-          // const supply = collection;
           const supply = (await program.account.collection.fetch(new PublicKey("4aDV62Jv3z2tD2BBL7wP15nU6YMyJgzDNgYMVtT33Huu"))).currentSupply.toNumber();
           const mintRent = await connection.getMinimumBalanceForRentExemption(MintLayout.span)
 
-          console.log("Procesds 77777777777777777")
-          // initTransaction.add(
-          //   SystemProgram.createAccount({
-          //     newAccountPubkey: collection.publicKey,
-          //     owner: owner,
-          //     rand: resp[0].pubkey,
-          //     lamports: mintRent,
-          //     programId: TOKEN_PROGRAM_ID
-          //   })
-          // )
-          // sendTransaction(initTransaction, [initMint])
           formData.append("tokenId", supply);
-          // formData.append("tokenId", 10);
             
           formData.append("contract_address", programId);
           formData.append("creater", resp[0].pubkey);
@@ -610,19 +587,10 @@ export default {
 
           console.log("Right after Create NFT");
 
-          // if (!response) {
-          //   console.log(response.errors);
-          //   this.errors = response.errors;
-          //   this.isLoading = false;
-          //   return;
-          // } else {
-              // const res = await window.solana.connect();
               console.log("Phantom wallet --------------------------", owner)
 
               const mint = Keypair.generate();
               let ata = await getAssociateTokenAddress(mint.publicKey, owner);
-              // let metadata = (await PublicKey.findProgramAddress([Buffer.from('metadata'),TOKEN_METADATA_PROGRAM_ID.toBuffer(),mint.publicKey.toBuffer()],TOKEN_METADATA_PROGRAM_ID))[0]
-              // let master_edition = (await PublicKey.findProgramAddress([Buffer.from('metadata'),TOKEN_METADATA_PROGRAM_ID.toBuffer(),mint.publicKey.toBuffer(),Buffer.from('edition')],TOKEN_METADATA_PROGRAM_ID))[0]
               let metadata = (await PublicKey.findProgramAddress([Buffer.from('metadata'),TOKEN_METADATA_PROGRAM_ID.toBuffer(),mint.publicKey.toBuffer()],TOKEN_METADATA_PROGRAM_ID))[0]
               let master_edition = (await PublicKey.findProgramAddress([Buffer.from('metadata'),TOKEN_METADATA_PROGRAM_ID.toBuffer(),mint.publicKey.toBuffer(),Buffer.from('edition')],TOKEN_METADATA_PROGRAM_ID))[0]
 

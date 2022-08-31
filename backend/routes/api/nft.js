@@ -63,8 +63,8 @@ router.post('/createNFT', async (req, res) => {
             console.log(file);
             console.log("error field passed")
 
-            // _nft.ipfs_path = file[0].hash;
-            _nft.ipfs_path = "ipfs_file_path";
+            _nft.ipfs_path = file[0].hash;
+            // _nft.ipfs_path = "ipfs_file_path";
             _nft.file = fileName;
 
             let metadata;
@@ -115,8 +115,8 @@ router.post('/createNFT', async (req, res) => {
                         console.log(err);
                       }
 
-                  // _nft.metadata_url = file_metadata[0].hash;
-                  _nft.metadata_url = "file_metadata[0].hash";
+                  _nft.metadata_url = file_metadata[0].hash;
+                  // _nft.metadata_url = "file_metadata[0].hash";
 
                   console.log('create new NFT', _nft);
                   const _newNFT = await _nft.save();
