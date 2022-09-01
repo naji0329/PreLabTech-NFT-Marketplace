@@ -511,7 +511,7 @@ export default {
             }
           )
 
-
+          console.log(resp)
 
           // Initialize Collection
 
