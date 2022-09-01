@@ -359,6 +359,7 @@ export default {
       this.auth.user.chain
     );
     this.collections = _colletions;
+    this.collections = ["Select"];
   },
   methods: {
     ...mapActions({
@@ -407,7 +408,6 @@ export default {
           ERC721NFT_json.abi,
           this.NFTData.collection.contract_address
         );
-        console.log("ETH Step 1")
 
         const supply = await contract.methods.supply().call();
 
@@ -418,13 +418,17 @@ export default {
         // formData.append("collection_id", "10");
         formData.append("collection_name", this.NFTData.collection.name);
         formData.append("collection_symbol", this.NFTData.collection.symbol);
+        formData.append("collection_name", "AlphaWOlf");
+        formData.append("collection_symbol", "WOLF");
         
         formData.append("creater", this.auth.user.address);
         formData.append("chain", this.auth.user.chain);
         formData.append("tokenId", 10);
         formData.append("tokenId", supply);
 
+        console.log("before create")
         const response = await NFTService.createNFT(formData);
+        console.log("after create")
 
         if (!response.errors) {
           console.log(response.errors);
@@ -484,7 +488,6 @@ export default {
         const program = new anchor.Program(SolanaNFT_json, programId, provider)
         const owner = provider.wallet.publicKey;
           this.phantomWallet = owner;
-
           
           formData.append("file", this.NFTData.file);
           formData.append("name", this.NFTData.name);
@@ -493,6 +496,8 @@ export default {
           // formData.append("collection_id", "10");
           formData.append("collection_name", this.NFTData.collection.name);
           formData.append("collection_symbol", this.NFTData.collection.symbol);
+          formData.append("collection_name", "AlphaWOlf");
+          formData.append("collection_symbol", "WOLF");
           
           formData.append("creater", this.auth.user.address);
           formData.append("chain", this.auth.user.chain);
@@ -508,7 +513,8 @@ export default {
               ]
             }
           )
-console.log(resp)
+          console.log(resp)
+
 
           // Initialize Collection
 
@@ -557,7 +563,6 @@ console.log(resp)
             //   .catch(err => console.log(err, "EEEEERRRRRRRRRROOOOOORRRRRR"))
           // }
 
-
           const supply = (await program.account.collection.fetch(new PublicKey("CyUYpd9FniZEE4hPqVq81zf6w3tSySARAjVcfQGGnYvP"))).currentSupply.toNumber();
           const mintRent = await connection.getMinimumBalanceForRentExemption(MintLayout.span)
 
@@ -565,6 +570,7 @@ console.log(resp)
           // formData.append("tokenId", 10);
             
           formData.append("contract_address", programId);
+          // formData.append("creater", owner);
           formData.append("chain", this.auth.user.chain);
           formData.append("owner", owner);
           formData.append("collection_id", new PublicKey("CyUYpd9FniZEE4hPqVq81zf6w3tSySARAjVcfQGGnYvP"));
@@ -573,10 +579,9 @@ console.log(resp)
           console.log("Before Create NFT");
 
           await NFTService.createNFT(formData).then(async (res) => {
-          console.log(res);
+              console.log(res);
 
-          console.log("Right after Create NFT");
-
+              console.log("Right after Create NFT");
               console.log("Phantom wallet --------------------------", owner)
 
               const mint = Keypair.generate();
@@ -639,14 +644,15 @@ console.log(resp)
                 )
               )
 
-              await sendTransaction(transaction, [mint]).then(() => 
+              await sendTransaction(transaction, [mint]).then((res) => 
                 {
-                  console.log("Mint Success!!!!!!!!")
-                  this.isLoading = false;
-                  alert("NFT created successfully!");
-                  this.$router.push(
-                    "/collection/" + this.NFTData.collection.shortUrl
-                  );
+                  if(res)
+                  {
+                    console.log("Mint Success!!!!!!!!")
+                    this.isLoading = false;
+                    alert("NFT created successfully!");
+                    this.$router.push("/collection/" + this.NFTData.collection.shortUrl);
+                  }
                 }
               ).catch(err => {
                 console.log(err)
