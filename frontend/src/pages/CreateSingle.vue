@@ -359,7 +359,6 @@ export default {
       this.auth.user.chain
     );
     this.collections = _colletions;
-    // this.collections = ["Select"];
   },
   methods: {
     ...mapActions({
@@ -419,8 +418,7 @@ export default {
         // formData.append("collection_id", "10");
         formData.append("collection_name", this.NFTData.collection.name);
         formData.append("collection_symbol", this.NFTData.collection.symbol);
-        // formData.append("collection_name", "AlphaWOlf");
-        // formData.append("collection_symbol", "WOLF");
+
         
         formData.append("creater", this.auth.user.address);
         formData.append("chain", this.auth.user.chain);
@@ -497,9 +495,7 @@ export default {
           // formData.append("collection_id", "10");
           formData.append("collection_name", this.NFTData.collection.name);
           formData.append("collection_symbol", this.NFTData.collection.symbol);
-          // formData.append("collection_name", "AlphaWOlf");
-          // formData.append("collection_symbol", "WOLF");
-          
+
           formData.append("creater", this.auth.user.address);
           formData.append("chain", this.auth.user.chain);
           
@@ -516,74 +512,76 @@ export default {
           )
 
 
+
           // Initialize Collection
 
           // if(resp.length == 0) {
-          //   // let collectionPair = Keypair.generate();
-          //   let randPair = Keypair.generate();
-          //   let initTransaction = new Transaction();
-          //   // let [ bump ] = PublicKey.findProgramAddress([randomPubkey.toBuffer(), owner.toBuffer()], programId)
-          //   let [ collection, bump ] = await PublicKey.findProgramAddress([randPair.publicKey.toBuffer()], programId)
-          //   console.log(collection.toBase58(), bump);
-          //   console.log("Procesds 333333333333333333")
-          //   const maxsupply = new anchor.BN(10000);
-          //   const _bump = new anchor.BN(bump);
 
-          //   initTransaction.add(
-          //     program.instruction.initCollection(
-          //       maxsupply,
-          //       _bump,
-          //       {
-          //         accounts: {
-          //           collection: collection,
-          //           owner: owner,
-          //           rand: randPair.publicKey,
-          //           systemProgram: anchor.web3.SystemProgram.programId
-          //         }
-          //       }
-          //     )
-          //   );
+            // let collectionPair = Keypair.generate();
+            // let randPair = Keypair.generate();
+            // let initTransaction = new Transaction();
+            // // let [ bump ] = PublicKey.findProgramAddress([randomPubkey.toBuffer(), owner.toBuffer()], programId) 
+            // let [ collection, bump ] = await PublicKey.findProgramAddress([randPair.publicKey.toBuffer()], programId)
+            // console.log(collection.toBase58(), bump);
+            // console.log("Procesds 333333333333333333")
+            // const maxsupply = new anchor.BN(10000);
+            // const _bump = new anchor.BN(bump);
 
-          //   const initMint = Keypair.generate();
-          //   let signerss = []
-          //   signerss.push(initMint)
+            // initTransaction.add(
+            //   program.instruction.initCollection(
+            //     maxsupply,
+            //     _bump,
+            //     {
+            //       accounts: {
+            //         collection: collection,
+            //         owner: owner,
+            //         rand: randPair.publicKey,
+            //         systemProgram: anchor.web3.SystemProgram.programId
+            //       }
+            //     }
+            //   )
+            // );
 
-          //   await sendTransaction(initTransaction, [])
-          //     .then(async () => {
-          //       console.log;
-          //       let collectionPubkey = await connection.getProgramAccounts(
-          //         programId,
-          //         {
-          //           dataSlice: {length: 0, offset: 0},
-          //           filters: [
-          //             {
-          //               dataSize: GLOBAL_SIZE
-          //             }
-          //           ]
-          //         }
-          //       )
-          //       console.log("Collection Address :::::::", collectionPubkey[0].pubkey.toBase58(), collectionPubkey[0].pubkey);
-          //     })
-          //     .catch(err => console.log(err, "EEEEERRRRRRRRRROOOOOORRRRRR"))
+            // await sendTransaction(initTransaction, [])
+            //   .then(async () => {
+            //     console.log;
+            //     let collectionPubkey = await connection.getProgramAccounts(
+            //       programId,
+            //       {
+            //         dataSlice: {length: 0, offset: 0},
+            //         filters: [
+            //           {
+            //             dataSize: GLOBAL_SIZE
+            //           }
+            //         ]
+            //       }
+            //     )
+            //     console.log("Collection Address :::::::", collectionPubkey[0].pubkey.toBase58(), collectionPubkey[0].pubkey);
+            //   })
+            //   .catch(err => console.log(err, "EEEEERRRRRRRRRROOOOOORRRRRR"))
           // }
 
-          const supply = (await program.account.collection.fetch(new PublicKey("4aDV62Jv3z2tD2BBL7wP15nU6YMyJgzDNgYMVtT33Huu"))).currentSupply.toNumber();
+          const supply = (await program.account.collection.fetch(new PublicKey("CyUYpd9FniZEE4hPqVq81zf6w3tSySARAjVcfQGGnYvP"))).currentSupply.toNumber();
           const mintRent = await connection.getMinimumBalanceForRentExemption(MintLayout.span)
 
           formData.append("tokenId", supply);
+          // formData.append("tokenId", 10);
             
           formData.append("contract_address", programId);
-          formData.append("creater", resp[0].pubkey);
+          // formData.append("creater", owner);
           formData.append("chain", this.auth.user.chain);
           formData.append("owner", owner);
+          formData.append("collection_id", new PublicKey("CyUYpd9FniZEE4hPqVq81zf6w3tSySARAjVcfQGGnYvP"));
+
 
 
           console.log("Before Create NFT");
 
           await NFTService.createNFT(formData).then(async (res) => {
-          console.log(res);
 
-          console.log("Right after Create NFT");
+              console.log(res);
+
+              console.log("Right after Create NFT");
 
               console.log("Phantom wallet --------------------------", owner)
 
@@ -626,7 +624,6 @@ export default {
                 )
               )
               console.log(data);
-              // data.creators[0].address = new PublicKey(data.creators[0].address);
               
               transaction.add(
                 program.instruction.mintNft(
@@ -634,7 +631,8 @@ export default {
                   {
                     accounts: {
                       owner: owner,
-                      collection: new PublicKey("4aDV62Jv3z2tD2BBL7wP15nU6YMyJgzDNgYMVtT33Huu"),
+                      collection: new PublicKey("CyUYpd9FniZEE4hPqVq81zf6w3tSySARAjVcfQGGnYvP"),
+
                       mint: mint.publicKey,
                       tokenAccount: ata,
                       metadata: metadata,
@@ -648,14 +646,16 @@ export default {
                 )
               )
 
-              await sendTransaction(transaction, [mint]).then(() => 
+              await sendTransaction(transaction, [mint]).then((res) => 
                 {
-                  console.log("Mint Success!!!!!!!!")
-                  this.isLoading = false;
-                  alert("NFT created successfully!");
-                  this.$router.push(
-                    "/collection/" + this.NFTData.collection.shortUrl
-                  );
+                  if(res)
+                  {
+                    console.log("Mint Success!!!!!!!!")
+                    this.isLoading = false;
+                    alert("NFT created successfully!");
+                    this.$router.push("/collection/" + this.NFTData.collection.shortUrl);
+                  }
+
                 }
               ).catch(err => {
                 console.log(err)
@@ -672,7 +672,11 @@ export default {
 </script>
 
 <!-- Collection address -->
-<!-- 4aDV62Jv3z2tD2BBL7wP15nU6YMyJgzDNgYMVtT33Huu   -->
+
+<!-- 4aDV62Jv3z2tD2BBL7wP15nU6YMyJgzDNgYMVtT33Huu -->
+<!-- CyUYpd9FniZEE4hPqVq81zf6w3tSySARAjVcfQGGnYvP -->
+<!-- HcVgv7LhuEQ6DcFMFFxyi5wMuWucrxr27pZZmuycmUGC -->
+
 <!-- [
     16786097,
     18937603,

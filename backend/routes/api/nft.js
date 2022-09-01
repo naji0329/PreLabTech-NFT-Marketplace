@@ -10,7 +10,8 @@ const path = require('path');
 
 const ipfsAPI = require('ipfs-api');
 const { listeners } = require('process');
-const ipfs = ipfsAPI('ipfs.infura.io', '5001', { protocol: 'https' });
+// const ipfs = ipfsAPI('ipfs.infura.io', '5001', { protocol: 'https' });
+const ipfs = ipfsAPI('ipfs.infura.io', '5001');
 
 // @route    POST api/collection/createCollection
 // @desc     Create Collection
@@ -48,10 +49,15 @@ router.post('/createNFT', async (req, res) => {
         readStream.pipe(writeStream)
 
         readStream.on('end', () => {
+
+        // readStream.on('end', function () {
           fs.unlinkSync(oldpath);
-          console.log("File pasted to", path.resolve(newpath));
+          console.log("Read process ", path.resolve(newpath));
 
           // Upload File to IPFS
+          // let uploadFile = fs.readFileSync(newpath);
+          // let tempBuffer = new Buffer(uploadFile);
+
           let uploadFile = fs.readFileSync(path.resolve(newpath));
           let tempBuffer = Buffer(uploadFile);
           ipfs.files.add(tempBuffer, async (err, file) => {
@@ -64,7 +70,9 @@ router.post('/createNFT', async (req, res) => {
             console.log("error field passed")
 
             _nft.ipfs_path = file[0].hash;
-            // _nft.ipfs_path = "ipfs_file_path";
+
+            // _nft.ipfs_path = file.hash;
+
             _nft.file = fileName;
 
             let metadata;
@@ -92,7 +100,9 @@ router.post('/createNFT', async (req, res) => {
             } else {
               return console.log("Change your chain to ETH or SOL");
             }
-            console.log(_nft.chain, "Meta data", metadata);
+
+            console.log("Meta data", _nft.chain, metadata);
+
             const jsonString = JSON.stringify(metadata);
 
             fs.writeFile(
@@ -116,7 +126,6 @@ router.post('/createNFT', async (req, res) => {
                       }
 
                   _nft.metadata_url = file_metadata[0].hash;
-                  // _nft.metadata_url = "file_metadata[0].hash";
 
                   console.log('create new NFT', _nft);
                   const _newNFT = await _nft.save();
