@@ -16,7 +16,7 @@
                 class="btn-link fw-semibold"
                 ><em class="ni ni-arrow-left"></em>
                 {{ SectionData.createSingleData.btnText }}</router-link
-              >
+              >  
               <h1 class="mt-2">{{ SectionData.createSingleData.title }}</h1>
             </div>
           </div>
