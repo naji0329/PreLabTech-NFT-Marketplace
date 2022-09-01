@@ -4,9 +4,9 @@ const router = express.Router();
 const Collection = require('../../models/Collection');
 const NFT = require('../../models/Nft');
 
-var formidable = require('formidable');
-var fs = require('fs');
-var path = require('path');
+const formidable = require('formidable');
+const fs = require('fs');
+const path = require('path');
 
 const ipfsAPI = require('ipfs-api');
 const { listeners } = require('process');
@@ -31,7 +31,7 @@ router.post('/createNFT', async (req, res) => {
         ipfs_path: '',
         chain: fields.chain,
         creater: fields.creater,
-        owner: fields.creater,
+        owner: fields.owner,
         tokenId: fields.tokenId,
         collection_id: fields.collection_id,
         collection_name: fields.collection_name,
@@ -49,6 +49,7 @@ router.post('/createNFT', async (req, res) => {
         readStream.pipe(writeStream)
 
         readStream.on('end', () => {
+
         // readStream.on('end', function () {
           fs.unlinkSync(oldpath);
           console.log("Read process ", path.resolve(newpath));
@@ -56,6 +57,7 @@ router.post('/createNFT', async (req, res) => {
           // Upload File to IPFS
           // let uploadFile = fs.readFileSync(newpath);
           // let tempBuffer = new Buffer(uploadFile);
+
           let uploadFile = fs.readFileSync(path.resolve(newpath));
           let tempBuffer = Buffer(uploadFile);
           ipfs.files.add(tempBuffer, async (err, file) => {
@@ -68,7 +70,9 @@ router.post('/createNFT', async (req, res) => {
             console.log("error field passed")
 
             _nft.ipfs_path = file[0].hash;
+
             // _nft.ipfs_path = file.hash;
+
             _nft.file = fileName;
 
             let metadata;
@@ -96,7 +100,9 @@ router.post('/createNFT', async (req, res) => {
             } else {
               return console.log("Change your chain to ETH or SOL");
             }
+
             console.log("Meta data", _nft.chain, metadata);
+
             const jsonString = JSON.stringify(metadata);
 
             fs.writeFile(

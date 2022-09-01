@@ -359,7 +359,6 @@ export default {
       this.auth.user.chain
     );
     this.collections = _colletions;
-    this.collections = ["Select"];
   },
   methods: {
     ...mapActions({
@@ -408,6 +407,7 @@ export default {
           ERC721NFT_json.abi,
           this.NFTData.collection.contract_address
         );
+        console.log("ETH Step 1")
 
         const supply = await contract.methods.supply().call();
 
@@ -418,8 +418,7 @@ export default {
         // formData.append("collection_id", "10");
         formData.append("collection_name", this.NFTData.collection.name);
         formData.append("collection_symbol", this.NFTData.collection.symbol);
-        formData.append("collection_name", "AlphaWOlf");
-        formData.append("collection_symbol", "WOLF");
+
         
         formData.append("creater", this.auth.user.address);
         formData.append("chain", this.auth.user.chain);
@@ -488,7 +487,7 @@ export default {
         const program = new anchor.Program(SolanaNFT_json, programId, provider)
         const owner = provider.wallet.publicKey;
           this.phantomWallet = owner;
-          
+
           formData.append("file", this.NFTData.file);
           formData.append("name", this.NFTData.name);
           formData.append("description", this.NFTData.description);
@@ -496,9 +495,7 @@ export default {
           // formData.append("collection_id", "10");
           formData.append("collection_name", this.NFTData.collection.name);
           formData.append("collection_symbol", this.NFTData.collection.symbol);
-          formData.append("collection_name", "AlphaWOlf");
-          formData.append("collection_symbol", "WOLF");
-          
+
           formData.append("creater", this.auth.user.address);
           formData.append("chain", this.auth.user.chain);
           
@@ -513,12 +510,13 @@ export default {
               ]
             }
           )
-          console.log(resp)
+
 
 
           // Initialize Collection
 
           // if(resp.length == 0) {
+
             // let collectionPair = Keypair.generate();
             // let randPair = Keypair.generate();
             // let initTransaction = new Transaction();
@@ -576,12 +574,15 @@ export default {
           formData.append("collection_id", new PublicKey("CyUYpd9FniZEE4hPqVq81zf6w3tSySARAjVcfQGGnYvP"));
 
 
+
           console.log("Before Create NFT");
 
           await NFTService.createNFT(formData).then(async (res) => {
+
               console.log(res);
 
               console.log("Right after Create NFT");
+
               console.log("Phantom wallet --------------------------", owner)
 
               const mint = Keypair.generate();
@@ -631,6 +632,7 @@ export default {
                     accounts: {
                       owner: owner,
                       collection: new PublicKey("CyUYpd9FniZEE4hPqVq81zf6w3tSySARAjVcfQGGnYvP"),
+
                       mint: mint.publicKey,
                       tokenAccount: ata,
                       metadata: metadata,
@@ -653,6 +655,7 @@ export default {
                     alert("NFT created successfully!");
                     this.$router.push("/collection/" + this.NFTData.collection.shortUrl);
                   }
+
                 }
               ).catch(err => {
                 console.log(err)
@@ -669,9 +672,11 @@ export default {
 </script>
 
 <!-- Collection address -->
+
 <!-- 4aDV62Jv3z2tD2BBL7wP15nU6YMyJgzDNgYMVtT33Huu -->
 <!-- CyUYpd9FniZEE4hPqVq81zf6w3tSySARAjVcfQGGnYvP -->
 <!-- HcVgv7LhuEQ6DcFMFFxyi5wMuWucrxr27pZZmuycmUGC -->
+
 <!-- [
     16786097,
     18937603,
