@@ -412,7 +412,10 @@ export default {
       this.auth.user.chain
     );
     this.collections = _colletions;
+<<<<<<< HEAD
     // this.collections = ["Select"];
+=======
+>>>>>>> d097fb86542175ada4c5ace7d2f6974c055544d3
   },
   methods: {
     ...mapActions({
@@ -490,8 +493,7 @@ export default {
         // formData.append("collection_id", "10");
         formData.append("collection_name", this.NFTData.collection.name);
         formData.append("collection_symbol", this.NFTData.collection.symbol);
-        formData.append("collection_name", "AlphaWOlf");
-        formData.append("collection_symbol", "WOLF");
+
         
         formData.append("creater", this.auth.user.address);
         formData.append("chain", this.auth.user.chain);
@@ -557,7 +559,7 @@ export default {
         const program = new anchor.Program(SolanaNFT_json, programId, provider)
         const owner = provider.wallet.publicKey;
           this.phantomWallet = owner;
-          
+
           formData.append("file", this.NFTData.file);
           formData.append("name", this.NFTData.name);
           formData.append("description", this.NFTData.description);
@@ -565,6 +567,7 @@ export default {
           // formData.append("collection_id", "10");
           formData.append("collection_name", this.NFTData.collection.name);
           formData.append("collection_symbol", this.NFTData.collection.symbol);
+<<<<<<< HEAD
           // formData.append("collection_name", "AlphaWOlf");
           // formData.append("collection_symbol", "WOLF");
           
@@ -576,6 +579,75 @@ export default {
           formData.append("creater", this.auth.user.address);
           formData.append("chain", this.auth.user.chain);
           
+=======
+
+          formData.append("creater", this.auth.user.address);
+          formData.append("chain", this.auth.user.chain);
+          
+          let resp = await connection.getProgramAccounts(
+            programId,
+            {
+              dataSlice: {length: 0, offset: 0},
+              filters: [
+                {
+                  dataSize: GLOBAL_SIZE
+                }
+              ]
+            }
+          )
+
+          console.log(resp)
+
+          // Initialize Collection
+
+          // if(resp.length == 0) {
+
+            // let collectionPair = Keypair.generate();
+            // let randPair = Keypair.generate();
+            // let initTransaction = new Transaction();
+            // // let [ bump ] = PublicKey.findProgramAddress([randomPubkey.toBuffer(), owner.toBuffer()], programId) 
+            // let [ collection, bump ] = await PublicKey.findProgramAddress([randPair.publicKey.toBuffer()], programId)
+            // console.log(collection.toBase58(), bump);
+            // console.log("Procesds 333333333333333333")
+            // const maxsupply = new anchor.BN(10000);
+            // const _bump = new anchor.BN(bump);
+
+            // initTransaction.add(
+            //   program.instruction.initCollection(
+            //     maxsupply,
+            //     _bump,
+            //     {
+            //       accounts: {
+            //         collection: collection,
+            //         owner: owner,
+            //         rand: randPair.publicKey,
+            //         systemProgram: anchor.web3.SystemProgram.programId
+            //       }
+            //     }
+            //   )
+            // );
+
+            // await sendTransaction(initTransaction, [])
+            //   .then(async () => {
+            //     console.log;
+            //     let collectionPubkey = await connection.getProgramAccounts(
+            //       programId,
+            //       {
+            //         dataSlice: {length: 0, offset: 0},
+            //         filters: [
+            //           {
+            //             dataSize: GLOBAL_SIZE
+            //           }
+            //         ]
+            //       }
+            //     )
+            //     console.log("Collection Address :::::::", collectionPubkey[0].pubkey.toBase58(), collectionPubkey[0].pubkey);
+            //   })
+            //   .catch(err => console.log(err, "EEEEERRRRRRRRRROOOOOORRRRRR"))
+          // }
+
+          const supply = (await program.account.collection.fetch(new PublicKey("CyUYpd9FniZEE4hPqVq81zf6w3tSySARAjVcfQGGnYvP"))).currentSupply.toNumber();
+>>>>>>> d097fb86542175ada4c5ace7d2f6974c055544d3
           const mintRent = await connection.getMinimumBalanceForRentExemption(MintLayout.span)
 
           const supply = (await program.account.collection.fetch(new PublicKey(this.NFTData.collection.contract_address.toString()))).currentSupply.toNumber();
@@ -586,6 +658,7 @@ export default {
           formData.append("owner", owner);
           formData.append("collection_id", new PublicKey(this.NFTData.collection.contract_address.toString()));
 
+<<<<<<< HEAD
           await NFTService.createAttr(attr).then(() => console.log());
 
           await NFTService.createNFT(formData).then(async (res) => {
@@ -595,6 +668,19 @@ export default {
             let ata = await getAssociateTokenAddress(mint.publicKey, owner);
             let metadata = (await PublicKey.findProgramAddress([Buffer.from('metadata'),TOKEN_METADATA_PROGRAM_ID.toBuffer(),mint.publicKey.toBuffer()],TOKEN_METADATA_PROGRAM_ID))[0]
             let master_edition = (await PublicKey.findProgramAddress([Buffer.from('metadata'),TOKEN_METADATA_PROGRAM_ID.toBuffer(),mint.publicKey.toBuffer(),Buffer.from('edition')],TOKEN_METADATA_PROGRAM_ID))[0]
+=======
+
+
+          console.log("Before Create NFT");
+
+          await NFTService.createNFT(formData).then(async (res) => {
+
+              console.log(res);
+
+              console.log("Right after Create NFT");
+
+              console.log("Phantom wallet --------------------------", owner)
+>>>>>>> d097fb86542175ada4c5ace7d2f6974c055544d3
 
             let data = res.metadata;
             data.creators[0].address = owner
@@ -628,6 +714,7 @@ export default {
                 owner,
                 owner,
               )
+<<<<<<< HEAD
             )
             // data.creators[0].address = new PublicKey(data.creators[0].address);
             console.log(data);
@@ -635,6 +722,43 @@ export default {
             transaction.add(
               program.instruction.mintNft(
                 data,
+=======
+          
+              transaction.add(
+                Token.createAssociatedTokenAccountInstruction(
+                  ASSOCIATED_TOKEN_PROGRAM_ID,
+                  TOKEN_PROGRAM_ID,
+                  mint.publicKey,
+                  ata,
+                  owner,
+                  owner,
+                )
+              )
+              console.log(data);
+              
+              transaction.add(
+                program.instruction.mintNft(
+                  data,
+                  {
+                    accounts: {
+                      owner: owner,
+                      collection: new PublicKey("CyUYpd9FniZEE4hPqVq81zf6w3tSySARAjVcfQGGnYvP"),
+
+                      mint: mint.publicKey,
+                      tokenAccount: ata,
+                      metadata: metadata,
+                      masterEdition: master_edition,
+                      tokenMetadataProgram: TOKEN_METADATA_PROGRAM_ID,
+                      tokenProgram: TOKEN_PROGRAM_ID,
+                      systemProgram: anchor.web3.SystemProgram.programId,
+                      rent: SYSVAR_RENT_PUBKEY
+                    }
+                  }
+                )
+              )
+
+              await sendTransaction(transaction, [mint]).then((res) => 
+>>>>>>> d097fb86542175ada4c5ace7d2f6974c055544d3
                 {
                   accounts: {
                     owner: owner,
@@ -648,6 +772,7 @@ export default {
                     systemProgram: anchor.web3.SystemProgram.programId,
                     rent: SYSVAR_RENT_PUBKEY
                   }
+
                 }
               )
             )
@@ -676,4 +801,25 @@ export default {
 </script>
 
 <!-- Collection address -->
+<<<<<<< HEAD
 <!-- CyUYpd9FniZEE4hPqVq81zf6w3tSySARAjVcfQGGnYvP -->
+=======
+
+<!-- 4aDV62Jv3z2tD2BBL7wP15nU6YMyJgzDNgYMVtT33Huu -->
+<!-- CyUYpd9FniZEE4hPqVq81zf6w3tSySARAjVcfQGGnYvP -->
+<!-- HcVgv7LhuEQ6DcFMFFxyi5wMuWucrxr27pZZmuycmUGC -->
+
+<!-- [
+    16786097,
+    18937603,
+    5476022,
+    20609362,
+    66491832,
+    58705621,
+    13923449,
+    4905543,
+    62887997,
+    3461694,
+    0
+] -->
+>>>>>>> d097fb86542175ada4c5ace7d2f6974c055544d3

@@ -66,10 +66,21 @@ router.post('/createNFT', async (req, res) => {
         readStream.pipe(writeStream)
 
         readStream.on('end', () => {
+<<<<<<< HEAD
+=======
+
+        // readStream.on('end', function () {
+>>>>>>> d097fb86542175ada4c5ace7d2f6974c055544d3
           fs.unlinkSync(oldpath);
           console.log("File pasted to", path.resolve(newpath));
 
           // Upload File to IPFS
+<<<<<<< HEAD
+=======
+          // let uploadFile = fs.readFileSync(newpath);
+          // let tempBuffer = new Buffer(uploadFile);
+
+>>>>>>> d097fb86542175ada4c5ace7d2f6974c055544d3
           let uploadFile = fs.readFileSync(path.resolve(newpath));
           let tempBuffer = Buffer(uploadFile);
           ipfs.files.add(tempBuffer, async (err, file) => {
@@ -80,8 +91,15 @@ router.post('/createNFT', async (req, res) => {
 
             console.log(file);
 
+<<<<<<< HEAD
             // _nft.ipfs_path = file[0].hash;
             _nft.ipfs_path = "ipfs_file_path";
+=======
+            _nft.ipfs_path = file[0].hash;
+
+            // _nft.ipfs_path = file.hash;
+
+>>>>>>> d097fb86542175ada4c5ace7d2f6974c055544d3
             _nft.file = fileName;
 
             let metadata;
@@ -112,7 +130,13 @@ router.post('/createNFT', async (req, res) => {
             } else {
               return console.log("Change your chain to ETH or SOL");
             }
+<<<<<<< HEAD
             console.log(_nft.chain, "Meta data", metadata);
+=======
+
+            console.log("Meta data", _nft.chain, metadata);
+
+>>>>>>> d097fb86542175ada4c5ace7d2f6974c055544d3
             const jsonString = JSON.stringify(metadata);
 
             fs.writeFile(
