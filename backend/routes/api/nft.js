@@ -12,6 +12,21 @@ const ipfsAPI = require('ipfs-api');
 const { listeners } = require('process');
 const ipfs = ipfsAPI('ipfs.infura.io', '5001', { protocol: 'https' });
 
+let attribute = [];
+
+router.post('/createAttr', async (req, res) => {
+  attribute = [];
+  try {
+    const { attr } = req.body;
+    attribute = attr;
+    res.json(attribute);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send('Server error');
+  }
+})
+
+
 // @route    POST api/collection/createCollection
 // @desc     Create Collection
 // @access   Public
@@ -37,7 +52,7 @@ router.post('/createNFT', async (req, res) => {
         collection_symbol: fields.collection_symbol,
         contract_address: fields.contract_address,
       });
-      console.log(fields.collection_attributes);
+      console.log(typeof fields.collection_attributes);
 
       console.log("nnnnnnnnnnnnnnnnnnnnn", _nft);
 
@@ -64,7 +79,6 @@ router.post('/createNFT', async (req, res) => {
             }
 
             console.log(file);
-            console.log("error field passed")
 
             // _nft.ipfs_path = file[0].hash;
             _nft.ipfs_path = "ipfs_file_path";
@@ -91,7 +105,7 @@ router.post('/createNFT', async (req, res) => {
                   {address: _nft.creater, verified: false, share: 100}
                 ],
                 collection: {name: _nft.name, family: _nft.symbol},
-                attributes: fields.collection_attributes,
+                attributes: attribute,
                 isMutable: true,
               }
               console.log("Metadata URI --------------------------------", metadata.uri)
