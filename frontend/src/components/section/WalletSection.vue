@@ -114,7 +114,8 @@ export default {
       loginWithPhantom: "auth/loginWithPhantom",
     }),
     connectMetamaskWallet: async function () {
-      if (window.ethereum) {
+      const { ethereum } = window;
+      if (ethereum) {
         const [userAddress] = await window.ethereum.enable();
         this.metamaskWallet = userAddress;
 
@@ -136,7 +137,7 @@ export default {
     },
     connectPhantomWallet: async function () {
       const { solana } = window;
-      if (window.solana) {
+      if (solana) {
         try {
           const response = await solana.connect();
           this.phantomWallet = response.publicKey.toString();

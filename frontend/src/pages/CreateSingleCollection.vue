@@ -180,7 +180,72 @@ import CollectionService from "@/services/collection.service.js";
 import {
   ERC721Factory_address,
   ERC721Factory_json,
+  SolanaNFT_json,
+  programId,
+  // TOKEN_METADATA_PROGRAM_ID
 } from "@/constants/constant.js";
+
+import {
+  Keypair,
+  PublicKey,
+  Transaction,
+  Connection,
+  clusterApiUrl,
+  // SystemProgram,
+  // SYSVAR_RENT_PUBKEY,
+} from "@solana/web3.js";
+
+import * as anchor from "@project-serum/anchor";
+
+async function sendTransaction(transaction, signers) {
+  const wallet = window.solana;
+  const preflightCommitment = '"finalized"'
+  const commitment = '"finalized"'
+  const connection = new Connection(clusterApiUrl('devnet'))
+  const provider = new anchor.Provider(connection, wallet, { preflightCommitment, commitment })
+  const owner = provider.wallet;
+  
+  try{
+    transaction.feePayer = owner.publicKey
+    transaction.recentBlockhash = (await connection.getRecentBlockhash('max')).blockhash;
+    transaction.setSigners(owner.publicKey,...signers.map(s => s.publicKey));
+    if(signers.length !== 0)
+      await transaction.partialSign(...signers)
+    const signedTransaction = await owner.signTransaction(transaction);
+    let hash = await connection.sendRawTransaction(await signedTransaction.serialize());
+    await connection.confirmTransaction(hash);
+    // Store.addNotification({
+    console.log({
+      title: "Success",
+      message: "Success",
+      type: "success",
+      insert: "top",
+      container: "top-right",
+      animationIn: ["animate__animated", "animate__fadeIn"],
+      animationOut: ["animate__animated", "animate__fadeOut"],
+      dismiss: {
+        duration: 1000,
+        onScreen: true
+      }
+    });
+  } catch(err) {
+    console.log(err)
+    // Store.addNotification({
+    console.log({
+      title: "ERROR",
+      message: "Error",
+      type: "warning",
+      insert: "top",
+      container: "top-right",
+      animationIn: ["animate__animated", "animate__fadeIn"],
+      animationOut: ["animate__animated", "animate__fadeOut"],
+      dismiss: {
+        duration: 1000,
+        onScreen: true
+      }
+    });
+  }
+}
 
 export default {
   name: "CreateSingleCollection",
@@ -335,8 +400,66 @@ export default {
               this.$router.push({ name: "my-collections" });
             });
         }
+      } else if ((await this.currentChain()) == "solana") {
+        formData.append("owner", this.auth.user.address);
+        formData.append("chain", this.auth.user.chain);
+        formData.append("type", "single");
+
+        const { solana } = window;
+        const solanaRes = await solana.connect();
+        this.phantomWallet = solanaRes.publicKey.toString();
+        const wallet = window.solana;
+        console.log(this.phantomWallet)
+        console.log("Solana Start")
+                
+        const preflightCommitment = '"finalized"'
+        const commitment = '"finalized"'
+        
+        const connection = new Connection(clusterApiUrl('devnet'))
+        
+        const provider = new anchor.Provider(connection, wallet, { preflightCommitment, commitment })
+        const program = new anchor.Program(SolanaNFT_json, programId, provider)
+        const owner = provider.wallet.publicKey;
+        this.phantomWallet = owner;
+
+        let randPair = Keypair.generate();
+        let initTransaction = new Transaction();
+        let [ collection, bump ] = await PublicKey.findProgramAddress([randPair.publicKey.toBuffer()], programId)
+        console.log(collection.toBase58(), bump);
+        const maxsupply = new anchor.BN(10000);
+        const _bump = new anchor.BN(bump);
+
+        initTransaction.add(
+          program.instruction.initCollection(
+            maxsupply,
+            _bump,
+            {
+              accounts: {
+                collection: collection,
+                owner: owner,
+                rand: randPair.publicKey,
+                systemProgram: anchor.web3.SystemProgram.programId
+              }
+            }
+          )
+        );
+
+        await sendTransaction(initTransaction, [])
+        .then( async () => {
+          console.log;
+          // console.log(":::::::", collectionPubkey[0].pubkey.toBase58(), collectionPubkey[0].pubkey);
+          formData.append("collection_address", collection.toBase58());
+          console.log(collection.toBase58())
+
+          const response = await CollectionService.createCollection(formData);
+          console.log(response);
+          this.Loading = false;
+          this.$router.push("/my-collections");
+        }).catch(err => console.log(err, "ERRRORRRR"));
+        this.Loading = true;
+        return false;
       } else {
-        this.isLoading = false;
+        alert("connect your wallet")
       }
     },
   },

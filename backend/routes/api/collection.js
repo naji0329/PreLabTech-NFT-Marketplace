@@ -63,6 +63,7 @@ router.post('/createCollection', async (req, res) => {
       }
 
       const collection = new Collection({
+        status: 1,
         name: fields.name,
         symbol: fields.symbol,
         description: fields.description,
@@ -70,6 +71,7 @@ router.post('/createCollection', async (req, res) => {
         owner: fields.owner,
         chain: fields.chain,
         type: fields.type,
+        contract_address: fields.collection_address,
         logoImage: logoImageName,
         coverImage: coverImageName
       });
