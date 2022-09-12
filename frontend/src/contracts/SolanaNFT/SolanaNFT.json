@@ -8,7 +8,7 @@
         {
           "name": "collection",
           "isMut": true,
-          "isSigner": true
+          "isSigner": false
         },
         {
           "name": "owner",

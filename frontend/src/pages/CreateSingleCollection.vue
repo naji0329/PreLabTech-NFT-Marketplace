@@ -246,6 +246,7 @@ async function sendTransaction(transaction, signers) {
     });
   }
 }
+
 export default {
   name: "CreateSingleCollection",
   data() {
@@ -402,7 +403,7 @@ export default {
       } else if ((await this.currentChain()) == "solana") {
         formData.append("owner", this.auth.user.address);
         formData.append("chain", this.auth.user.chain);
-        formData.append("type", "NFT");
+        formData.append("type", "single");
 
         const { solana } = window;
         const solanaRes = await solana.connect();
