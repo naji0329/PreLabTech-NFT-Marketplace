@@ -114,8 +114,6 @@ export default {
       loginWithPhantom: "auth/loginWithPhantom",
     }),
     connectMetamaskWallet: async function () {
-      const { ethereum } = window;
-      if (ethereum) {
         const [userAddress] = await window.ethereum.enable();
         this.metamaskWallet = userAddress;
 
@@ -130,8 +128,7 @@ export default {
             this.msg = error.response.data.msg;
             alert(this.msg);
           }
-        }
-      } else {
+        } else {
         window.open("https://metamask.io/download/");
       }
     },
