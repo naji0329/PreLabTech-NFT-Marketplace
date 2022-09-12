@@ -57,7 +57,7 @@ router.post('/createNFT', async (req, res) => {
           //     console.log(err);
           //   }
 
-          // _nft.ipfs_path = file[0].hash;
+          _nft.ipfs_path = file[0].hash;
           _nft.file = fileName;
 
           // Metadata Generate
