@@ -133,22 +133,20 @@ export default {
       }
     },
     connectPhantomWallet: async function () {
-      const { solana } = window;
-      if (solana) {
+      if (window.solana) {
         try {
+	  const solana = window.solana;
           const response = await solana.connect();
           this.phantomWallet = response.publicKey.toString();
 
-          try {
-            await this.loginWithPhantom(this.phantomWallet);
-            if (this.auth.status.loggedIn) {
-              this.$router.push({ name: "profile" });
-            }
-          } catch (error) {
-            this.msg = error.response.data.msg;
-            alert(this.msg);
+          await this.loginWithPhantom(this.phantomWallet);
+          if (this.auth.status.loggedIn) {
+            this.$router.push({ name: "profile" });
           }
+
         } catch (err) {
+            this.msg = err.response.data.msg;
+            alert(this.msg);
           // { code: 4001, message: 'User rejected the request.' }
         }
       } else {
