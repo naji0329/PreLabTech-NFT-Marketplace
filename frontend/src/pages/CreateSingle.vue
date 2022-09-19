@@ -411,7 +411,7 @@ export default {
       this.auth.user.address,
       this.auth.user.chain
     );
-    // this.collections = _colletions;
+    this.collections = _colletions;
     this.collections = _colletions.filter(item => item.type == "single");
     // this.collections = ["Select"];
   },
@@ -480,7 +480,6 @@ export default {
           ERC721NFT_json.abi,
           this.NFTData.collection.contract_address
         );
-        console.log("ETH Step 1")
 
         const supply = await contract.methods.supply().call();
 
@@ -488,20 +487,14 @@ export default {
         formData.append("name", this.NFTData.name);
         formData.append("description", this.NFTData.description);
         formData.append("collection_id", this.NFTData.collection._id);
-        // formData.append("collection_id", "10");
         formData.append("collection_name", this.NFTData.collection.name);
         formData.append("collection_symbol", this.NFTData.collection.symbol);
-        formData.append("collection_name", "AlphaWOlf");
-        formData.append("collection_symbol", "WOLF");
         
         formData.append("creater", this.auth.user.address);
         formData.append("chain", this.auth.user.chain);
-        formData.append("tokenId", 10);
         formData.append("tokenId", supply);
 
-        console.log("before create")
         const response = await NFTService.createNFT(formData);
-        console.log("after create")
 
         if (!response.errors) {
           console.log(response.errors);
@@ -541,37 +534,35 @@ export default {
               this.isLoading = false;
             });
         }
-      } else if ((await this.currentChain()) == "solana" && this.auth.user.address.length != 0) {
-        console.log(this.NFTData.collection.contract_address);
-        const { solana } = window;
-        const solanaRes = await solana.connect();
-        this.phantomWallet = solanaRes.publicKey.toString();
-        const wallet = window.solana;
-        console.log("Wallet Address: ", this.phantomWallet)
+        } else if ((await this.currentChain()) == "solana") {
+          if(this.auth.user.address.length != 0)
+          {
+          console.log(this.NFTData.collection.contract_address);
+          const { solana } = window;
+          const solanaRes = await solana.connect();
+          this.phantomWallet = solanaRes.publicKey.toString();
+          const wallet = window.solana;
+          console.log("Wallet Address: ", this.phantomWallet)
 
-        const preflightCommitment = '"finalized"'
-        const commitment = '"finalized"'
-        
-        const connection = new Connection(clusterApiUrl('devnet'))
-        
-        const provider = new anchor.Provider(connection, wallet, { preflightCommitment, commitment })
-        const program = new anchor.Program(SolanaNFT_json, programId, provider)
-        const owner = provider.wallet.publicKey;
+          const preflightCommitment = "finalized"
+          const commitment = "finalized"
+          
+          const connection = new Connection(clusterApiUrl('devnet'))
+          
+          const provider = new anchor.Provider(connection, wallet, { preflightCommitment, commitment })
+          const program = new anchor.Program(SolanaNFT_json, programId, provider)
+          const owner = provider.wallet.publicKey;
           this.phantomWallet = owner;
           
           formData.append("file", this.NFTData.file);
           formData.append("name", this.NFTData.name);
           formData.append("description", this.NFTData.description);
           formData.append("collection_id", this.NFTData.collection._id);
-          // formData.append("collection_id", "10");
           formData.append("collection_name", this.NFTData.collection.name);
           formData.append("collection_symbol", this.NFTData.collection.symbol);
-          // formData.append("collection_name", "AlphaWOlf");
-          // formData.append("collection_symbol", "WOLF");
           
           let attr = [];
           this.NFTData.attributes.map(item => attr.push([{"trait_type": item[0]},{"value": item[1]}]));
-          this.NFTData.attributes = attr;
           formData.append("collection_attributes", attr)
           
           formData.append("creater", this.auth.user.address);
@@ -669,7 +660,12 @@ export default {
               alert("NFT not created!");
             });
           })
-         
+          
+        }
+      } else {
+        alert("Connect your wallet!");
+        this.isLoading = false;
+        return 0;
       }
     },
   },
