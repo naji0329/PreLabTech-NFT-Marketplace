@@ -78,76 +78,81 @@ router.post('/createNFT', async (req, res) => {
             if (err) {
               console.log("------------------------------ ERROR -----------------------------")
               console.log(err);
+              return false;
             }
 
-            console.log(file);
+            if(typeof file != "undefined") {
+              console.log(file);
 
-            _nft.ipfs_path = file[0].hash;
-            // _nft.ipfs_path = "ipfs_file_path";
-            _nft.file = fileName;
+              _nft.ipfs_path = file[0].hash;
+              // _nft.ipfs_path = "ipfs_file_path";
+              _nft.file = fileName;
 
-            let metadata;
-            // Metadata Generate
-            if(_nft.chain == "ethereum") {
-              metadata = {
-                name: _nft.name,
-                description: _nft.description,
-                image: 'https://ipfs.io/ipfs/' + _nft.ipfs_path,
-                animation_url: '',
-                external_url: ''
-              };
-            } else if(_nft.chain == "solana") {
-              metadata = {
-                name: _nft.name,
-                symbol: _nft.collection_symbol,
-                description: _nft.description,
-                uri: 'https://ipfs.io/ipfs/' + _nft.ipfs_path,
-                sellerFeeBasisPoints: 350,
-                creators: [
-                  {address: _nft.creater, verified: false, share: 100}
-                ],
-                collection: {name: _nft.name, family: _nft.symbol},
-                attributes: attribute,
-                isMutable: true,
-              }
-              console.log("Metadata URI --------------------------------", metadata.uri)
-            } else {
-              return console.log("Change your chain to ETH or SOL");
-            }
-            console.log(_nft.chain, "Meta data", metadata);
-            const jsonString = JSON.stringify(metadata);
-
-            fs.writeFile(
-              path.resolve('./../frontend/public/files/nfts/metadata/' + cTimestamp + '.json'),
-              jsonString,
-              async (err) => {
-                if (err) {
-                  console.log('Error writing file', err);
-                } else {
-                  // Upload Metadata to IPFS
-                  let uploadJSON = fs.readFileSync(
-                    path.resolve('./../frontend/public/files/nfts/metadata/' + cTimestamp + '.json'),
-                  );
-                  // let tempMetadataBuffer = new Buffer(uploadJSON);
-                  let tempMetadataBuffer = new Buffer.from(uploadJSON);
-                  ipfs.files.add(
-                    tempMetadataBuffer,
-                    async function (err, file_metadata) {
-                      if (err) {
-                        console.log(err);
-                      }
-
-                  _nft.metadata_url = file_metadata[0].hash;
-                  // _nft.metadata_url = "file_metadata[0].hash";
-
-                  console.log('create new NFT', _nft);
-                  const _newNFT = await _nft.save();
-                  return res.status(200).json({ _newNFT, metadata });
-                  }
-                  );
+              let metadata;
+              // Metadata Generate
+              if(_nft.chain == "ethereum") {
+                metadata = {
+                  name: _nft.name,
+                  description: _nft.description,
+                  image: 'https://ipfs.io/ipfs/' + _nft.ipfs_path,
+                  animation_url: '',
+                  external_url: ''
+                };
+              } else if(_nft.chain == "solana") {
+                metadata = {
+                  name: _nft.name,
+                  symbol: _nft.collection_symbol,
+                  description: _nft.description,
+                  uri: 'https://ipfs.io/ipfs/' + _nft.ipfs_path,
+                  sellerFeeBasisPoints: 350,
+                  creators: [
+                    {address: _nft.creater, verified: false, share: 100}
+                  ],
+                  collection: {name: _nft.name, family: _nft.symbol},
+                  attributes: attribute,
+                  isMutable: true,
                 }
+                console.log("Metadata URI --------------------------------", metadata.uri)
+              } else {
+                return console.log("Change your chain to ETH or SOL");
               }
-            );
+              console.log(_nft.chain, "Meta data", metadata);
+              const jsonString = JSON.stringify(metadata);
+
+              fs.writeFile(
+                path.resolve('./../frontend/public/files/nfts/metadata/' + cTimestamp + '.json'),
+                jsonString,
+                async (err) => {
+                  if (err) {
+                    console.log('Error writing file', err);
+                  } else {
+                    // Upload Metadata to IPFS
+                    let uploadJSON = fs.readFileSync(
+                      path.resolve('./../frontend/public/files/nfts/metadata/' + cTimestamp + '.json'),
+                    );
+                    // let tempMetadataBuffer = new Buffer(uploadJSON);
+                    let tempMetadataBuffer = new Buffer.from(uploadJSON);
+                    ipfs.files.add(
+                      tempMetadataBuffer,
+                      async function (err, file_metadata) {
+                        if (err) {
+                          console.log(err);
+                        }
+
+                    _nft.metadata_url = file_metadata[0].hash;
+                    // _nft.metadata_url = "file_metadata[0].hash";
+
+                    console.log('create new NFT', _nft);
+                    const _newNFT = await _nft.save();
+                    return res.status(200).json({ _newNFT, metadata });
+                    }
+                    );
+                  }
+                }
+              );
+            } else {
+              console.log("IPFS add failed")
+            }
           });
         });
       }
