@@ -192,14 +192,6 @@
                   <button
                     class="btn btn-primary"
                     type="button"
-                    v-on:click="showAttribute"
-                  >
-                    Show Attribute
-                  </button>
-
-                  <button
-                    class="btn btn-primary"
-                    type="button"
                     v-on:click="addAttribute"
                     v-if="!isLoading"
                   >
@@ -422,9 +414,6 @@ export default {
     }),
     uploadFile() {
       this.NFTData.file = this.$refs.file.files[0];
-    },
-    showAttribute() {
-      console.log(this.NFTData.attributes);
     },
     addAttribute() {
       const attr = this.NFTData.attributes;

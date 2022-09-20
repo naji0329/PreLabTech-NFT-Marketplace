@@ -52,9 +52,9 @@ router.post('/createNFT', async (req, res) => {
         collection_symbol: fields.collection_symbol,
         contract_address: fields.contract_address,
       });
-      // console.log(typeof fields.collection_attributes);
+      console.log(typeof fields.collection_attributes);
 
-      console.log("NFT: ", _nft);
+      console.log("nnnnnnnnnnnnnnnnnnnnn", _nft);
 
       if (files.file) {
         const oldpath = files.file.filepath;
@@ -71,8 +71,10 @@ router.post('/createNFT', async (req, res) => {
 
           // Upload File to IPFS
           let uploadFile = fs.readFileSync(path.resolve(newpath));
-          let tempBuffer = Buffer(uploadFile);
-          ipfs.files.add(tempBuffer, async (err, file) => {
+          const tempBuffer = new Buffer.from(uploadFile);
+          console.log(typeof tempBuffer)
+          // ipfs.files.add(tempBuffer, async (err, file) => {
+          ipfs.add(tempBuffer, async function(err, file) {
             if (err) {
               console.log("------------------------------ ERROR -----------------------------")
               console.log(err);
@@ -123,11 +125,11 @@ router.post('/createNFT', async (req, res) => {
                   console.log('Error writing file', err);
                 } else {
                   // Upload Metadata to IPFS
-                  let uploadFile = fs.readFileSync(
+                  let uploadJSON = fs.readFileSync(
                     path.resolve('./../frontend/public/files/nfts/metadata/' + cTimestamp + '.json'),
                   );
-                  // let tempMetadataBuffer = new Buffer(uploadFile);
-                  let tempMetadataBuffer = Buffer(uploadFile);
+                  // let tempMetadataBuffer = new Buffer(uploadJSON);
+                  let tempMetadataBuffer = new Buffer.from(uploadJSON);
                   ipfs.files.add(
                     tempMetadataBuffer,
                     async function (err, file_metadata) {
