@@ -71,7 +71,7 @@ router.post('/createNFT', async (req, res) => {
 
           // Upload File to IPFS
           let uploadFile = fs.readFileSync(path.resolve(newpath));
-          const tempBuffer = new Buffer.from(uploadFile);
+          const tempBuffer = Buffer(uploadFile);
           console.log(typeof tempBuffer)
           // ipfs.files.add(tempBuffer, async (err, file) => {
           ipfs.add(tempBuffer, async function(err, file) {
@@ -84,8 +84,8 @@ router.post('/createNFT', async (req, res) => {
             if(typeof file != "undefined") {
               console.log(file);
 
-              // _nft.ipfs_path = file[0].hash;
-              _nft.ipfs_path = "ipfs_file_path";
+               _nft.ipfs_path = file[0].hash;
+              // _nft.ipfs_path = "ipfs_file_path";
               _nft.file = fileName;
 
               let metadata;
@@ -130,8 +130,8 @@ router.post('/createNFT', async (req, res) => {
                     let uploadJSON = fs.readFileSync(
                       path.resolve('./../frontend/public/files/nfts/metadata/' + cTimestamp + '.json'),
                     );
-                    // let tempMetadataBuffer = new Buffer(uploadJSON);
-                    let tempMetadataBuffer = new Buffer.from(uploadJSON);
+                    let tempMetadataBuffer = Buffer(uploadJSON);
+                    // let tempMetadataBuffer = new Buffer.from(uploadJSON);
                     ipfs.files.add(
                       tempMetadataBuffer,
                       async function (err, file_metadata) {
@@ -139,8 +139,8 @@ router.post('/createNFT', async (req, res) => {
                           console.log(err);
                         }
 
-                    // _nft.metadata_url = file_metadata[0].hash;
-                    _nft.metadata_url = "file_metadata[0].hash";
+                    _nft.metadata_url = file_metadata[0].hash;
+                    // _nft.metadata_url = "file_metadata[0].hash";
 
                     console.log('create new NFT', _nft);
                     const _newNFT = await _nft.save();
