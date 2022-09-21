@@ -123,7 +123,7 @@ router.post('/loginWithPhantom', async (req, res) => {
       { expiresIn: '5 days' },
       (err, token) => {
         if (err) throw err;
-        res.json({ token, chain: 'ethereum', address: address });
+        res.json({ token, chain: 'solana', address: address });
       }
     );
   } catch (err) {

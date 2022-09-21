@@ -114,37 +114,38 @@ export default {
       loginWithPhantom: "auth/loginWithPhantom",
     }),
     connectMetamaskWallet: async function () {
-      const [userAddress] = await window.ethereum.enable();
-      this.metamaskWallet = userAddress;
+        const [userAddress] = await window.ethereum.enable();
+        this.metamaskWallet = userAddress;
 
-      if (userAddress) {
-        try {
-          await this.loginWithMetamask(this.metamaskWallet);
-          console.log("asdfasdfas", this.auth);
-          if (this.auth.status.loggedIn) {
-            this.$router.push({ name: "profile" });
+        if (userAddress) {
+          try {
+            await this.loginWithMetamask(this.metamaskWallet);
+            console.log("asdfasdfas", this.auth);
+            if (this.auth.status.loggedIn) {
+              this.$router.push({ name: "profile" });
+            }
+          } catch (error) {
+            this.msg = error.response.data.msg;
+            alert(this.msg);
           }
-        } catch (error) {
-          this.msg = error.response.data.msg;
-          alert(this.msg);
-        }
+        } else {
+        window.open("https://metamask.io/download/");
       }
     },
     connectPhantomWallet: async function () {
-      if (window.solana) {
-        try {
-          const solana = window.solana;
-          const response = await solana.connect();
-          this.phantomWallet = response.publicKey.toString();
-          await this.loginWithPhantom(this.phantomWallet);
-          if (this.auth.status.loggedIn) {
-            this.$router.push({ name: "profile" });
-          }
-        } catch (err) {
-          this.msg = err.response.data.msg;
-          alert(this.msg);
-          // { code: 4001, message: 'User rejected the request.' }
+      console.log()
+      if (typeof window.solana == "undefined") {
+        window.open("https://phantom.app");
+      } else {
+        const solana = window.solana; 
+        const response = await solana.connect();
+        this.phantomWallet = response.publicKey.toString();
+
+        await this.loginWithPhantom(this.phantomWallet);
+        if (this.auth.status.loggedIn) {
+          this.$router.push({ name: "profile" });
         }
+
       }
     },
   },

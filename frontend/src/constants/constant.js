@@ -11,9 +11,11 @@ import ERC721NFT_json from "@/contracts/ERC721NFT/NFT.json";
 import ERC1155NFT_json from "@/contracts/ERC1155NFT/NFT.json";
 
 export const TOKEN_METADATA_PROGRAM_ID = new anchor.web3.PublicKey("metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s")
+export const TOKEN_PROGRAM_ID = new anchor.web3.PublicKey('TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA');
 
 import SolanaNFT_json from "@/contracts/SolanaNFT/SolanaNFT.json";
-const programId = new anchor.web3.PublicKey('C47gbJh2S4ESsLYDgxod6k83uawxEhYsNbLfNi1vuqvV');
+const NFTMintprogramId = new anchor.web3.PublicKey('C47gbJh2S4ESsLYDgxod6k83uawxEhYsNbLfNi1vuqvV');
+const auctionProgramId = new anchor.web3.PublicKey('auctxRXPeJoc4817jDhf4HbjnhEcr1cCXenosMhK5R8');
 
 // For testing
 // import SolanaNFT_json from "@/contracts/SolanaNFT/TestSolanaNFT.json";
@@ -30,5 +32,6 @@ export {
 
 export {
   SolanaNFT_json,
-  programId
+  NFTMintprogramId,
+  auctionProgramId,
 }

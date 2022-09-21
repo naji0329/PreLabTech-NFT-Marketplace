@@ -16,11 +16,18 @@
       > -->
       <!-- <button class="btn btn-primary" type="button"  data-bs-toggle="modal" data-bs-target="#cctModal">Create Collection</button> -->
       <button
-        class="btn btn-primary"
+        class="btn btn-primary mx-5"
         type="button"
         v-on:click="createSingleCollection()"
       >
-        Create Collection
+        Create Single Collection
+      </button>
+      <button
+        class="btn btn-primary mx-5"
+        type="button"
+        v-on:click="createMultipleCollection()"
+      >
+        Create Multiple Collection
       </button>
       <!-- </router-link> -->
     </div>
@@ -55,6 +62,7 @@
                 </router-link>
               </div>
               <!-- enbd col -->
+
               <div class="col-sm-6 col-6">
                 <router-link
                   to="create-singleCollection"
