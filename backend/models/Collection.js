@@ -10,19 +10,19 @@ const UserSchema = new mongoose.Schema({
     required: true
   },
   description: {
-    type: String
+    type: String,
   },
   shortUrl: {
-    type: String
+    type: String,
   },
   owner: {
-    type: String
+    type: String,
   },
   chain: {
-    type: String
+    type: String,
   },
   type: {
-    type: String
+    type: String,
   },
   contract_address: {
     type: String

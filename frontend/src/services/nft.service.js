@@ -6,11 +6,6 @@ export default {
       return response.data;
     });
   },
-  createAttr(attr) {
-    return axios.post("/nft/createAttr", { attr }).then((response) => {
-      return response.data;
-    });
-  },
   getNFTsByCollectionId(_collectionId) {
     return axios
       .get("/nft/getNFTs?collection_id=" + _collectionId)

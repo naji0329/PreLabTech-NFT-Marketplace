@@ -92,10 +92,7 @@ export default {
   },
   async beforeMount() {
     // Get user colleciton data by address
-    const response = await CollectionService.getCollections(
-      null,
-      this.auth.user.chain
-    );
+    const response = await CollectionService.getCollections(null);
     this.collectionData = response;
   },
   // setup() {

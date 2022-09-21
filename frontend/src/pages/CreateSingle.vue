@@ -150,8 +150,6 @@
                     }}</small>
                   </p>
                 </div>
-
-
                 <!-- Attribute -->
                 <div class="mb-4">
                   <label class="mb-2 form-label">Attributes</label>
@@ -198,7 +196,7 @@
                     + Add attribute
                   </button>
                 </div>
-                
+
                 <!-- <div class="mb-3">
                                     <label class="mb-2 form-label">Royalties</label>
                                     <input type="text" class="form-control form-control-s1" placeholder="e.g 10%">
@@ -233,98 +231,14 @@
 </template>
 
 <script>
-
-import { mapState, mapGetters, mapActions } from "vuex";
+import { mapState, mapGetters } from "vuex";
 import Web3 from "web3";
 // Import component data. You can change the data in the store to reflect in all component
 import SectionData from "@/store/store.js";
 import NFTService from "@/services/nft.service.js";
 import CollectionService from "@/services/collection.service.js";
 
-import { 
-  ERC721NFT_json,
-  SolanaNFT_json,
-  programId,
-  TOKEN_METADATA_PROGRAM_ID
-} from "@/constants/constant.js";
-
-
-import * as anchor from "@project-serum/anchor";
-
-import { 
-  MintLayout, Token, 
-  TOKEN_PROGRAM_ID, ASSOCIATED_TOKEN_PROGRAM_ID 
-} from "@solana/spl-token";
-
-import {
-  Keypair,
-  PublicKey,
-  Transaction,
-  Connection,
-  clusterApiUrl,
-  SystemProgram,
-  SYSVAR_RENT_PUBKEY,
-} from "@solana/web3.js";
-
-export async function getAssociateTokenAddress(mint, owner) {
-  let [address] = await PublicKey.findProgramAddress(
-    [owner.toBuffer(), TOKEN_PROGRAM_ID.toBuffer(), mint.toBuffer()],
-    ASSOCIATED_TOKEN_PROGRAM_ID,
-  );
-  return address;
-}
-
-
-async function sendTransaction(transaction, signers) {
-  const wallet = window.solana;
-  const preflightCommitment = '"finalized"'
-  const commitment = '"finalized"'
-  const connection = new Connection(clusterApiUrl('devnet'))
-  const provider = new anchor.Provider(connection, wallet, { preflightCommitment, commitment })
-  const owner = provider.wallet;
-  
-  try{
-    transaction.feePayer = owner.publicKey
-    transaction.recentBlockhash = (await connection.getRecentBlockhash('max')).blockhash;
-    transaction.setSigners(owner.publicKey,...signers.map(s => s.publicKey));
-    if(signers.length !== 0)
-      await transaction.partialSign(...signers)
-    const signedTransaction = await owner.signTransaction(transaction);
-    let hash = await connection.sendRawTransaction(await signedTransaction.serialize());
-    await connection.confirmTransaction(hash);
-    // Store.addNotification({
-    console.log({
-      title: "Success",
-      message: "Success",
-      type: "success",
-      insert: "top",
-      container: "top-right",
-      animationIn: ["animate__animated", "animate__fadeIn"],
-      animationOut: ["animate__animated", "animate__fadeOut"],
-      dismiss: {
-        duration: 1000,
-        onScreen: true
-      }
-    });
-  } catch(err) {
-    console.log(err)
-    // Store.addNotification({
-    console.log({
-      title: "ERROR",
-      message: "Error",
-      type: "warning",
-      insert: "top",
-      container: "top-right",
-      animationIn: ["animate__animated", "animate__fadeIn"],
-      animationOut: ["animate__animated", "animate__fadeOut"],
-      dismiss: {
-        duration: 1000,
-        onScreen: true
-      }
-    });
-  }
-}
-
+import { ERC721NFT_json } from "@/constants/constant.js";
 
 export default {
   name: "CreateSingle",
@@ -337,7 +251,6 @@ export default {
         description: null,
         file: null,
         collection: null,
-        attributes: [],
       },
       errors: {
         collection: null,
@@ -406,12 +319,9 @@ export default {
     this.collections = _colletions;
     this.collections = _colletions.filter(item => item.type == "single");
     // this.collections = ["Select"];
+
   },
   methods: {
-    ...mapActions({
-      loginWithPhantom: "auth/loginWithPhantom",
-      getCollections: "collection/getCollections",
-    }),
     uploadFile() {
       this.NFTData.file = this.$refs.file.files[0];
     },
@@ -439,31 +349,23 @@ export default {
         this.errors.description = "Please select file";
         return false;
       }
-      if (this.NFTData.attributes.length != 0) {
-        this.NFTData.attributes.map(item => {
-          if(item.trait_type == "" || item.value == "")
-          {
-            this.errors.attributes = "Please input attributes";
-            return false;
-          }
-        })
-      }
 
       this.isLoading = true;
 
       const formData = new FormData();
-      console.log("========================================================");
-      // console.log("File : ", this.NFTData.file);
-      // console.log("Name : ", this.NFTData.name);
-      // console.log("description : ", this.NFTData.description);
-      // console.log("ID : ", this.NFTData.collection._id);
-      // console.log("Collection : ", this.NFTData.collection.name);
-      // console.log("symbol : ", this.collection.symbol);
+      formData.append("file", this.NFTData.file);
+      formData.append("name", this.NFTData.name);
+      formData.append("description", this.NFTData.description);
+      formData.append("collection_id", this.NFTData.collection._id);
+      formData.append("collection_name", this.NFTData.collection.name);
+      formData.append("collection_symbol", this.NFTData.collection.symbol);
+      formData.append(
+        "contract_address",
+        this.NFTData.collection.contract_address
+      );
 
       if ((await this.currentChain()) == "ethereum") {
         // Create web3.
-        console.log("Create an NFT on ETH chain")
-
         let web3 = new Web3(window.ethereum);
         let contract = new web3.eth.Contract(
           ERC721NFT_json.abi,
@@ -478,14 +380,13 @@ export default {
         formData.append("collection_id", this.NFTData.collection._id);
         formData.append("collection_name", this.NFTData.collection.name);
         formData.append("collection_symbol", this.NFTData.collection.symbol);
-        
         formData.append("creater", this.auth.user.address);
         formData.append("chain", this.auth.user.chain);
         formData.append("tokenId", supply);
 
         const response = await NFTService.createNFT(formData);
 
-        if (!response.errors) {
+        if (response.errors) {
           console.log(response.errors);
           this.errors = response.errors;
           this.isLoading = false;
@@ -496,7 +397,6 @@ export default {
             .mint(
               this.auth.user.address,
               supply,
-              10,
               "" + response._newNFT.metadata_url
             )
             .send({ from: this.auth.user.address })
@@ -517,10 +417,6 @@ export default {
               this.$router.push(
                 "/collection/" + this.NFTData.collection.shortUrl
               );
-            })
-            .catch(err => {
-              console.log(err);
-              this.isLoading = false;
             });
         }
         } else if ((await this.currentChain()) == "solana") {
@@ -655,11 +551,9 @@ export default {
         alert("Connect your wallet!");
         this.isLoading = false;
         return 0;
+
       }
     },
   },
 };
 </script>
-
-<!-- Collection address -->
-<!-- CyUYpd9FniZEE4hPqVq81zf6w3tSySARAjVcfQGGnYvP -->

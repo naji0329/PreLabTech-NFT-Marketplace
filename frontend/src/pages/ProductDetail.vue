@@ -143,9 +143,6 @@
                     </div><!-- end col -->
                 </div><!-- end row -->
             </div><!-- .container -->
-
-
-
              <!-- Modal -->
             <div class="modal fade" id="placeBidModal" tabindex="-1" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">
@@ -160,24 +157,20 @@
                             <p class="mb-3" v-html="SectionData.placeBidModal.content"></p>
                             <div class="mb-3">
                                 <label class="form-label">{{ SectionData.placeBidModal.labelText }}</label>
-                                <input type="text" class="form-control form-control-s1" placeholder="Enter bid" v-model="BidData.bidETH">
+                                <input type="text" class="form-control form-control-s1" placeholder="Enter bid">
                             </div>
                             <div class="mb-3">
                                 <label class="form-label" v-html="SectionData.placeBidModal.labelTextTwo"></label>
-                                <input type="text" class="form-control form-control-s1" v-model="BidData.bidAmount">
+                                <input type="text" class="form-control form-control-s1" value="1">
                             </div>
                             <ul class="total-bid-list mb-4">
                                 <li v-for="(list, i) in SectionData.placeBidModal.totalBidList" :key="i"><span>{{ list.title }}</span> <span>{{ list.price }}</span></li>
                             </ul>
-                            <!-- <a :href="SectionData.placeBidModal.btnLink" class="btn btn-primary d-block">{{ SectionData.placeBidModal.btnText }}</a> -->
-                            <button class="btn btn-primary d-block" type="button" v-on:click="placeBid">{{SectionData.placeBidModal.btnText}}</button>
+                            <a :href="SectionData.placeBidModal.btnLink" class="btn btn-primary d-block">{{ SectionData.placeBidModal.btnText }}</a>
                         </div><!-- end modal-body -->
                     </div><!-- end modal-content -->
                 </div><!-- end modal-dialog -->
             </div><!-- end modal-->
-
-
-
              <!-- Modal -->
             <div class="modal fade" id="buyModal" tabindex="-1" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">
@@ -314,147 +307,33 @@
 <script>
 //import ProductDetailSection from '@/components/section/Products'
 // Import component data. You can change the data in the store to reflect in all component
-
-import { mapState, mapGetters } from "vuex";
-
-import {
-  // ERC721Factory_address,
-  // ERC721Factory_json,
-  // SolanaNFT_json,
-  // programId,
-  // TOKEN_METADATA_PROGRAM_ID
-} from "@/constants/constant.js";
-
-import {
-  // Keypair,
-  // PublicKey,
-  // Transaction,
-  Connection,
-  clusterApiUrl,
-  // SystemProgram,
-  // SYSVAR_RENT_PUBKEY,
-} from "@solana/web3.js";
-
-import * as anchor from "@project-serum/anchor";
-
-// async function sendTransaction(transaction, signers) {
-//   // const wallet = useWallet();
-//   // const connection = useConnection().connection
-//   // const wallet = window.solana;
-//   // const connection = window.solana.connect();
-//   const wallet = window.solana;
-//   const preflightCommitment = '"finalized"'
-//   const commitment = '"finalized"'
-//   const connection = new Connection(clusterApiUrl('devnet'))
-//   const provider = new anchor.Provider(connection, wallet, { preflightCommitment, commitment })
-//   const owner = provider.wallet;
-  
-//   // const connection = useConnection().connection
-//   try{
-//     transaction.feePayer = owner.publicKey
-//     transaction.recentBlockhash = (await connection.getRecentBlockhash('max')).blockhash;
-//     transaction.setSigners(owner.publicKey,...signers.map(s => s.publicKey));
-//     if(signers.length !== 0)
-//       await transaction.partialSign(...signers)
-//     const signedTransaction = await owner.signTransaction(transaction);
-//     let hash = await connection.sendRawTransaction(await signedTransaction.serialize());
-//     await connection.confirmTransaction(hash);
-//     // Store.addNotification({
-//     console.log({
-//       title: "Success",
-//       message: "Success",
-//       type: "success",
-//       insert: "top",
-//       container: "top-right",
-//       animationIn: ["animate__animated", "animate__fadeIn"],
-//       animationOut: ["animate__animated", "animate__fadeOut"],
-//       dismiss: {
-//         duration: 1000,
-//         onScreen: true
-//       }
-//     });
-//   } catch(err) {
-//     console.log(err)
-//     // Store.addNotification({
-//     console.log({
-//       title: "ERROR",
-//       message: "Error",
-//       type: "warning",
-//       insert: "top",
-//       container: "top-right",
-//       animationIn: ["animate__animated", "animate__fadeIn"],
-//       animationOut: ["animate__animated", "animate__fadeOut"],
-//       dismiss: {
-//         duration: 1000,
-//         onScreen: true
-//       }
-//     });
-//   }
-// }
-
 import SectionData from '@/store/store.js'
 
 export default {
   name: 'ProductDetail',
   data(){
-    return{
-      SectionData,
-      id: this.$route.params.id,
-      title: '',
-      imgLg: '',
-      metaText: '',
-      metaTextTwo: '',
-      metaTextThree: '',
-      content: '',
-      BidData: {
-        bidETH: '',
-        bidAmount: '1'
-      }
-    }
-  },
-  computed: {
-    ...mapState(["auth"]),
-    ...mapGetters({ currentChain: ["auth/currentChain"] }),
-  },
-  mounted() {
+        return{
+            SectionData,
+            id: this.$route.params.id,
+            title: '',
+            imgLg: '',
+            metaText: '',
+            metaTextTwo: '',
+            metaTextThree: '',
+            content: '',
+         }
+    },
+    mounted() {
     SectionData.productData.products.forEach( element => {
-      if(this.id == element.id){
-        this.imgLg = element.imgLg;
-        this.title = element.title;
-        this.metaText = element.metaText;
-        this.metaTextTwo = element.metaTextTwo;
-        this.metaTextThree = element.metaTextThree;
-        this.content = element.content;
-      }
-    });
-  },
-  methods: {
-    async placeBid() {
-      console.log("Place a bid clicked")
-      console.log(this.BidData.bidETH, this.BidData.bidAmount)
-      if ((await this.currentChain()) == "ethereum") {
-        console.log("Ethereum Auction bid")
-        return false;
-      } else if ((await this.currentChain()) == "solana" && this.auth.user.address.length != 0) {
-        console.log("Solana Auction bid")
-        
-        const wallet = window.solana;
-        const preflightCommitment = '"finalized"'
-        const commitment = '"finalized"'
-
-        const connection = new Connection(clusterApiUrl('devnet'))
-        const provider = new anchor.Provider(connection, wallet, { preflightCommitment, commitment })
-        // const program = new anchor.Program(SolanaNFT_json, programId, provider)
-        const owner = provider.wallet.publicKey;
-        
-        if(typeof owner != "undefined") {
-          console.log("Phantom wallet --------------------------", owner)
+        if(this.id == element.id){
+            this.imgLg = element.imgLg;
+            this.title = element.title;
+            this.metaText = element.metaText;
+            this.metaTextTwo = element.metaTextTwo;
+            this.metaTextThree = element.metaTextThree;
+            this.content = element.content;
         }
-        return false;
-      }
-      console.log("Chain not selected")
-      return false;
-    }
+    });
   }
 }
 </script>
