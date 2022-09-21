@@ -238,7 +238,91 @@ import SectionData from "@/store/store.js";
 import NFTService from "@/services/nft.service.js";
 import CollectionService from "@/services/collection.service.js";
 
-import { ERC721NFT_json } from "@/constants/constant.js";
+
+import { 
+  ERC721NFT_json,
+  SolanaNFT_json,
+  NFTMintprogramId,
+  TOKEN_METADATA_PROGRAM_ID
+} from "@/constants/constant.js";
+
+
+import * as anchor from "@project-serum/anchor";
+
+import { 
+  MintLayout, Token, 
+  TOKEN_PROGRAM_ID, ASSOCIATED_TOKEN_PROGRAM_ID 
+} from "@solana/spl-token";
+
+import {
+  Keypair,
+  PublicKey,
+  Transaction,
+  Connection,
+  clusterApiUrl,
+  SystemProgram,
+  SYSVAR_RENT_PUBKEY,
+} from "@solana/web3.js";
+
+export async function getAssociateTokenAddress(mint, owner) {
+  let [address] = await PublicKey.findProgramAddress(
+    [owner.toBuffer(), TOKEN_PROGRAM_ID.toBuffer(), mint.toBuffer()],
+    ASSOCIATED_TOKEN_PROGRAM_ID,
+  );
+  return address;
+}
+
+
+async function sendTransaction(transaction, signers) {
+  const wallet = window.solana;
+  const preflightCommitment = '"finalized"'
+  const commitment = '"finalized"'
+  const connection = new Connection(clusterApiUrl('devnet'))
+  const provider = new anchor.Provider(connection, wallet, { preflightCommitment, commitment })
+  const owner = provider.wallet;
+  
+  try{
+    transaction.feePayer = owner.publicKey
+    transaction.recentBlockhash = (await connection.getRecentBlockhash('max')).blockhash;
+    transaction.setSigners(owner.publicKey,...signers.map(s => s.publicKey));
+    if(signers.length !== 0)
+      await transaction.partialSign(...signers)
+    const signedTransaction = await owner.signTransaction(transaction);
+    let hash = await connection.sendRawTransaction(await signedTransaction.serialize());
+    await connection.confirmTransaction(hash);
+    // Store.addNotification({
+    console.log({
+      title: "Success",
+      message: "Success",
+      type: "success",
+      insert: "top",
+      container: "top-right",
+      animationIn: ["animate__animated", "animate__fadeIn"],
+      animationOut: ["animate__animated", "animate__fadeOut"],
+      dismiss: {
+        duration: 1000,
+        onScreen: true
+      }
+    });
+  } catch(err) {
+    console.log(err)
+    // Store.addNotification({
+    console.log({
+      title: "ERROR",
+      message: "Error",
+      type: "warning",
+      insert: "top",
+      container: "top-right",
+      animationIn: ["animate__animated", "animate__fadeIn"],
+      animationOut: ["animate__animated", "animate__fadeOut"],
+      dismiss: {
+        duration: 1000,
+        onScreen: true
+      }
+    });
+  }
+}
+
 
 export default {
   name: "CreateSingle",
