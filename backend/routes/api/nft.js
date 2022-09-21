@@ -4,22 +4,39 @@ const router = express.Router();
 const Collection = require('../../models/Collection');
 const NFT = require('../../models/Nft');
 
-var formidable = require('formidable');
-var fs = require('fs');
-var path = require('path');
+const formidable = require('formidable');
+const fs = require('fs');
+const path = require('path');
 
 const ipfsAPI = require('ipfs-api');
 const { listeners } = require('process');
 const ipfs = ipfsAPI('ipfs.infura.io', '5001', { protocol: 'https' });
 
+let attribute = [];
+
+router.post('/createAttr', async (req, res) => {
+  attribute = [];
+  try {
+    const { attr } = req.body;
+    attribute = attr;
+    res.json(attribute);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send('Server error');
+  }
+})
+
+
 // @route    POST api/collection/createCollection
 // @desc     Create Collection
 // @access   Public
 router.post('/createNFT', async (req, res) => {
+
+  // const form = formidable({ multiples: true });
+  const form = new formidable.IncomingForm();
+
   try {
     // To Do
-
-    const form = new formidable.IncomingForm();
     form.parse(req, async function (err, fields, files) {
       let _nft = new NFT({
         name: fields.name,
@@ -28,31 +45,33 @@ router.post('/createNFT', async (req, res) => {
         ipfs_path: '',
         chain: fields.chain,
         creater: fields.creater,
-        owner: fields.creater,
+        owner: fields.owner,
         tokenId: fields.tokenId,
         collection_id: fields.collection_id,
         collection_name: fields.collection_name,
         collection_symbol: fields.collection_symbol,
-        contract_address: fields.contract_address
+        contract_address: fields.contract_address,
       });
+      console.log(typeof fields.collection_attributes);
+
+      console.log("nnnnnnnnnnnnnnnnnnnnn", _nft);
 
       if (files.file) {
         const oldpath = files.file.filepath;
         const cTimestamp = Date.now();
         const fileName = cTimestamp + path.extname(files.file.originalFilename);
-        const newpath = './../frontend/public/files/nfts/file/' + fileName;
-        const readStream = fs.createReadStream(oldpath);
+        const newpath = path.resolve('./../frontend/public/files/nfts/file/' + fileName);
+        const readStream = fs.createReadStream(oldpath, { encoding: 'utf8', highWaterMark: 16 * 1024 });
         const writeStream = fs.createWriteStream(newpath);
         readStream.pipe(writeStream)
 
         readStream.on('end', () => {
-
           fs.unlinkSync(oldpath);
+          console.log("File pasted to", path.resolve(newpath));
 
           // Upload File to IPFS
           let uploadFile = fs.readFileSync(path.resolve(newpath));
-          const tempBuffer = Buffer(uploadFile);
-          console.log(typeof tempBuffer)
+          const tempBuffer = new Buffer.from(uploadFile);
           // ipfs.files.add(tempBuffer, async (err, file) => {
           ipfs.add(tempBuffer, async function(err, file) {
             if (err) {
@@ -64,7 +83,7 @@ router.post('/createNFT', async (req, res) => {
             if(typeof file != "undefined") {
               console.log(file);
 
-               _nft.ipfs_path = file[0].hash;
+              _nft.ipfs_path = file[0].hash;
               // _nft.ipfs_path = "ipfs_file_path";
               _nft.file = fileName;
 
@@ -110,8 +129,8 @@ router.post('/createNFT', async (req, res) => {
                     let uploadJSON = fs.readFileSync(
                       path.resolve('./../frontend/public/files/nfts/metadata/' + cTimestamp + '.json'),
                     );
-                    let tempMetadataBuffer = Buffer(uploadJSON);
-                    // let tempMetadataBuffer = new Buffer.from(uploadJSON);
+                    // let tempMetadataBuffer = new Buffer(uploadJSON);
+                    let tempMetadataBuffer = new Buffer.from(uploadJSON);
                     ipfs.files.add(
                       tempMetadataBuffer,
                       async function (err, file_metadata) {
@@ -132,6 +151,7 @@ router.post('/createNFT', async (req, res) => {
               );
             } else {
               console.log("IPFS add failed")
+              return false;
             }
           });
         });
