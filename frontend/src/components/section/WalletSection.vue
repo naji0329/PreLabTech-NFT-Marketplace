@@ -65,11 +65,14 @@ export default {
     ...mapState(['auth']),
     ...mapGetters({isLoggoedIn: ['auth/isLoggoedIn']})
   },
-  methods : {
-    ...mapActions({loginWithMetamask: "auth/loginWithMetamask", loginWithPhantom: "auth/loginWithPhantom"}),
-    connectMetamaskWallet : async function() {
-      const [userAddress] = await window.ethereum.enable();
-      this.metamaskWallet = userAddress;
+  methods: {
+    ...mapActions({
+      loginWithMetamask: "auth/loginWithMetamask",
+      loginWithPhantom: "auth/loginWithPhantom",
+    }),
+    connectMetamaskWallet: async function () {
+        const [userAddress] = await window.ethereum.enable();
+        this.metamaskWallet = userAddress;
 
       if(userAddress) {
         try { 
@@ -78,30 +81,28 @@ export default {
           if (this.auth.status.loggedIn) {
               this.$router.push({ name: "profile"})
           }
-        } catch (error) {
-          this.msg = error.response.data.msg;
-          alert(this.msg);
-        }
+        } else {
+        window.open("https://metamask.io/download/");
       }
     },
-    connectPhantomWallet : async function() {
-      const { solana } = window;
-      if (solana) {
+    connectPhantomWallet: async function () {
+      if (window.solana) {
+
         try {
+	  const solana = window.solana;
           const response = await solana.connect();
           this.phantomWallet = response.publicKey.toString();
-          
-          try { 
-            await this.loginWithPhantom(this.phantomWallet);
-            if (this.auth.status.loggedIn) {
-                this.$router.push({ name: "profile"})
-            }
-          } catch (error) {
-            this.msg = error.response.data.msg;
-            alert(this.msg);
+          await this.loginWithPhantom(this.phantomWallet);
+          if (this.auth.status.loggedIn) {
+            this.$router.push({ name: "profile" });
+
           }
+
         } catch (err) {
-        // { code: 4001, message: 'User rejected the request.' }
+            this.msg = err.response.data.msg;
+            alert(this.msg);
+          // { code: 4001, message: 'User rejected the request.' }
+
         }
       }
     }
