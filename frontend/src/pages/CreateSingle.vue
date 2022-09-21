@@ -252,6 +252,7 @@ import {
   Token,
   TOKEN_PROGRAM_ID,
   ASSOCIATED_TOKEN_PROGRAM_ID,
+
 } from "@solana/spl-token";
 
 import {
@@ -268,6 +269,7 @@ export async function getAssociateTokenAddress(mint, owner) {
   let [address] = await PublicKey.findProgramAddress(
     [owner.toBuffer(), TOKEN_PROGRAM_ID.toBuffer(), mint.toBuffer()],
     ASSOCIATED_TOKEN_PROGRAM_ID
+
   );
   return address;
 }
@@ -294,6 +296,7 @@ async function sendTransaction(transaction, signers) {
     let hash = await connection.sendRawTransaction(
       await signedTransaction.serialize()
     );
+
     await connection.confirmTransaction(hash);
     // Store.addNotification({
     console.log({
@@ -311,6 +314,7 @@ async function sendTransaction(transaction, signers) {
     });
   } catch (err) {
     console.log(err);
+
     // Store.addNotification({
     console.log({
       title: "ERROR",
