@@ -404,7 +404,13 @@ export default {
       this.auth.user.chain
     );
     this.collections = _colletions;
-    this.collections = _colletions.filter(item => item.type == "single");
+    if ((await this.currentChain()) == "ethereum") {
+      this.collections = _colletions.filter(item => item.type == "721");
+    } else if ((await this.currentChain()) == "solana") {
+      this.collections = _colletions.filter(item => item.type == "single");
+    } else {
+      this.collections = [];
+    }
     // this.collections = ["Select"];
   },
   methods: {
