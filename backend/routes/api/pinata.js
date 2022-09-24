@@ -1,6 +1,9 @@
 require('dotenv').config();
-const key = process.env.PINATA_KEY;
-const secret = process.env.PINATA_SECRET;
+
+const pinataKey = require('../../config/default.json');
+const key = pinataKey.key;
+const secret = pinataKey.PINATA_SECRET;
+
 //imports needed for this function
 const axios = require('axios');
 const fs = require('fs');
